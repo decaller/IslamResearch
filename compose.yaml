@@ -1,0 +1,138 @@
+services:
+    laravel.test:
+        build:
+            context: './vendor/laravel/sail/runtimes/8.5'
+            dockerfile: Dockerfile
+            args:
+                WWWGROUP: '${WWWGROUP}'
+        image: 'sail-8.5/app'
+        extra_hosts:
+            - 'host.docker.internal:host-gateway'
+        ports:
+            - '${APP_PORT:-80}:80'
+            - '${VITE_PORT:-5173}:${VITE_PORT:-5173}'
+        environment:
+            WWWUSER: '${WWWUSER}'
+            LARAVEL_SAIL: 1
+            XDEBUG_MODE: '${SAIL_XDEBUG_MODE:-off}'
+            XDEBUG_CONFIG: '${SAIL_XDEBUG_CONFIG:-client_host=host.docker.internal}'
+            IGNITION_LOCAL_SITES_PATH: '${PWD}'
+        volumes:
+            - '.:/var/www/html'
+        networks:
+            - sail
+        depends_on:
+            - pgsql
+            - redis
+            - meilisearch
+    pgsql:
+        image: 'timescale/timescaledb-ha:pg16'
+        ports:
+            - '${FORWARD_DB_PORT:-5432}:5432'
+        environment:
+            PGPASSWORD: '${DB_PASSWORD:-secret}'
+            POSTGRES_DB: '${DB_DATABASE}'
+            POSTGRES_USER: '${DB_USERNAME}'
+            POSTGRES_PASSWORD: '${DB_PASSWORD:-secret}'
+        volumes:
+            - 'sail-pgsql:/var/lib/postgresql'
+            - './vendor/laravel/sail/database/pgsql/create-testing-database.sql:/docker-entrypoint-initdb.d/10-create-testing-database.sql'
+        networks:
+            - sail
+        healthcheck:
+            test:
+                - CMD
+                - pg_isready
+                - '-q'
+                - '-d'
+                - '${DB_DATABASE}'
+                - '-U'
+                - '${DB_USERNAME}'
+            retries: 3
+            timeout: 5s
+    redis:
+        image: 'redis:alpine'
+        ports:
+            - '${FORWARD_REDIS_PORT:-6379}:6379'
+        volumes:
+            - 'sail-redis:/data'
+        networks:
+            - sail
+        healthcheck:
+            test:
+                - CMD
+                - redis-cli
+                - ping
+            retries: 3
+            timeout: 5s
+    meilisearch:
+        image: 'getmeili/meilisearch:latest'
+        ports:
+            - '${FORWARD_MEILISEARCH_PORT:-7700}:7700'
+        environment:
+            MEILI_NO_ANALYTICS: '${MEILISEARCH_NO_ANALYTICS:-false}'
+        volumes:
+            - 'sail-meilisearch:/meili_data'
+        networks:
+            - sail
+        healthcheck:
+            test:
+                - CMD
+                - wget
+                - '--no-verbose'
+                - '--spider'
+                - 'http://127.0.0.1:7700/health'
+            retries: 3
+            timeout: 5s
+    n8n:
+        image: 'n8nio/n8n:latest'
+        ports:
+            - '${FORWARD_N8N_PORT:-5678}:5678'
+        environment:
+            N8N_HOST: 'localhost'
+            N8N_PORT: 5678
+            N8N_PROTOCOL: http
+            N8N_METRICS: 'true'
+            N8N_ENCRYPTION_KEY: '${N8N_ENCRYPTION_KEY}'
+            N8N_USER_MANAGEMENT_JWT_SECRET: '${N8N_USER_MANAGEMENT_JWT_SECRET}'
+        volumes:
+            - 'sail-n8n:/home/node/.n8n'
+            - './flow:/flow'
+            - './n8n-provision.sh:/provision.sh'
+        networks:
+            - sail
+        healthcheck:
+            test: ["CMD", "wget", "--quiet", "--spider", "http://localhost:5678/healthz"]
+            interval: 10s
+            timeout: 5s
+            retries: 5
+        depends_on:
+            - pgsql
+            - redis
+    n8n-provision:
+        image: 'n8nio/n8n:latest'
+        depends_on:
+            n8n:
+                condition: service_healthy
+        environment:
+            N8N_ENCRYPTION_KEY: '${N8N_ENCRYPTION_KEY}'
+        volumes:
+            - 'sail-n8n:/home/node/.n8n'
+            - './flow:/flow'
+            - './n8n-provision.sh:/provision.sh'
+        entrypoint: /bin/sh
+        command: /provision.sh
+        networks:
+            - sail
+networks:
+    sail:
+        driver: bridge
+volumes:
+    sail-pgsql:
+        driver: local
+    sail-redis:
+        driver: local
+    sail-meilisearch:
+        driver: local
+    sail-n8n:
+        driver: local
