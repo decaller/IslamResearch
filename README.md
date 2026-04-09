@@ -6,6 +6,11 @@ A Laravel-based platform for Islamic research, featuring Livewire, Filament v5, 
 
 Follow these steps to get the project running locally using **Laravel Sail**:
 
+For more detailed documentation, please refer to the [docs folder](./docs/):
+- [Architecture](./docs/architecture.md)
+- [Data Sources](./docs/data-sources.md)
+- [Implementation Details](./docs/details.md)
+
 1.  **Clone the repository**:
     ```bash
     git clone <repository-url>
