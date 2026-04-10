@@ -26,7 +26,10 @@ services:
             - redis
             - meilisearch
     pgsql:
-        image: 'timescale/timescaledb-ha:pg16'
+        # THE EXACT CONTAINER YOU NEED:
+        # This is standard PostgreSQL 16, but with the 'pgvector' extension pre-installed.
+        # It is incredibly lightweight compared to TimescaleDB.
+        image: 'pgvector/pgvector:pg16'
         ports:
             - '${FORWARD_DB_PORT:-5432}:5432'
         environment:
@@ -84,44 +87,27 @@ services:
                 - 'http://127.0.0.1:7700/health'
             retries: 3
             timeout: 5s
-    n8n:
-        image: 'n8nio/n8n:latest'
+    prefect-server:
+        image: prefecthq/prefect:2-python3.11
+        command: prefect server start --host 0.0.0.0
         ports:
-            - '${FORWARD_N8N_PORT:-5678}:5678'
-        environment:
-            N8N_HOST: 'localhost'
-            N8N_PORT: 5678
-            N8N_PROTOCOL: http
-            N8N_METRICS: 'true'
-            N8N_ENCRYPTION_KEY: '${N8N_ENCRYPTION_KEY}'
-            N8N_USER_MANAGEMENT_JWT_SECRET: '${N8N_USER_MANAGEMENT_JWT_SECRET}'
-        volumes:
-            - 'sail-n8n:/home/node/.n8n'
-            - './flow:/flow'
-            - './n8n-provision.sh:/provision.sh'
+            - "4200:4200"
         networks:
             - sail
-        healthcheck:
-            test: ["CMD", "wget", "--quiet", "--spider", "http://localhost:5678/healthz"]
-            interval: 10s
-            timeout: 5s
-            retries: 5
+    ai-pipeline:
+        build:
+            context: ./docker/python
+        volumes:
+            - ./ai-scripts:/app
+        environment:
+            - PREFECT_API_URL=http://prefect-server:4200/api
+            - DB_HOST=pgsql
+            - DB_USER=${DB_USERNAME}
+            - DB_PASS=${DB_PASSWORD}
+            - OLLAMA_HOST=http://host.docker.internal:11434
         depends_on:
             - pgsql
-            - redis
-    n8n-provision:
-        image: 'n8nio/n8n:latest'
-        depends_on:
-            n8n:
-                condition: service_healthy
-        environment:
-            N8N_ENCRYPTION_KEY: '${N8N_ENCRYPTION_KEY}'
-        volumes:
-            - 'sail-n8n:/home/node/.n8n'
-            - './flow:/flow'
-            - './n8n-provision.sh:/provision.sh'
-        entrypoint: /bin/sh
-        command: /provision.sh
+            - prefect-server
         networks:
             - sail
 networks:
@@ -133,6 +119,4 @@ volumes:
     sail-redis:
         driver: local
     sail-meilisearch:
-        driver: local
-    sail-n8n:
         driver: local

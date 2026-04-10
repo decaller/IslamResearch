@@ -32,7 +32,7 @@ The platform categorizes data into the following main branches:
 
 ## Ingestion Workflows
 
-We use **n8n** to automate the synchronization of data from:
+We use the **Prefect-orchestrated AI Pipeline** to automate the synchronization of data from:
 
 - External APIs (e.g., Quran.com API, Hadith Cloud).
 - Structured datasets (JSON/CSV/SQL).
@@ -43,5 +43,5 @@ We use **n8n** to automate the synchronization of data from:
 To add a new data source:
 
 1.  **Define Source:** Assign the source to one of the six categories above.
-2.  **Workflow Setup:** Create an n8n workflow to fetch and normalize the text.
+2.  **Pipeline Setup:** Create or adapt a Prefect task to fetch and normalize the text.
 3.  **Vectorization:** Trigger the embedding generation to enable semantic search across the collection.

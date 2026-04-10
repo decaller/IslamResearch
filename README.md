@@ -1,6 +1,6 @@
 # IslamResearch
 
-A Laravel-based platform for Islamic research, featuring Livewire, Filament v5, n8n, and vector search capabilities.
+A Laravel-based platform for Islamic research, featuring Livewire, Filament v5, Prefect-orchestrated AI pipelines, and vector search capabilities.
 
 ## 🚀 Installation & Setup
 
@@ -8,6 +8,7 @@ Follow these steps to get the project running locally using **Laravel Sail**:
 
 For more detailed documentation, please refer to the [docs folder](./docs/):
 - [Architecture](./docs/architecture.md)
+- [AI Pipeline Blueprint](./docs/pipeline.md)
 - [Data Sources](./docs/data-sources.md)
 - [Implementation Details](./docs/details.md)
 
@@ -63,38 +64,29 @@ Once the Sail containers are up and running, you can access the following servic
 
 | Service | URL | Description |
 | :--- | :--- | :--- |
-| **Main Application** | [http://localhost:8000](http://localhost:8000) | The main user interface |
-| **Filament Admin** | [http://localhost:8000/admin](http://localhost:8000/admin) | Admin dashboard for data management |
-| **n8n Workflow** | [http://localhost:5678](http://localhost:5678) | Automation and workflow engine |
-| **Laravel Horizon** | [http://localhost:8000/horizon](http://localhost:8000/horizon) | Queue and job monitoring |
-| **Laravel Telescope** | [http://localhost:8000/telescope](http://localhost:8000/telescope) | Debugging and performance insights |
+| **Main Application** | [http://localhost](http://localhost) | The main user interface |
+| **Filament Admin** | [http://localhost/admin](http://localhost/admin) | Admin dashboard for data management |
+| **Prefect UI** | [http://localhost:4200](http://localhost:4200) | AI Pipeline orchestration dashboard |
+| **Laravel Horizon** | [http://localhost/horizon](http://localhost/horizon) | Queue and job monitoring |
+| **Laravel Telescope** | [http://localhost/telescope](http://localhost/telescope) | Debugging and performance insights |
 | **Meilisearch** | [http://localhost:7700](http://localhost:7700) | Search engine dashboard |
 
 ---
 
-## 🤖 n8n Setup & Automation
+## 🤖 AI Pipeline Setup (Prefect)
 
-The project includes an automated n8n setup with pre-loaded workflows and credentials.
+The project includes an automated AI factory orchestrated by Prefect.
 
-### 1. Initial Setup
-When you first access n8n at [http://localhost:5678](http://localhost:5678), it will ask you to register an owner account. 
-- **Register manually** in the browser to set your own credentials.
-- After login, you will find the **"Webhook Trigger Flow"** already imported and active.
+### 1. Prefect UI
+Access the Prefect dashboard at [http://localhost:4200](http://localhost:4200) to monitor and manage your Islamic text processing flows.
 
-### 2. Automated Imports
-The project uses a sidecar container called `n8n-provision` to automatically import:
-- **Ollama Credentials**: Pre-configured to connect to the local Ollama instance.
-- **Example Workflows**: Located in the `./flow` directory.
+### 2. AI Worker Container
+The `ai-pipeline` container runs the Prefect worker, which:
+- Executes **Fast/CPU** tasks (Classification, Segmentation).
+- Orchestrates **Slow/GPU** tasks (Ollama Translation/Enrichment).
 
-### 3. Testing the Webhook
-You can verify the n8n automation is working by triggering the example webhook from your host machine or via Sail:
-
-**Via Curl (Sail):**
-```bash
-./vendor/bin/sail shell -c "curl -i http://n8n:5678/webhook/test-webhook"
-```
-
-**Expected Response:** `{"message":"Workflow was started"}`
+### 3. Triggering Flows
+Flows are triggered from the Laravel Filament dashboard via the Prefect REST API.
 
 ---
 
@@ -105,7 +97,7 @@ You can verify the n8n automation is working by triggering the example webhook f
 - **Framework**: Laravel 13
 - **Frontend**: Livewire 4, Tailwind CSS 4
 - **Admin Panel**: Filament v5
-- **Automation**: n8n
-- **Database**: PostgreSQL with TimescaleDB (pgvectorscale)
+- **AI Orchestration**: Prefect
+- **Database**: PostgreSQL with pgvector
 - **Search**: Meilisearch
 - **Dev Environment**: Laravel Sail

@@ -1,77 +1,73 @@
 # End-to-End Data Processing & Enrichment Pipeline
 
-This document outlines the architectural flow for transforming raw, unstructured Islamic texts into highly searchable, semantically-enriched data units. The system utilizes a decoupled microservice approach for text segmentation and a LangChain-powered n8n orchestration layer for AI enrichment.
+This document outlines the architectural flow for transforming raw, unstructured Islamic texts into highly searchable, semantically-enriched data units. The system utilizes a **Prefect-orchestrated AI Pipeline** that handles the entire conversion process, allowing the Laravel application to remain lightweight and focused on orchestration and monitoring.
 
-## Stage 1: Source Selection (SourceJob)
+---
 
-1.  **Selection:** An admin selects specific text sources (e.g., volumes, chapters) via the Laravel Filament dashboard.
-2.  **Initial Metadata:** Foundational metadata (Source Title, Author, Volume, Resource Type) is securely bound to the `SourceJob`.
-3.  **Queueing:** The system pushes the job to a Laravel background queue.
-4.  **Trigger:** The queue worker sends the raw text and its preserved metadata to the segmentation engine.
+## 🏗️ Core Laravel & Filament Resources
 
-## Stage 2: Segmentation (Python Microservice)
+Because Prefect handles the heavy lifting (reading directly from PostgreSQL and writing back to it), Laravel focuses on three primary models and their corresponding Filament resources.
 
-To prevent LLM token waste and memory crashes (OOM), segmentation is handled by a lightweight, dedicated microservice rather than an LLM.
+### 1. SourceBook (Text Source)
+The entry point for all research data. Admins use this resource to manage primary sources and trigger the AI factory.
+- **Database:** `source_books` (id, title, author, resource_type, language, status)
+- **Filament Action:** **"Process with AI"**. This custom action sends an HTTP POST to the Prefect API to create a flow run and updates the status to `processing`.
 
-1.  **Microservice Handoff:** Raw text is passed to an isolated Python API.
-2.  **Deterministic Splitting (SpaCy):** The microservice utilizes SpaCy's rule-based Sentencizer to instantly split the text into discrete sentences (**Sentence Boundary Detection**). This guarantees zero overlap and naturally eliminates duplicate sentences.
-3.  **Context Extraction ("Small-to-Big"):** For every individual sentence identified, the microservice automatically grabs the **5 sentences** immediately preceding and following it. This massive context block is saved alongside the target sentence.
-4.  **Ingestion:** The exact sentence, its surrounding context, and original metadata are returned to Laravel via REST API to create `SentenceJob` records.
+### 2. SentenceJob (Batch Monitoring)
+Since ingestion processes thousands of sentences, this is a **Read-Only** monitoring table used to track the progress of the background worker.
+- **Database:** `sentence_jobs` (id, source_book_id, raw_text, status)
+- **Monitoring:** Integrated Stats Overview Widget showing "Total Pending", "Processed Today", and "Failed Jobs".
 
-## Stage 3: Sentence Ingestion (SentenceJob)
+### 3. Item / Sentence (Enriched Search Database)
+The final, AI-enriched result. This resource allows for manual scholarly review and corrections.
+- **Database:** `items` (id, resource_type, text, metadata [JSONB], text_vector [vector])
+- **Filament Interface:** Uses a JSON form plugin to allow precise editing of tags, categories, and hierarchical arrays.
 
-1.  **Monitoring:** Newly created `SentenceJob` entries populate the Filament dashboard, allowing admins to monitor ingestion progress.
-2.  **Queueing:** These individual tasks are immediately queued for the heavy AI enrichment phase: **SentenceProcessing**.
+---
 
-## Stage 4: AI Processing & Enrichment (n8n Workflow)
+## 🤖 Prefect-Centric Workflow
 
-The Laravel queue triggers an advanced n8n workflow (`SentenceProcessing`).
+The AI process is now entirely background-oriented, segmented into a high-performance modular pipeline.
 
-### A. Resource Routing
-A Switch Node routes the sentence based on its `resource_type` (e.g., Quran, Hadith, Tafsir). The LLM uses resource-specific prompts (e.g., separating Isnad from Matn for Hadith, or extracting Root Words for Language Tools) and saves the output to a dynamic JSON object.
+### Stage 1: Trigger (Laravel -> Prefect)
+The Admin clicks "Process with AI" in Filament. Laravel notifies Prefect to start the `Islamic Text Ingestion` flow for a specific `source_book_id`.
 
-### B. Categorization & Tagging Sub-Flow
-The AI analyzes the sentence and its surrounding context to apply structural and searchable metadata.
+### Stage 2: Ingestion & Segmentation (Prefect CPU)
+The pipeline reads the raw text from the database and uses **SpaCy** and **Regex** to:
+1.  Strip Harakat (vowel marks).
+2.  Segment text into sentences with preserved context boundaries.
 
-1.  **Categorization (Hierarchical & Controlled):**
-    *   The AI must classify the text into predefined, rigid roots (e.g., Discipline: **Fiqh** -> Chapter: **Muamalah**).
-    *   **Auto-widening Rule:** If the AI determines a new Sub-chapter is required, it cannot create it directly. It places the suggestion in a "Waiting Room" array for admin approval.
-2.  **Tagging (Flat & Unrestricted):**
-    *   The AI acts freely to extract hyper-specific metadata as flat tags (e.g., `[Mu'adz_bin_Jabal]`, `[Zakat]`, `[Yemen]`).
+### Stage 3: Deep Enrichment (Prefect GPU x Ollama)
+For every segment, the pipeline performs:
+1.  **Classification:** Zero-shot categorizing into scholarly branches (Fiqh, Aqidah, etc.).
+2.  **Translation:** Generating formal Indonesian translations via the **Aya** model.
+3.  **Vectorization:** Generating multilingual embeddings for concept-based search.
 
-### C. Batching & Multi-Target Vectorization
-To optimize API costs and network latency, processed records are not embedded one by one.
+### Stage 4: Webhook Completion (Prefect -> Laravel)
+When the processing is complete, Prefect calls a Laravel API endpoint to notify the system.
+- **Endpoint:** `POST /api/webhooks/prefect/job-completed`
+- **Logic:** Updates the `SourceBook` status to `completed` and records the final processed count.
 
-1.  **Batching:** Processed `SentenceJobs` are grouped into batches of 50–100 items.
-2.  **Multi-Target Vectorization:** The system sends bulk API calls to the embedding model (e.g., OpenAI or Cohere) to vectorize multiple targets per item:
-    *   **Text Vector:** The embedding of the core sentence + context.
-    *   **Category Vector:** The embedding of the assigned Discipline/Chapter.
-    *   **Tag Vectors:** The embeddings of the extracted tags.
-    *   *(Note: Vectorizing categories and tags allows the system to perform semantic routing and fuzzy filtering later).*
+---
 
-## Stage 5: Database Storage (PostgreSQL)
-
-The final enriched data is written to a unified PostgreSQL database optimized for high-performance AI retrieval.
-
-1.  **Relational Data:** ID, Resource Type, core sentence, and context strings.
-2.  **JSONB Schema:** The dynamic resource metadata, exact Category hierarchy, and Tag arrays are stored in a strictly typed **JSONB** column for fast filtering.
-3.  **Vector Indexing:** The generated embeddings are stored using the `pgvector` extension and indexed using **StreamingDiskANN** (via `pgvectorscale`). This ensures the index remains on the SSD, allowing the system to scale to millions of records without exhausting server RAM.
-
-## Data Flow Diagram
+## 📈 Data Flow Diagram
 
 ```mermaid
 graph TD
-    A[Admin Dashboard] -->|Create| B(SourceJob)
-    B -->|Laravel Queue| C{Python Microservice}
-    C -->|SpaCy SBD| D[Sentence + Context Extraction]
-    D -->|REST API| E(SentenceJob)
-    E -->|Laravel Queue| F{n8n: SentenceProcessing}
-    F -->|Branch by Type| G[Metadata Enrichment]
-    G -->|Sub-flow| H[n8n: Categorization & Tagging]
-    H -->|Batch & Queue| J(VectorizationJob)
-    J -->|Multi-Target Vectorization| I[PostgreSQL: StreamingDiskANN]
+    A[Filament: SourceBook] -->|Trigger POST| B(Prefect API)
+    B -->|Flow Run| C{Prefect AI Worker}
+    C -->|Read Raw| D[(PostgreSQL)]
+    C -->|CPU| E[Segment & Classify]
+    C -->|GPU| F[Ollama: Translate]
+    C -->|Vector| G[HNSW Embedding]
+    E --> H[Write Enriched]
+    F --> H
+    G --> H
+    H -->|Save| D
+    C -->|Webhook| I[Laravel: JobCompleted]
+    I -->|Update Status| A
 ```
 
 ---
 
-*For technical implementation details, n8n switch logic, and specific LLM prompts, see [details.md](./details.md).*
+*For detailed model schemas and Python script logic, see [pipeline.md](./pipeline.md) and [details.md](./details.md).*

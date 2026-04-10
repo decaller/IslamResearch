@@ -2,93 +2,61 @@
 
 This document provides deep technical insights and implementation strategies for the more complex components of the IslamResearch Platform.
 
-## SpaCy Optimization for Large Texts
-
-Processing large historical Islamic texts (like multivolume Tafsirs or Hadith collections) can be memory-intensive. `spaCy` is optimized for performance but can consume significant RAM if not handled correctly.
-
-### 1. The "Sentencizer" Hack (Zero-RAM Approach)
-For initial segmentation (Stage 2), we only require **Sentence Boundary Detection (SBD)**. By using a rule-based Sentencizer instead of a full neural network model, we reduce memory usage to nearly zero.
-
-```python
-import spacy
-
-# Load a blank model (super fast, no heavy neural networks)
-nlp = spacy.blank("ar") # Use "ar" for Arabic, "en" for English
-
-# Add the rule-based sentencizer to the pipeline
-nlp.add_pipe("sentencizer")
-
-# Process text
-doc = nlp(raw_text)
-sentences = [sent.text for sent in doc.sents]
-```
-
-### 2. Efficient Streaming with `nlp.pipe()`
-When detailed AI analysis (Tagging, NER) is required in later stages, avoid passing giant strings. Use `nlp.pipe()` to stream data in batches and disable unnecessary pipeline components.
-
-```python
-# Process in batches of 50 to save RAM
-for doc in nlp.pipe(paragraphs, batch_size=50, disable=["ner", "tagger", "lemmatizer"]):
-    for sent in doc.sents:
-        # Process individual sentences
-```
-
-### 3. Architecture Isolation (The Microservice Pattern)
-Running Python ML libraries directly inside n8n containers can lead to instability. We isolate the processing into a separate microservice.
-
 ---
 
-## Resource-Specific Processing (Stage 4 Deep Dive)
+## 🏛️ Resource-Based Processing Flows (Stage 4 Deep Dive)
 
-When the `SentenceJob` reaches the **SentenceProcessing** n8n workflow, a Switch Node routes the batch based on its `resource_type`.
+When a `SentenceJob` is picked up by the Prefect Worker, the Python code uses conditional routing based on its `resource_type`. Each branch uses specific Python tasks or LLM (Ollama) prompts to extract metadata unique to that text type.
 
-### 1. Quran
--   **Stage 2 Override:** The primary split is strictly by **Ayah (Verse)** boundaries. However, since specific verses (e.g., *Ayah al-Dayn*, 2:282) can span an entire page, the microservice checks the word count. If an Ayah exceeds the optimal embedding limit (e.g., **> 40 words**), it triggers a secondary split using **Quranic pause marks (Waqf)** or SpaCy's sentencizer to create sub-Ayah chunks.
+### 1. The Quran (The Core Text)
+Requires absolute precision and sub-verse segmentation for long entries.
+-   **Stage 2 Customization:** Primary splitting by Ayah boundaries. If a verse exceeds **40 words** (e.g., *Ayah al-Dayn*), it triggers secondary splitting using Quranic *waqaf* marks or SpaCy SBD.
 -   **Stage 4 Enrichment:**
-    *   **Mapping:** Exact Surah_ID, Ayah_Number, Juzz, and **Ayah_Part_Index** (for chunks of long verses).
-    *   **Translation Alignment:** Align translations strictly to the Arabic Ayah or the specific sub-Ayah chunk.
-    *   **Categorization:** Apply ontological tags via the `Categorization` sub-flow.
+    *   **Mapping:** Precise alignment for Surah_ID, Ayah_Number, Juzz, and **Ayah_Part_Index**.
+    *   **Theme Tagging:** Zero-Shot model categorizes the segment (e.g., #Eschatology, #Prophet_Stories, #Fiqh).
     *   **Vectorization:** Dual-embedding (Arabic + Translation).
 
-### 2. Hadits Book
--   **Stage 2 Override:** Standard SpaCy SBD + 5-sentence context.
+### 2. Hadith Books (Narrations)
+Focuses on the separation of the chain (Sanad) from the text (Matn).
+-   **Stage 2 Customization:** Standard SpaCy SBD with 5-sentence context to preserve the full narration context.
 -   **Stage 4 Enrichment:**
-    *   **Information Extraction (LLM):** Separation of **Isnad** (Chain) and **Matn** (Text).
-    *   **Metadata Mapping:** Kitab, Bab, Hadith_Number, and Authenticity Grace.
-    *   **Categorization:** Categorize Matn under Fiqh or Akhlaq themes.
+    *   **Ollama Extraction:** The LLM extracts the narrator chain into an array. 
+    *   *Prompt:* "Read this text. Does it contain a Sanad? Extract the narrators into an array."
+    *   **Metadata Mapping:** Book, Chapter, Hadith_Number, and Authenticity_Grade.
 
-### 3. Tafsir Book
--   **Stage 2 Override:** Standard SpaCy SBD.
+### 3. Tafsir Books (Exegesis)
+Connecting explanations back to the source Quranic verses.
+-   **Stage 2 Customization:** Standard SpaCy SBD.
 -   **Stage 4 Enrichment:**
-    *   **Anchor Linking:** Identify the specific Surah and Ayah being explained.
-    *   **Categorization:** Flag for *Asbab al-Nuzul*, Linguistic Analysis, or *Fiqh*.
-    *   **Metadata:** Target_Surah_ID, Target_Ayah_Number.
+    *   **Anchor Linking:** The LLM identifies exactly which Surah/Ayah is being discussed.
+    *   **Categorization:** Tagging for *Asbabun Nuzul*, Linguistic Analysis, or Jurisprudence.
+    *   **Schema:** Target_Surah_ID, Target_Ayah_Number, Author_ID.
 
-### 4. Syarh Hadits Book
--   **Stage 2 Override:** Standard SpaCy SBD.
+### 4. Hadith Syarh Books (Commentaries)
+Explanations of Hadith (e.g., Fath al-Bari).
 -   **Stage 4 Enrichment:**
-    *   **Anchor Linking:** Link to primary Hadith number/chapter.
-    *   **Categorization:** Flag for *Rijal* (Biography), *'Ilal* (Defects), or Legal derivation.
-    *   **Metadata:** Target_Hadith_Collection, Target_Hadith_Number.
+    *   **Anchor Linking:** Identify the specific Hadith number or core Matn phrase.
+    *   **Categorization:** Tagging Narrator biographies (*Rijal*), Hidden defects (*'Ilal*), or Legal derivation.
+    *   **Schema:** Target_Hadith_Collection, Target_Hadith_Number.
 
-### 5. Language Tools Book (Dictionaries)
--   **Stage 2 Override:** Bypass standard SpaCy. Use **custom Regex or structured parser** to split by **Root Word / Lemma** entries.
+### 5. Language Tools (Linguistics)
+Dictionaries (Lisan al-Arab) and grammar books.
+-   **Stage 2 Customization:** Bypass standard SpaCy. Uses custom Regex or structured parsers to split by **Root Word / Lemma** entries.
 -   **Stage 4 Enrichment:**
-    *   **Root Extraction (LLM):** Extract the 3 or 4-letter Arabic root (**Jidhr**).
-    *   **Metadata:** Root_Word, Derived_Forms, Definition_Type.
-    *   **Vectorization:** Weighted towards the root word to enable cross-resource referencing.
+    *   **Jidhr Extraction:** Uses **CAMeL Tools** or LLM to extract the exact 3 or 4-letter Arabic root.
+    *   **Vectorization Strategy:** Heavily weighted on the root word to enable cross-resource referencing.
 
-### 6. Other Book (General Literature)
--   **Stage 2 Override:** Standard SpaCy SBD + 5-sentence context.
+### 6. Other Books (General Literature)
+General literature covering faith, history, and ethics.
 -   **Stage 4 Enrichment:**
-    *   **Entity Extraction:** Extract People, Places, Battles, and Events.
-    *   **Categorization:** Multi-label classification (e.g., #Trade, #Umayyad_Period).
+    *   **NER Extraction:** Ollama extracts Named Entities: People, Places, Battles, and Events.
+    *   **Theme Tagging:** Standard multi-label classification (#Trade, #Umayyad_Dynasty).
 
 ---
 
-## Unified Database Strategy (PostgreSQL JSONB)
+## 🗄️ Unified Database Strategy (PostgreSQL JSONB)
 
-The platform utilizes a unified items table to handle the diverse metadata requirements of different resource types.
+Because each resource type generates different metadata, PostgreSQL handles this via a unified `items` table with a strictly typed **JSONB** column.
 
 | Field | Type | Description |
 | :--- | :--- | :--- |
@@ -96,13 +64,73 @@ The platform utilizes a unified items table to handle the diverse metadata requi
 | **resource_type** | Enum | quran, hadith, tafsir, syarh, language, other |
 | **sentence_text** | Text | The core sentence content |
 | **context_text** | Text | The 5 sentences immediately before and after |
-| **metadata** | **JSONB** | **Dynamic LLM extraction data (Isnad, Root, etc.)** |
-| **embedding** | Vector | Indexed with StreamingDiskANN (pgvectorscale) |
-
-This JSONB approach allows for strict typing in code while maintaining flexibility in the database storage.
+| **metadata** | **JSONB** | **Dynamic LLM data (Isnad, Root, Target_Ayah, etc.)** |
+| **embedding** | Vector | Indexed with HNSW (pgvector) |
 
 ---
 
-## Search Technology
+## 🔍 Search Technology
 
-The platform utilizes **pgvectorscale** to enable **StreamingDiskANN** indexes. This allows us to perform high-accuracy vector searches across millions of sentences while keeping the index on disk rather than entirely in RAM, significantly reducing infrastructure costs while maintaining millisecond latency.
+The platform utilizes **pgvector** with **HNSW** indexes. We implement a **Language Detection "Cheat"** to maintain millisecond latency:
+Instead of an expensive AI model for language detection, we use a blazing-fast PHP Regex in the search controller:
+```php
+preg_match('/\p{Arabic}/u', $query)
+```
+Arabic queries route to the `arabic_embedder` index, while Latin queries (Indo/English) route to the `multilingual_embedder`.
+
+---
+
+## 🤖 Prefect Pipeline Workflow (`main_pipeline.py`)
+
+The pipeline handles the division of labor between "Fast" (CPU) and "Slow" (GPU) tasks using a modular architecture.
+
+```python
+@flow(name="Islamic Text Ingestion")
+def process_batch():
+    texts = fetch_pending_records()
+    for text in texts:
+        # Fast CPU: Prep & Categorize
+        clean_sentences = text_prep.clean_arabic(text['content'])
+        for sentence in clean_sentences:
+            category = classify.zero_shot(sentence)
+            # Slow GPU: Translate (Ollama)
+            indonesian = translate.run_ollama(sentence)
+            # Math/Vector: Embeddings
+            vectors = vectorize.create_embeddings(sentence, indonesian)
+            # Save Enriched Data
+            save_to_db(text['id'], sentence, category, indonesian, vectors)
+```
+
+---
+
+## 🐳 Docker Setup (Prefect)
+
+The AI factory runs in a dedicated Python container sharing the `sail` network.
+
+### Python Dockerfile (`docker/python/Dockerfile`)
+```dockerfile
+FROM python:3.11-slim
+RUN apt-get update && apt-get install -y gcc g++ curl libpq-dev
+RUN pip install prefect transformers torch requests spacy psycopg2-binary camel-tools
+RUN python -m spacy download ar_core_news_sm
+WORKDIR /app
+CMD ["tail", "-f", "/dev/null"]
+```
+
+### Sail Service Extension
+```yaml
+    prefect-server:
+        image: prefecthq/prefect:2-python3.11
+        command: prefect server start --host 0.0.0.0
+        ports: ["4200:4200"]
+        networks: [sail]
+
+    ai-pipeline:
+        build: { context: ./docker/python }
+        volumes: ["./ai-scripts:/app"]
+        environment:
+            - PREFECT_API_URL=http://prefect-server:4200/api
+            - DB_HOST=pgsql
+            - OLLAMA_HOST=http://host.docker.internal:11434
+        networks: [sail]
+```
