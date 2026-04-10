@@ -1,103 +1,54 @@
-# IslamResearch
+# 🌙 IslamResearch
 
-A Laravel-based platform for Islamic research, featuring Livewire, Filament v5, Prefect-orchestrated AI pipelines, and vector search capabilities.
+**IslamResearch** is a state-of-the-art research platform designed to transform classical Islamic texts into semantically-enriched, highly searchable data units. By combining the power of modern web frameworks with advanced AI orchestration, it provides scholars and researchers with an intelligent workspace for studying and classifying sacred knowledge.
 
-## 🚀 Installation & Setup
-
-Follow these steps to get the project running locally using **Laravel Sail**:
-
-For more detailed documentation, please refer to the [docs folder](./docs/):
-- [Architecture](./docs/architecture.md)
-- [AI Pipeline Blueprint](./docs/pipeline.md)
-- [Data Sources](./docs/data-sources.md)
-- [Implementation Details](./docs/details.md)
-
-1.  **Clone the repository**:
-    ```bash
-    git clone <repository-url>
-    cd IslamResearch
-    ```
-
-2.  **Environment Setup**:
-    Copy the example environment file:
-    ```bash
-    cp .env.example .env
-    ```
-
-3.  **Install Dependencies**:
-    If you have Composer installed locally, run:
-    ```bash
-    composer install
-    ```
-    Alternatively, run it via Docker:
-    ```bash
-    docker run --rm \
-        -u "$(id -u):$(id -g)" \
-        -v "$(pwd):/var/www/html" \
-        -w /var/www/html \
-        laravelsail/php85-composer:latest \
-        composer install --ignore-platform-reqs
-    ```
-
-4.  **Start Laravel Sail**:
-    ```bash
-    ./vendor/bin/sail up -d
-    ```
-
-5.  **Generate Application Key & Migrate**:
-    ```bash
-    ./vendor/bin/sail artisan key:generate
-    ./vendor/bin/sail artisan migrate
-    ```
-
-6.  **Install Frontend Assets**:
-    ```bash
-    ./vendor/bin/sail npm install
-    ./vendor/bin/sail npm run build
-    ```
+> [!IMPORTANT]
+> **Project Status:** This project is currently in **very early development**. Many features are in the mockup/blueprint stage. Please refer to the **[Development Roadmap (TODO.md)](./TODO.md)** for the implementation status and upcoming milestones.
 
 ---
 
-## 🔗 Accessible URLs (Local Environment)
+## 🏗️ Core Concept
 
-Once the Sail containers are up and running, you can access the following services:
+The platform acts as an **AI-driven factory** for Islamic corpus management. It automates the tedious process of text cleaning, segmentation, classification, and translation, while maintaining a human-in-the-loop scholarly review system.
 
-| Service | URL | Description |
-| :--- | :--- | :--- |
-| **Main Application** | [http://localhost](http://localhost) | The main user interface |
-| **Filament Admin** | [http://localhost/admin](http://localhost/admin) | Admin dashboard for data management |
-| **Prefect UI** | [http://localhost:4200](http://localhost:4200) | AI Pipeline orchestration dashboard |
-| **Laravel Horizon** | [http://localhost/horizon](http://localhost/horizon) | Queue and job monitoring |
-| **Laravel Telescope** | [http://localhost/telescope](http://localhost/telescope) | Debugging and performance insights |
-| **Meilisearch** | [http://localhost:7700](http://localhost:7700) | Search engine dashboard |
+### Key Workflows:
+1.  **Ingestion**: Upload classical Arabic texts (Harakat-rich) into the system.
+2.  **AI Factory**: Trigger Prefect-orchestrated pipelines that segment text, strip harakat, classify topics (Fiqh, Aqidah, etc.), and generate translations.
+3.  **Semantic Enrichment**: Generate multilingual vector embeddings to support concept-based search rather than just keyword matching.
+4.  **Scholarly Review**: Use a premium Filament-powered dashboard to verify, correct, and annotate AI-generated data.
 
 ---
 
-## 🤖 AI Pipeline Setup (Prefect)
+## 🛠️ Tech Stack
 
-The project includes an automated AI factory orchestrated by Prefect.
+Built with the best-in-class Laravel ecosystem and modern AI tools:
 
-### 1. Prefect UI
-Access the Prefect dashboard at [http://localhost:4200](http://localhost:4200) to monitor and manage your Islamic text processing flows.
-
-### 2. AI Worker Container
-The `ai-pipeline` container runs the Prefect worker, which:
-- Executes **Fast/CPU** tasks (Classification, Segmentation).
-- Orchestrates **Slow/GPU** tasks (Ollama Translation/Enrichment).
-
-### 3. Triggering Flows
-Flows are triggered from the Laravel Filament dashboard via the Prefect REST API.
+-   **Backend**: [Laravel 13](https://laravel.com) (The PHP Framework for Web Artisans)
+-   **Admin UI**: [Filament v5](https://filamentphp.com) (TALL Stack framework for beautiful dashboards)
+-   **Reactivity**: [Livewire 4](https://livewire.laravel.com)
+-   **AI Orchestration**: [Prefect](https://www.prefect.io) (Python-based data orchestration)
+-   **Database**: [PostgreSQL](https://www.postgresql.org) with `pgvector` for high-performance vector search.
+-   **Search Engine**: [Meilisearch](https://www.meilisearch.com) for lightning-fast typo-tolerant results.
+-   **Containerization**: [Laravel Sail](https://laravel.com/docs/sail) + Docker Compose.
 
 ---
 
+## 📚 Documentation
+
+Detailed guides are available to help you understand and extend the platform:
+
+-   📖 **[Architecture Blueprint](./docs/architecture.md)**: Deep dive into the system design and data flow.
+-   🤖 **[AI Pipeline Details](./docs/pipeline.md)**: Details on the NLP models and stage-by-stage transformations.
+-   📦 **[Data Sources](./docs/data-sources.md)**: List of supported resources and ingestion strategies.
+-   🚀 **[Installation Guide](./docs/installation.md)**: Step-by-step setup for your local development environment.
+-   📝 **[Development Roadmap](./TODO.md)**: Current task list and implementation status.
+
 ---
 
-## 🛠 Tech Stack
+## 🏁 Getting Started
 
-- **Framework**: Laravel 13
-- **Frontend**: Livewire 4, Tailwind CSS 4
-- **Admin Panel**: Filament v5
-- **AI Orchestration**: Prefect
-- **Database**: PostgreSQL with pgvector
-- **Search**: Meilisearch
-- **Dev Environment**: Laravel Sail
+To get the project running locally, please follow the **[Installation & Setup Guide](./docs/installation.md)**.
+
+---
+
+*This project is dedicated to making Islamic knowledge more accessible through modern technology.*
