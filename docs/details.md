@@ -44,6 +44,7 @@ Dictionaries (Lisan al-Arab) and grammar books.
 -   **Stage 2 Customization:** Bypass standard SpaCy. Uses custom Regex or structured parsers to split by **Root Word / Lemma** entries.
 -   **Stage 4 Enrichment:**
     *   **Jidhr Extraction:** Uses **CAMeL Tools** or LLM to extract the exact 3 or 4-letter Arabic root.
+    *   **Lexicon Strategy:** Implements a normalized dictionary approach for roots and surface words. See the detailed [Linguistic Lexicon & Vector Strategy](./lexicon-strategy.md).
     *   **Vectorization Strategy:** Heavily weighted on the root word to enable cross-resource referencing.
 
 ### 6. Other Books (General Literature)

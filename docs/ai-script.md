@@ -47,6 +47,7 @@ def process_batch():
 
 - **Regex Stripping:** Efficiently removes non-essential marks.
 - **SpaCy SBD:** Rule-based segmentation for high performance.
+- **Lexicon Mapping:** Uses CAMeL Tools to extract roots and diacritized/clean word pairs for the Global Lexicon.
 
 ---
 

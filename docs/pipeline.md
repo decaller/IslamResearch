@@ -61,6 +61,7 @@ Below are the specific models utilized in the pipeline, their roles, and links f
 - **Regex Stripping:** Efficiently removes non-essential marks.
 - **SpaCy SBD:** Rule-based segmentation for high performance.
 - **CAMeL Extraction:** Extracts the 3-letter root (**Jidhr**) for enhanced metadata tagging.
+- **Lexicon Integration:** Populates the Global Lexicon (`lexicon_roots` and `lexicon_words`) to enable deep morphological search. See [Lexicon Strategy](./lexicon-strategy.md).
 
 ### 🏷️ Stage 3: Classification (`tasks/classify.py`)
 Uses Hugging Face pipelines locally to assign rigid categories.

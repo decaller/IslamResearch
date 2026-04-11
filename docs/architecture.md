@@ -23,6 +23,11 @@ The final, AI-enriched result. This resource allows for manual scholarly review 
 - **Database:** `items` (id, resource_type, text, metadata [JSONB], text_vector [vector])
 - **Filament Interface:** Uses a JSON form plugin to allow precise editing of tags, categories, and hierarchical arrays.
 
+### 4. Linguistic Lexicon (Root & Word Explorer)
+Resources for exploring the foundational components of the database. Useful for scholars performing deep morphological research.
+- **LexiconRootResource:** Allows searching and managing base roots (Jidhr). Shows all associated words and their semantic vector proximity.
+- **LexiconWordResource:** Manages surface words (Arabic with/without Harakat). Displays frequency across the corpus and links back to the original `Item` segments.
+
 ---
 
 ## 🤖 Prefect-Centric Workflow
