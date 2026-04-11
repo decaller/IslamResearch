@@ -62,7 +62,7 @@ Because each resource type generates different metadata, PostgreSQL handles this
 | Field | Type | Description |
 | :--- | :--- | :--- |
 | **id** | UUID | Primary Key |
-| **resource_type** | Enum | quran, hadith, tafsir, syarh, language, other |
+| **resource_type** | Enum | quran, hadith, tafsir, syarh, language, quranic_action, other |
 | **sentence_text** | Text | The core sentence content |
 | **context_text** | Text | The 5 sentences immediately before and after |
 | **metadata** | **JSONB** | **Dynamic LLM data (Isnad, Root, Target_Ayah, etc.)** |
