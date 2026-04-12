@@ -10,8 +10,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        // CASCADE ensures the base 'vector' extension is also installed automatically
-        DB::statement('CREATE EXTENSION IF NOT EXISTS vectorscale CASCADE;');
+        // Use 'vector' extension which is available in pgvector/pgvector image
+        DB::statement('CREATE EXTENSION IF NOT EXISTS vector CASCADE;');
     }
 
     /**
@@ -19,6 +19,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        DB::statement('DROP EXTENSION IF EXISTS vectorscale CASCADE;');
+        DB::statement('DROP EXTENSION IF EXISTS vector CASCADE;');
     }
 };
