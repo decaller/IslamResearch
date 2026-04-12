@@ -5,7 +5,7 @@
     "guidelines": true,
     "mcp": true,
     "nightwatch_mcp": false,
-    "sail": false,
+    "sail": true,
     "skills": [
         "laravel-best-practices",
         "configuring-horizon",

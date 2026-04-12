@@ -75,4 +75,4 @@ graph TD
 
 ---
 
-*For detailed model schemas, Python script logic, UI architecture, and personalization systems, see [pipeline.md](./pipeline.md), [details.md](./details.md), [frontend.md](./frontend.md), [quranic-tadabbur-amal.md](./quranic-tadabbur-amal.md), and [user-personalization.md](./user-personalization.md).*
+*For detailed model schemas, Python script logic, UI architecture, and personalization systems, see [pipeline.md](./pipeline.md), [details.md](./details.md), [frontend.md](./frontend.md), [ux/search-page.md](./ux/search-page.md), [ux/page-types.md](./ux/page-types.md), [quranic-tadabbur-amal.md](./quranic-tadabbur-amal.md), and [user-personalization.md](./user-personalization.md).*

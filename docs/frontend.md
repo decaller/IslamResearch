@@ -1,6 +1,9 @@
 # Frontend Architecture: The "Scholar UI"
 
-To expose the massive power of the AI pipeline without overwhelming the user, the UI employs a **"Progressive Disclosure"** design. It remains clean and simple for general use while allowing advanced scholars to toggle granular search methods and morphological tools.
+To expose the massive power of the AI pipeline without overwhelming the user, the UI employs a **"Progressive Disclosure"** design. It remains clean and simple for general use while allowing advanced scholars to toggle granular search methods and morphological tools. 
+
+> [!NOTE]
+> For a detailed walkthrough of the visual layout and interaction design, see [Search Page UX](./ux/search-page.md) and [Page Types & Explorability](./ux/page-types.md).
 
 ---
 

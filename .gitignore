@@ -21,3 +21,12 @@ yarn-error.log
 /.nova
 /.vscode
 /.zed
+/.agents
+/.augment
+/.claude
+/.commandcode
+/.continue
+/.cortex
+/.factory
+/.gemini
+/.zencoder
