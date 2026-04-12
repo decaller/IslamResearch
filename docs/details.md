@@ -14,7 +14,7 @@ Requires absolute precision and sub-verse segmentation for long entries.
 -   **Stage 4 Enrichment:**
     *   **Mapping:** Precise alignment for Surah_ID, Ayah_Number, Juzz, and **Ayah_Part_Index**.
     *   **Theme Tagging:** Zero-Shot model categorizes the segment (e.g., #Eschatology, #Prophet_Stories, #Fiqh).
-    *   **Vectorization:** Dual-embedding (Arabic + Translation).
+    *   **Vectorization:** Split dual-indexes (Arabic string into `embedding_ar`, Indonesian string into `embedding_id`).
 
 ### 2. Hadith Books (Narrations)
 Focuses on the separation of the chain (Sanad) from the text (Matn).
@@ -62,11 +62,13 @@ Because each resource type generates different metadata, PostgreSQL handles this
 | Field | Type | Description |
 | :--- | :--- | :--- |
 | **id** | UUID | Primary Key |
-| **resource_type** | Enum | quran, hadith, tafsir, syarh, language, quranic_action, other |
-| **sentence_text** | Text | The core sentence content |
-| **context_text** | Text | The 5 sentences immediately before and after |
+| **source_book_id** | UUID | Foreign Key -> `source_books.id` |
+| **sequence_number** | Integer | Order index for dynamic `context_text` fetching without data bloat |
+| **resource_type** | Enum | quran, hadith, tafsir, syarh, language, quranic_action, etc. |
+| **sentence_text** | Text | The core Arabic sentence content |
+| **translation** | JSON | The mapped structural translations |
 | **metadata** | **JSONB** | **Dynamic LLM data (Isnad, Root, Target_Ayah, etc.)** |
-| **embedding** | Vector | Indexed with HNSW (pgvector) |
+| **embedding_ar, ...** | Vector | Language-specific AI vectors |
 
 ---
 
@@ -96,10 +98,11 @@ def process_batch():
             category = classify.zero_shot(sentence)
             # Slow GPU: Translate (Ollama)
             indonesian = translate.run_ollama(sentence)
-            # Math/Vector: Embeddings
-            vectors = vectorize.create_embeddings(sentence, indonesian)
+            # Math/Vector: Specific Embeddings
+            embed_ar = vectorize.create_embeddings(sentence)
+            embed_id = vectorize.create_embeddings(indonesian)
             # Save Enriched Data
-            save_to_db(text['id'], sentence, category, indonesian, vectors)
+            save_to_db(text['id'], sentence, category, indonesian, embed_ar, embed_id)
 ```
 
 ---

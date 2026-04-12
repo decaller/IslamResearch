@@ -43,7 +43,7 @@ Below are the specific models utilized in the pipeline, their roles, and links f
 - **Find Alternatives:** Search for *text-generation + ar + GGUF*
 
 ### 3. The Vectorizer (Multilingual Embeddings)
-- **Function:** Converts both Arabic and Indonesian texts into semantic mathematical arrays (vectors) so Meilisearch/PostgreSQL can perform cross-lingual meaning-based search.
+- **Function:** Converts both texts into completely separated semantic vectors (`embedding_ar`, `embedding_id`) to prevent cross-language concept dilution and drastically improve accurate recall.
 - **Active Model:** `mixedbread-ai/mxbai-embed-large-v1`
 - **Find Alternatives:** Search for *sentence-similarity + ar (Multilingual)*
 
@@ -75,7 +75,7 @@ Makes HTTP requests to the Ollama container (host GPU) using the **Aya** model.
 ### 📐 Stage 5: Vectorization (`tasks/vectorize.py`)
 Uses a multilingual embedding model.
 - **Model:** `mxbai-embed-large`
-- **Mechanism:** Vectorizes both languages to enable cross-lingual semantic search.
+- **Mechanism:** Vectorizes Arabic and translations individually, routing them to specific schema columns.
 
 ### 🗄️ Database Interaction (`database.py`)
 Manages connections to PostgreSQL and Meilisearch, providing tasks for fetching pending records and saving enriched results.

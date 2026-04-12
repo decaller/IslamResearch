@@ -47,14 +47,15 @@ Stores the actual variations found in the texts, linked to their parent root.
 
 **Index:** Unique constraint on `(language, word_raw, word_clean)`.
 
-### C. Pivot Table: `item_word`
-Connects the sentences (`items` table) to the `lexicon_words` table.
+### C. Pivot Table: `sentence_word`
+Connects the `sentences` table to the `lexicon_words` table for deep highlighting matrices.
 
 | Field | Type | Description |
 | :--- | :--- | :--- |
-| **item_id** | UUID | Foreign Key -> `items.id` |
+| **sentence_id** | UUID | Foreign Key -> `sentences.id` |
 | **word_id** | UUID | Foreign Key -> `lexicon_words.id` |
-| **frequency** | Int | Count of appearances in this specific sentence/paragraph |
+| **source_type** | Enum | Identifies if the word originated from the raw text or the translation JSON |
+| **positions** | Int[] | Array of coordinate indexes (e.g., `[3, 14]`) for instant UI matching |
 
 ---
 
@@ -125,4 +126,4 @@ To manage this complex linguistic data, the Laravel backend provides two key Fil
 2.  **LexiconWordResource:**
     *   **Purpose:** Individual word analysis.
     *   **Key Data:** Shows both `word_raw` (Harakat) and `word_clean` (Search-friendly) versions.
-    *   **Traceability:** Includes a relation manager to see every `Item` (Sentence) where this specific word was used, providing immediate context for linguistic research.
+    *   **Traceability:** Includes a relation manager to see every `Sentence` where this specific word was used, providing immediate context for linguistic research.

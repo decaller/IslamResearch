@@ -10,7 +10,7 @@ Because Prefect handles the heavy lifting (reading directly from PostgreSQL and 
 
 ### 1. SourceBook (Text Source)
 The entry point for all research data. Admins use this resource to manage primary sources and trigger the AI factory.
-- **Database:** `source_books` (id, title, author, resource_type, language, status)
+- **Database:** `source_books` (id, title, scholar_id, resource_type, language, status, metadata)
 - **Filament Action:** **"Process with AI"**. This custom action sends an HTTP POST to the Prefect API to create a flow run and updates the status to `processing`.
 
 ### 2. SentenceJob (Batch Monitoring)
@@ -20,13 +20,13 @@ Since ingestion processes thousands of sentences, this is a **Read-Only** monito
 
 ### 3. Item / Sentence (Enriched Search Database)
 The final, AI-enriched result. This resource allows for manual scholarly review and corrections.
-- **Database:** `items` (id, resource_type, text, metadata [JSONB], text_vector [vector])
+- **Database:** `sentences` (id, source_book_id, sequence_number, resource_type, sentence_text, translation, metadata [JSONB], embedding_ar [vector], embedding_id [vector], embedding_en [vector])
 - **Filament Interface:** Uses a JSON form plugin to allow precise editing of tags, categories, and hierarchical arrays.
 
 ### 4. Linguistic Lexicon (Root & Word Explorer)
 Resources for exploring the foundational components of the database. Useful for scholars performing deep morphological research.
 - **LexiconRootResource:** Allows searching and managing base roots (Jidhr). Shows all associated words and their semantic vector proximity.
-- **LexiconWordResource:** Manages surface words (Arabic with/without Harakat). Displays frequency across the corpus and links back to the original `Item` segments.
+- **LexiconWordResource:** Manages surface words (Arabic with/without Harakat). Displays exact occurrences via an integer array and links back to the original `Sentence` segments.
 
 ---
 
@@ -46,7 +46,7 @@ The pipeline reads the raw text from the database and uses **SpaCy** and **Regex
 For every segment, the pipeline performs:
 1.  **Classification:** Zero-shot categorizing into scholarly branches (Fiqh, Aqidah, etc.).
 2.  **Translation:** Generating formal Indonesian translations via the **Aya** model.
-3.  **Vectorization:** Generating multilingual embeddings for concept-based search.
+3.  **Vectorization:** Generating distinct, language-specific embeddings (`embedding_ar`, `embedding_id`) to prevent concept dilution during semantic search.
 
 ### Stage 4: Webhook Completion (Prefect -> Laravel)
 When the processing is complete, Prefect calls a Laravel API endpoint to notify the system.

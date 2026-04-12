@@ -20,14 +20,14 @@ Since the book explicitly references specific Ayahs, we use Ollama for **Anchor 
 - **Prompt:** "Read this 'Amal (Action) point. Translate it into formal, actionable Indonesian. Then, identify the exact Surah and Ayah number it is referencing."
 - **Vectorization:** We generate multilingual embeddings for the Indonesian versions of the Action and Contemplation text.
 
-### JSONB Schema (`items` table)
+### Relational Schema (`sentences` via metadata)
 ```json
 {
   "id": "uuid-9999",
   "resource_type": "quranic_action",
-  "content": {
-    "arabic_raw": "طبق سنة من سنن النبي ﷺ في هذا اليوم",
-    "indonesian": "Terapkan satu sunnah Nabi ﷺ pada hari ini."
+  "sentence_text": "طبق سنة من سنن النبي ﷺ في هذا اليوم",
+  "translation": {
+    "id": "Terapkan satu sunnah Nabi ﷺ pada hari ini."
   },
   "metadata": {
     "target_surah": 2,
@@ -52,8 +52,8 @@ A dynamic, tabbed interface that updates instantly based on the Ayahs currently 
 
 1.  **الوقفات التدبرية (Contemplations):** Queries `resource_type: quranic_action` where `metadata.type = 'contemplation'`.
 2.  **توجيه (Directives & Guidance):** Queries `metadata.type = 'directive'`. Displays broad moral lessons.
-3.  **الأعمال (Actions - The Habit Tracker):** Queries `metadata.type = 'action'`. 
-    - **Interactive UI:** Rendered as clickable checkboxes. Checking an action (e.g., "Give charity based on Ayah 261") saves to a `user_habits` table for spiritual progress tracking.
+5.  **الأعمال (Actions - The Habit Tracker):** Queries `metadata.type = 'action'`. 
+    - **Interactive Tracker:** Rendered as actionable checkboxes in the UI. Checking it safely pushes a timestamp into the `user_habits` ledger, linking the `user_id` directly to the `sentence_id`.
 4.  **معاني الكلمات (Word Meanings / Lexicon):** Hits the `lexicon_words` and `lexicon_roots` tables. Clicking a word opens a popup with its 3-letter root and a button to search the entire library for that root.
 5.  **التفاسير (Tafsirs / Exegesis):** Queries `resource_type: tafsir`. Includes an accordion to switch between scholars (e.g., As-Sa'di vs. Ibn Kathir) seamlessly.
 
