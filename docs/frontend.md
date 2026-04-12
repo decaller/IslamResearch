@@ -95,3 +95,38 @@ $results = Sentence::search($userQuery, function ($meilisearch, $query, $options
     return $meilisearch->search($query, $options);
 })->get();
 ```
+
+---
+
+## 4. Component Library (daisyUI v5)
+
+The Scholar UI is built on **daisyUI v5**, a semantic component library that ships as a native Tailwind v4 plugin. It provides pre-styled, theme-aware components that map directly onto each UI zone, drastically reducing bespoke CSS.
+
+### Installation (Tailwind v4 Plugin)
+
+```js
+// vite.config.js / postcss
+// daisyUI is added as a Tailwind v4 plugin:
+// @plugin "daisyui";
+```
+
+### Zone → daisyUI Component Mapping
+
+| UI Zone | daisyUI Components |
+| :--- | :--- |
+| **Omni-Bar (Top Nav)** | `navbar`, `input input-lg`, `dropdown`, `kbd`, `btn` |
+| **Faceted Sidebar** | `drawer`, `menu`, `checkbox`, `collapse` (accordion) |
+| **Result Cards** | `card`, `card-body`, `badge`, `skeleton` (loading), `highlight` (`<mark>`) |
+| **Intelligence Panel** | `tabs`, `tab`, `tab-content`; `drawer` + `modal` on mobile |
+| **Activity Bar (IDE)** | `menu menu-vertical`, `tooltip` |
+| **Editor Tabs (IDE)** | `tabs`, `tab` |
+| **Lexicon Stats** | `stat`, `stat-title`, `stat-value`, `stat-desc` |
+| **Breadcrumb** | `breadcrumbs` |
+| **Relevance Slider** | `range` |
+| **Action Progress** | `progress` |
+| **Save Collection** | `btn btn-ghost`, `swap` (bookmark toggle) |
+
+### Theming
+
+daisyUI themes are applied via the `data-theme` attribute on `<html>`. The application ships with a custom `"scholar"` light theme and `"scholar-dark"` dark theme defined in the Tailwind v4 config, scoped to the project's Islamic design system (emerald greens, warm cream backgrounds, gold accents).
+

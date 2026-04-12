@@ -33,16 +33,21 @@ Implementing the GPU LLM pipeline seamlessly alongside Laravel webhooks.
 - [x] **Testing Webhook Boundary**
   - [x] Implement **Pest PHP** test suites targeting the Webhook API. Use `Http::fake()` to throw random/malformed LLM schema blobs to guarantee Horizon fails elegantly rather than crashing.
 
-## 🎨 Phase 3: The "Scholar IDE UI" (Livewire 4 + Tailwind v4)
-Constructing the split-pane, reactive study canvas for the end user.
+## 🎨 Phase 3: The "Scholar IDE UI" (Livewire 4 + Tailwind v4 + daisyUI v5)
+Constructing the split-pane, reactive study canvas using **daisyUI v5** (Tailwind v4 plugin) as the semantic component library, Alpine.js for client-side behaviour, and Livewire 4 for server-driven state.
 
 - [ ] **Workspace Layout & Alpine Initialization**
-  - [ ] Scaffold the Activity Bar, Explorer Panel, and Editor Canvas using basic HTML.
-  - [ ] Embed the complex layout dragging logic natively in Alpine.js `x-data` avoiding DOM rehydration delays.
-- [ ] **Tailwind Container Layouts**
-  - [ ] Build the content cards utilizing `@container` queries dynamically adapting grid columns depending purely on their parent's panel width.
+  - [ ] Install `daisyui@5` as a Tailwind v4 plugin and configure the Islamic theme (dark/light tokens via daisyUI `data-theme`).
+  - [ ] Scaffold the Activity Bar using daisyUI `menu menu-vertical` + `tooltip` components (50px fixed strip).
+  - [ ] Build the Explorer/Sidebar using daisyUI `drawer` as the collapsible shell; populate with a `menu` tree for `taxonomies` (ltree paths).
+  - [ ] Render the Editor Tab Bar using daisyUI `tabs` + `tab` components; persist active tab index in Alpine `x-data`.
+  - [ ] Embed the complex Split Pane dragging logic natively in Alpine.js `x-data`, using a `divider` sentinel element as the resize handle, avoiding DOM rehydration delays.
+- [ ] **daisyUI Container Layouts**
+  - [ ] Build result/content cards using daisyUI `card` + `card-body` with `@container` queries so grid columns adapt dynamically to the surrounding pane width.
+  - [ ] Use daisyUI `stat` components for Lexicon distribution charts and `badge` for AI-generated tags on result cards.
+  - [ ] Apply daisyUI `skeleton` loading placeholders while Livewire dispatches async search queries.
 - [ ] **State Emitting (Write-Behind Redis Cache)**
-  - [ ] Connect Alpine UI manipulation with Livewire generic listeners.
+  - [ ] Connect Alpine UI state (pane widths, active tab, scroll `Y`) with Livewire generic listeners via `$dispatch`.
   - [ ] Implement the 2-second debounce patch requests securely storing active tabs, horizontal scrolls, and split IDs in Redis.
 - [ ] **Syncing UI to Database**
   - [ ] Map the Redis cached json blob to load and persist smoothly into the `user_workspaces` table on login/logout triggers.

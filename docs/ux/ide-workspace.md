@@ -1,6 +1,6 @@
 # UX Design: The IDE-Like Scholarly Workspace
 
-To support the immense depth of the `IslamResearch` platform, the User Interface discards the traditional "Search Engine" flat-page design in favor of an **Integrated Development Environment (IDE)** paradigm—highly inspired by tools like VS Code or IntelliJ. 
+To support the immense depth of the `IslamResearch` platform, the User Interface discards the traditional "Search Engine" flat-page design in favor of an **Integrated Development Environment (IDE)** paradigm—highly inspired by tools like VS Code or IntelliJ. UI components are built with **daisyUI v5** (Tailwind v4 plugin) for semantic, theme-aware markup.
 
 This layout allows scholars to cross-reference multiple texts, deeply analyze roots, and maintain complex states without losing their train of thought.
 
@@ -11,29 +11,29 @@ This layout allows scholars to cross-reference multiple texts, deeply analyze ro
 The workspace is divided into four distinct resizable areas:
 
 ### A. The Activity Bar (Far Left, 50px wide)
-A thin vertical strip containing global tool icons. Clicking these changes the contents of the Explorer panel.
+A thin vertical strip containing global tool icons built with the daisyUI **`menu menu-vertical`** component and **`tooltip`** (data-tip) for icon labels. Clicking these changes the contents of the Explorer panel.
 - 📁 **Explorer:** Your active books, saved collections, and workspace history.
 - 🔍 **Search:** Global semantic search across `sentences`.
 - 📖 **Lexicon:** Direct access to `lexicon_roots`.
 - 📈 **Analytics/Tadabbur:** Habit trackers and progress for `user_habits`.
-- ⚙️ **Settings:** Dark mode, text size, and UI preferences (stored in `users.metadata`).
+- ⚙️ **Settings:** Dark mode, text size, and UI preferences (stored in `users.metadata`). Dark mode toggled via daisyUI `data-theme` attribute swap using a daisyUI **`swap`** component.
 
 ### B. The Explorer (Sidebar, Collapsible)
-The primary navigation panel. Its contents change based on the Activity Bar selection.
-- **Tree View:** Beautifully renders the `taxonomies` table (using the `path ltree` logic) as a collapsible folder structure (e.g., *📁 Fiqh > 📁 Usul Fiqh*).
-- **Infinite Scroll:** Loads `scholars` and `source_books` instantly via virtual scrolling.
+The primary navigation panel implemented with the daisyUI **`drawer`** component. Its contents change based on the Activity Bar selection.
+- **Tree View:** Renders the `taxonomies` table (ltree paths) as a collapsible **`menu`** + **`collapse`** structure (e.g., *📁 Fiqh > 📁 Usul Fiqh*).
+- **Infinite Scroll:** Loads `scholars` and `source_books` instantly via virtual scrolling inside the drawer content area.
 
 ### C. The Editor Group (The Main Canvas)
 This is where the actual texts are rendered. Unlike a standard webpage, this area supports **Tabs**.
-- **Tab Bar:** Each search query, specific Surah, or Hadith chapter opens as a distinct tab at the top. 
-- **Sticky States:** If a user scrolls 50% down a Tafsir tab, switches to a Search tab, and then switches back, the scroll position is perfectly maintained.
-- **Breadcrumb Trail:** Rendered directly below the tabs, leveraging the `user_journeys` table to show *exactly* what path the scholar took to arrive at this specific text.
+- **Tab Bar:** Built using daisyUI **`tabs`** + **`tab`** components. Each search query, specific Surah, or Hadith chapter opens as a distinct tab at the top.
+- **Sticky States:** If a user scrolls 50% down a Tafsir tab, switches to a Search tab, and then switches back, the scroll position is perfectly maintained (stored in Alpine `x-data`).
+- **Breadcrumb Trail:** Rendered with a daisyUI **`breadcrumbs`** component directly below the tabs, leveraging the `user_journeys` table to show *exactly* what path the scholar took.
 
 ### D. The Split Pane (Contextual Intelligence)
 The true power of the Scholar UI. The Editor Group can be split vertically or horizontally.
-- **Dual-Pane Study:** A user can pin an Arabic Mushaf (Quran) on the Left Pane, and click a verse to instantly load *Tafsir Ibn Kathir* on the Right Pane.
-- **Lexicon Popup/Pane:** Clicking an Arabic word containing a `positions` array highlight triggers the Right Pane to load the exact `lexicon_roots` and morphological details, without losing sight of the source sentence.
-- **Tailwind v4 Container Queries:** To handle unpredictable pane dimensions (e.g., dragging the left panel to be 300px wide), the CSS uses `@container` queries rather than global media queries, ensuring internal cards stack responsively relative to their surrounding pane!
+- **Dual-Pane Study:** A user can pin an Arabic Mushaf (Quran) on the Left Pane, and click a verse to instantly load *Tafsir Ibn Kathir* on the Right Pane. The daisyUI **`divider`** element (vertical) acts as the visual drag-handle sentinel.
+- **Lexicon Popup/Pane:** Clicking an Arabic word triggers the Right Pane to load `lexicon_roots` details inside a daisyUI **`card`** without losing sight of the source sentence.
+- **Container Queries:** To handle unpredictable pane dimensions (e.g. 300px dragged pane), the CSS uses `@container` queries so daisyUI **`card`** grids reflow relative to their surrounding pane, not the global viewport.
 
 ---
 
@@ -76,8 +76,8 @@ Every single UI interaction (opening a tab, resizing the sidebar to 300px, split
 
 ### The Auto-Save Flow (Livewire 4 "Islands" & Alpine)
 To prevent constant DOM re-renders during intense dragging or tab managing, the UI depends on highly localized reactive islands:
-1. **Alpine State:** Complex pane splitting and dragging is mapped fully in Alpine.js `x-data` avoiding continuous Livewire round-trips.
-2. **Debounce (Frontend):** After 2 idle seconds, Alpine fires a singular Livewire event.
+1. **Alpine State:** Complex pane splitting and dragging is mapped fully in Alpine.js `x-data` avoiding continuous Livewire round-trips. daisyUI components accept standard HTML attributes so Alpine bindings (`x-bind`, `x-on`) attach cleanly without conflicts.
+2. **Debounce (Frontend):** After 2 idle seconds, Alpine fires a singular Livewire `$dispatch` event.
 3. **Redis Cache:** The minimal Livewire component catches the payload and safely writes it to Redis `user_workspace_{$id}`.
 4. **Database Flush:** A Laravel Horizon job pulls from Redis and flushes it to PostgreSQL silently.
 

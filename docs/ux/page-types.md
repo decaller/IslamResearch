@@ -1,6 +1,6 @@
 # UX Architecture: Page Types & Explorability
 
-In the "Scholar UI", a search result is just the beginning. The platform features dedicated page types for Sentences, Words (Lexicons), Categories, and Tags.
+In the "Scholar UI", a search result is just the beginning. The platform features dedicated page types for Sentences, Words (Lexicons), Categories, and Tags. All components use **daisyUI v5** (Tailwind v4 plugin) for semantic, theme-aware markup.
 
 The golden rule of this UX is **Infinite Explorability**: Every entity on the screen must be a clickable portal that allows the user to traverse the database laterally (across disciplines) or vertically (deep into linguistics).
 
@@ -12,8 +12,8 @@ The golden rule of this UX is **Infinite Explorability**: Every entity on the sc
 
 ### The Explorability Features:
 *   **The Infinite Scroll (Vertical Context):** The user doesn't just see the single sentence/verse they clicked. The page automatically renders the sentences before and after it. Scrolling up or down seamlessly loads the rest of the book/chapter.
-*   **The Dual-Pane Exegesis (Horizontal Context):** The right side shows the text. The left side holds the 5-Tab system (Tafsir, Actions, Directives, Lexicon).
-*   **Explorability Hook:** When reading the 5-Tab panel, any related Hadith or Ayah mentioned in the Tafsir is rendered as a hoverable "Preview Card". The user can peek at the referenced text without leaving their current page.
+*   **The Dual-Pane Exegesis (Horizontal Context):** The right side shows the text in a daisyUI **`card`**. The left side holds the 5-Tab system built with daisyUI **`tabs`** + **`tab`** + **`tab-content`** (Tafsir, Actions, Directives, Lexicon).
+*   **Explorability Hook:** When reading the 5-Tab panel, any related Hadith or Ayah mentioned in the Tafsir is rendered as a hoverable daisyUI **`card`** Preview Card. The user can peek at the referenced text without leaving their current page.
 
 ---
 
@@ -22,9 +22,9 @@ The golden rule of this UX is **Infinite Explorability**: Every entity on the sc
 **Primary Goal:** To act as a dynamic, AI-powered dictionary that shows how a single root concept evolves across the entire Islamic corpus.
 
 ### The Explorability Features:
-*   **The Derivation Tree (Visual Hook):** The top of the page features a visual "Word Cloud" or tree showing all surface words derived from the root (e.g., عِلْم, يَعْلَمُونَ, عَالِم). Clicking a branch instantly filters the page results to that specific grammatical form.
-*   **Corpus Distribution Chart:** A beautiful bar chart showing where this root is used (e.g., "Used 854 times in the Quran, 200 times in Bukhari, 50 times in Lisan al-Arab"). Clicking a bar filters the feed to that specific book.
-*   **Explorability Hook: Semantic Synonyms.** At the bottom of the root page, the AI suggests "Related Roots" based on vector similarity (e.g., if looking at "Wealth" م-و-ل, it suggests "Gold" ذ-ه-ب). This allows scholars to jump between linguistically distinct but conceptually identical roots.
+*   **The Derivation Tree (Visual Hook):** The top of the page features a visual "Word Cloud" using daisyUI **`badge`** chips for surface words derived from the root (e.g., عِلْم, يَعْلَمُونَ, عَالِم). Clicking a `badge` instantly filters the page results to that grammatical form.
+*   **Corpus Distribution Chart:** A **`stat`** + **`progress`** component group showing where this root is used (e.g., "Used 854× in the Quran, 200× in Bukhari"). Clicking a stat bar filters the feed.
+*   **Explorability Hook: Semantic Synonyms.** At the bottom, the AI suggests "Related Roots" as daisyUI **`badge badge-outline`** chips based on vector similarity.
 
 ---
 
@@ -33,9 +33,9 @@ The golden rule of this UX is **Infinite Explorability**: Every entity on the sc
 **Primary Goal:** To provide highly structured, linear reading for users who want to study a discipline systematically.
 
 ### The Explorability Features:
-*   **The Breadcrumb Hierarchy (Top):** Clearly displays *Fiqh ➔ Muamalah ➔ Debt*. The user can click 'Muamalah' to instantly step up one level and see a broader view.
-*   **Sub-Chapter Cards (Visual Navigation):** Instead of a dry list of texts, the top of the page features large, clickable cards for all child categories (e.g., "Rules of Interest", "Rules of Trade").
-*   **Explorability Hook: "Recommended Next".** Because categories are structural, the UX tracks the user's reading progress. If they finish reading the texts in the "Zakat" category, the UI smoothly suggests jumping to the "Fasting" category, replicating the natural flow of a classical textbook.
+*   **The Breadcrumb Hierarchy (Top):** daisyUI **`breadcrumbs`** clearly displays *Fiqh ➔ Muamalah ➔ Debt*. The user clicks any node to step up one level.
+*   **Sub-Chapter Cards (Visual Navigation):** Instead of a dry list, the top of the page features large daisyUI **`card`** components for all child categories (e.g., "Rules of Interest", "Rules of Trade") with a **`badge`** showing article count.
+*   **Explorability Hook: "Recommended Next".** Because categories are structural, the UX tracks reading progress. Upon finishing the "Zakat" category, the UI shows a daisyUI **`alert alert-info`** prompting the user to jump to "Fasting".
 
 ---
 
@@ -45,8 +45,8 @@ The golden rule of this UX is **Infinite Explorability**: Every entity on the sc
 
 ### The Explorability Features:
 *   **The Cross-Disciplinary Feed:** Unlike a Category page, the Tag page feed is "chaotic" by design. A user sees a Quranic verse, followed by a Sirah event, followed by a Fiqh ruling—all unified by the tag `#Prophet_Muhammad`.
-*   **Filter by Facet:** A sticky left-sidebar allows the user to tame the feed. They can check a box to say, "Only show me #Prophet_Muhammad intersecting with the Tafsir Category."
-*   **Explorability Hook: "Co-occurring Tags" (The Wikipedia Effect).** On the right sidebar, the UI lists tags that frequently appear alongside the current tag (e.g., If browsing `#Battle_of_Badr`, the UI suggests `#Angels`, `#Abu_Jahl`, `#Ramadan`). This encourages the user to continuously click laterally through historical and conceptual links.
+*   **Filter by Facet:** A sticky left daisyUI **`menu`** sidebar with **`checkbox`** items to tame the feed.
+*   **Explorability Hook: "Co-occurring Tags" (The Wikipedia Effect).** On the right, daisyUI **`badge`** chips list co-occurring tags (e.g., `#Battle_of_Badr` → `#Angels`, `#Abu_Jahl`, `#Ramadan`), encouraging lateral traversal.
 
 ---
 
@@ -62,9 +62,9 @@ To ensure the user never feels lost while exploring these wildly different page 
 
 ## 6. Summary of Interaction Models
 
-| Page Type | Psychological Goal | UI Style | Key Feature |
-| :--- | :--- | :--- | :--- |
-| **Sentence** | Deep Focus | Minimal, text-heavy | Infinite Scroll & Dual-Pane Exegesis |
-| **Word/Lexicon** | Morphological Tracing | Analytical, data-heavy | Derivation Trees & Distribution Charts |
-| **Category** | Structured Drilling | Linear, hierarchical | Sub-Chapter Cards & Progress Tracking |
-| **Tag** | Lateral Jumping | Dynamic, hub-like | Co-occurring Tags (Wikipedia Effect) |
+| Page Type | Psychological Goal | UI Style | Key Feature | daisyUI Components |
+| :--- | :--- | :--- | :--- | :--- |
+| **Sentence** | Deep Focus | Minimal, text-heavy | Infinite Scroll & Dual-Pane Exegesis | `card`, `tabs`, `tab` |
+| **Word/Lexicon** | Morphological Tracing | Analytical, data-heavy | Derivation Trees & Distribution Charts | `badge`, `stat`, `progress` |
+| **Category** | Structured Drilling | Linear, hierarchical | Sub-Chapter Cards & Progress Tracking | `card`, `breadcrumbs`, `alert` |
+| **Tag** | Lateral Jumping | Dynamic, hub-like | Co-occurring Tags (Wikipedia Effect) | `badge`, `menu`, `checkbox` |
