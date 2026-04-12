@@ -13,7 +13,8 @@ ai-scripts/
 │   ├── __init__.py
 │   ├── text_prep.py      # SpaCy, RegEx, Harakat removal
 │   ├── classify.py       # Hugging Face Zero-Shot & NER
-│   ├── translate.py      # Ollama API calls
+│   ├── translate.py      # Ollama API calls (Indonesian translation)
+│   ├── transliterate.py  # Ollama API calls (ALA-LC romanisation)
 │   └── vectorize.py      # Embedding generation
 ├── database.py           # Postgres and Meilisearch connections
 ├── requirements.txt      # Python dependencies
@@ -65,6 +66,19 @@ Uses Hugging Face pipelines locally to assign rigid categories using zero-shot c
 Makes HTTP requests to the Ollama container (running on the host GPU) using the **Aya** model. 
 
 - **Resilience:** Prefect handles automatic retries ($3 \times$) with a 5-second delay if Ollama times out or crashes.
+
+---
+
+## 🔤 Stage 4.5: Transliteration (`tasks/transliterate.py`)
+
+Sends each Arabic sentence to Ollama to generate an **ALA-LC romanised transliteration** and persists the result to the `sentence_transliterations` table.
+
+- **Prompt:** Instructs the model to apply the Library of Congress (ALA-LC) standard and return only the romanised text.
+- **Configuration:** Model and scheme are fully controlled via `.env`:
+  - `OLLAMA_URL` — Base URL for the Ollama server *(set this once for all Ollama tasks)*.
+  - `OLLAMA_TRANSLITERATE_MODEL` — Which Ollama model to use (default: `aya-23-8b`).
+  - `OLLAMA_TRANSLITERATE_SCHEME` — Scheme label stored in the DB (default: `ala_lc`).
+- **Idempotent:** Uses an SQL `ON CONFLICT (sentence_id, scheme) DO UPDATE` so re-runs never create duplicates.
 
 ---
 

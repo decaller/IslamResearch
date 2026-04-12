@@ -1,1 +1,1 @@
-from . import text_prep, classify, translate, vectorize
+from . import text_prep, classify, translate, transliterate, vectorize

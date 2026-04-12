@@ -72,6 +72,12 @@ Uses Hugging Face pipelines locally to assign rigid categories.
 Makes HTTP requests to the Ollama container (host GPU) using the **Aya** model.
 - **Resilience:** Prefect handles automatic retries ($3 \times$) with a 5-second delay if Ollama times out.
 
+### 🔤 Stage 4.5: Transliteration (`tasks/transliterate.py`)
+Generates a **romanised (ALA-LC) transliteration** for every Arabic sentence via Ollama and stores it in the `sentence_transliterations` table.
+- **Config:** `OLLAMA_URL`, `OLLAMA_TRANSLITERATE_MODEL`, `OLLAMA_TRANSLITERATE_SCHEME` in `.env` — the URL is shared with the translation task so you only configure it once.
+- **Why AI?** Rule-based ALA-LC schemes fail on dialectal and classical Arabic; an LLM handles these edge cases gracefully.
+- **Idempotent:** `ON CONFLICT (sentence_id, scheme) DO UPDATE` ensures pipeline re-runs are safe.
+
 ### 📐 Stage 5: Vectorization (`tasks/vectorize.py`)
 Uses a multilingual embedding model.
 - **Model:** `mxbai-embed-large`

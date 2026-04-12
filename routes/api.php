@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\PrefectWebhookController;
+use App\Http\Controllers\SearchController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -21,3 +22,9 @@ use Illuminate\Support\Facades\Route;
 Route::post('/webhooks/prefect/job-completed', PrefectWebhookController::class)
     ->middleware('throttle:60,1')
     ->name('webhooks.prefect.job-completed');
+
+// Search Integration
+Route::middleware('throttle:120,1')->group(function () {
+    Route::get('/search', [SearchController::class, 'index'])->name('search.index');
+    Route::get('/search/autocomplete', [SearchController::class, 'autocomplete'])->name('search.autocomplete');
+});

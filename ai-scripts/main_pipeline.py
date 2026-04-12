@@ -2,8 +2,8 @@ import os
 
 import httpx
 from prefect import flow, get_run_logger
-from tasks import classify, text_prep, translate, vectorize
-from database import fetch_pending_records, save_to_db
+from tasks import classify, text_prep, translate, transliterate, vectorize
+from database import fetch_pending_records, save_to_db, save_transliteration
 
 
 @flow(name="Islamic Text Ingestion")
@@ -29,10 +29,14 @@ def process_batch():
             # 5. GPU via Ollama: Translate Arabic → Indonesian (Aya model)
             indonesian = translate.run_ollama(sentence)
 
-            # 6. CPU/GPU: Dual-language vectorization (mxbai-embed-large-v1 / 1024-dim)
+            # 6. GPU via Ollama: Generate romanised transliteration (ALA-LC)
+            #    Model configured via OLLAMA_TRANSLITERATE_MODEL in .env
+            transliteration = transliterate.run_ollama(sentence)
+
+            # 7. CPU/GPU: Dual-language vectorization (mxbai-embed-large-v1 / 1024-dim)
             vectors = vectorize.create_embeddings(sentence, indonesian)
 
-            # 7. Persist enriched sentence + lexicon data to PostgreSQL
+            # 8. Persist enriched sentence + lexicon data to PostgreSQL
             sentence_id = save_to_db(
                 record_id=text['id'],
                 sentence_text=sentence,
@@ -42,14 +46,22 @@ def process_batch():
                 lexicon_data=root_data[idx]['lexicon_data'],
             )
 
-            # 8. Call Laravel Horizon webhook so IntegratePrefectData job
-            #    can write the vectors & translations into the final schema.
-            #    Returns 202 immediately — Horizon takes care of the rest.
+            # 9. Persist AI-generated transliteration to sentence_transliterations
+            save_transliteration(
+                sentence_id=sentence_id,
+                scheme=transliteration['scheme'],
+                transliteration_text=transliteration['transliteration_text'],
+            )
+
+            # 10. Call Laravel Horizon webhook so IntegratePrefectData job
+            #     can write the vectors & translations into the final schema.
+            #     Returns 202 immediately — Horizon takes care of the rest.
             _notify_laravel(
                 sentence_job_id=text['id'],
                 sentence_id=sentence_id,
                 category=category,
                 vectors=vectors,
+                transliteration=transliteration,
                 lexicon_data=root_data[idx]['lexicon_data'],
             )
 
@@ -59,6 +71,7 @@ def _notify_laravel(
     sentence_id: str,
     category: str,
     vectors: dict,
+    transliteration: dict,
     lexicon_data: list[dict],
 ) -> None:
     """
@@ -78,6 +91,12 @@ def _notify_laravel(
         "category": category,
         "embedding_ar": vectors["vector_ar"],
         "embedding_id": vectors["vector_id"],
+        # Include transliteration so Laravel can upsert it without
+        # querying Postgres separately — keeping the webhook self-contained.
+        "transliteration": {
+            "scheme": transliteration["scheme"],
+            "text": transliteration["transliteration_text"],
+        },
         "lexicon_data": lexicon_data,
     }
 

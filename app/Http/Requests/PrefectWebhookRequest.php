@@ -37,6 +37,11 @@ class PrefectWebhookRequest extends FormRequest
 
             'category' => ['nullable', 'string', 'max:255'],
 
+            // Transliteration data
+            'transliteration' => ['nullable', 'array'],
+            'transliteration.scheme' => ['required_with:transliteration', 'string', 'max:255'],
+            'transliteration.text' => ['required_with:transliteration', 'string'],
+
             // Lexicon data from CAMeL Tools root extraction
             'lexicon_data' => ['nullable', 'array'],
             'lexicon_data.*.word_raw' => ['required_with:lexicon_data', 'string', 'max:255'],

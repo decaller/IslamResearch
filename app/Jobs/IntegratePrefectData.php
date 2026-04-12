@@ -7,6 +7,7 @@ use App\Models\LexiconWord;
 use App\Models\Sentence;
 use App\Models\SentenceJob;
 use App\Models\SentenceTranslation;
+use App\Models\SentenceTransliteration;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -38,6 +39,7 @@ class IntegratePrefectData implements ShouldQueue
      *   embedding_ar: float[],
      *   embedding_id: float[],
      *   category: string|null,
+     *   transliteration: array{scheme: string, text: string}|null,
      *   lexicon_data: array<array{word_raw: string, word_clean: string, root: string|null}>|null,
      * } $payload
      */
@@ -89,13 +91,24 @@ class IntegratePrefectData implements ShouldQueue
                     );
                 }
 
-                // 3. Upsert Global Lexicon (roots + words) and attach pivot links
+                // 3. Save AI-generated romanised transliteration
+                if (! empty($this->payload['transliteration']['text'])) {
+                    SentenceTransliteration::firstOrCreate(
+                        [
+                            'sentence_id' => $sentence->id,
+                            'scheme' => $this->payload['transliteration']['scheme'] ?? 'ala_lc',
+                        ],
+                        ['transliteration_text' => $this->payload['transliteration']['text']],
+                    );
+                }
+
+                // 4. Upsert Global Lexicon (roots + words) and attach pivot links
                 if (! empty($this->payload['lexicon_data'])) {
                     $this->integrateGlobalLexicon($sentence, $this->payload['lexicon_data']);
                 }
             }
 
-            // 4. Mark the tracking record as completed
+            // 5. Mark the tracking record as completed
             $sentenceJob->update([
                 'status' => 'completed',
                 'completed_at' => now(),
