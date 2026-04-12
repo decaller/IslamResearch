@@ -23,11 +23,7 @@ Enum action_type {
   split_pane
 }
 
-Enum item_type {
-  static_item
-  dynamic_query
-  workspace_state
-}
+// Enum item_type replaced by Laravel Polymorphic relations
 
 Enum feedback_status {
   pending
@@ -50,6 +46,7 @@ Table users [headercolor: #1E3A8A] {
   metadata jsonb [note: 'Individual user preferences and profile settings']
   created_at timestamp
   updated_at timestamp
+  deleted_at timestamp [note: 'Soft Deletes']
 }
 
 Table scholars [headercolor: #1D4ED8] {
@@ -68,6 +65,7 @@ Table source_books [headercolor: #2563EB] {
   metadata jsonb [note: 'Bibliographical details and source info']
   created_at timestamp
   updated_at timestamp
+  deleted_at timestamp [note: 'Soft Deletes']
 }
 
 Table taxonomies [headercolor: #3B82F6] {
@@ -77,6 +75,7 @@ Table taxonomies [headercolor: #3B82F6] {
   name varchar [note: 'e.g., Fiqh, Tafsir']
   slug varchar [unique]
   metadata jsonb [note: 'Flexible categorization data']
+  deleted_at timestamp [note: 'Soft Deletes']
   
   indexes {
     path [type: gist]
@@ -109,9 +108,9 @@ Table sentences [headercolor: #BFDBFE] {
   sentence_text text [note: 'The core sentence content']
   translation json [note: 'Translations in multiple languages']
   metadata jsonb [note: 'Dynamic LLM data (Isnad, Root, Target_Ayah, etc.)']
-  embedding_ar vector [note: 'Indexed with HNSW for accurate Arabic search']
-  embedding_id vector [note: 'Indexed with HNSW for accurate Indonesian search']
-  embedding_en vector [note: 'Indexed with HNSW for accurate English search']
+  embedding_ar "vector(1024)" [note: 'Indexed with HNSW for accurate Arabic search (e.g., 1024d)']
+  embedding_id "vector(1024)" [note: 'Indexed with HNSW for accurate Indonesian search (e.g., 1024d)']
+  embedding_en "vector(1024)" [note: 'Indexed with HNSW for accurate English search (e.g., 1024d)']
   created_at timestamp
   updated_at timestamp
 
@@ -127,7 +126,7 @@ Table lexicon_roots [headercolor: #065F46] {
   id uuid [primary key, note: 'Stores the foundational base of words']
   language varchar [note: '''ar' or 'id''']
   root_value varchar [note: 'e.g., ع ل م, tulis']
-  embedding vector [note: 'pgvector']
+  embedding "vector(1024)" [note: 'pgvector (1024d)']
   metadata jsonb [note: 'Hierarchical linguistic properties']
   
   indexes {
@@ -141,7 +140,7 @@ Table lexicon_words [headercolor: #059669] {
   language varchar [note: '''ar' or 'id''']
   word_raw varchar [note: 'Exact word from text (with Harakat for Arabic)']
   word_clean varchar [note: 'Stripped version (no Harakat)']
-  embedding vector [note: 'pgvector']
+  embedding "vector(1024)" [note: 'pgvector (1024d)']
   metadata jsonb [note: 'Morphological details and usage frequency notes']
   
   indexes {
@@ -180,12 +179,17 @@ Table user_journeys [headercolor: #4338CA] {
   target_search_id uuid [ref: > searches.id, note: 'Nullable, if action relates to a cached search']
   context_data jsonb [note: 'Strictly non-relational metadata like UI scroll position or raw query string']
   created_at timestamp [note: 'Creation time for chronological sequencing']
+  
+  indexes {
+    created_at
+    user_id
+  }
 }
 
 Table searches [headercolor: #4F46E5] {
   id uuid [primary key, note: 'Caches query embeddings to minimize API costs']
   query varchar [unique, note: 'The raw search text']
-  embedding vector [note: 'Stored query embedding']
+  embedding "vector(1024)" [note: 'Stored query embedding (1024d)']
   created_at timestamp
 }
 
@@ -196,6 +200,11 @@ Table user_searches [headercolor: #6366F1] {
   filters jsonb [note: 'Applied filters like taxonomies, scholars']
   results_count int
   created_at timestamp
+
+  indexes {
+    created_at
+    user_id
+  }
 }
 
 Table collections [headercolor: #818CF8] {
@@ -204,13 +213,15 @@ Table collections [headercolor: #818CF8] {
   name varchar [note: 'e.g., Ramadan Prep']
   is_public boolean
   metadata jsonb [note: 'Collection customizations and tags']
+  deleted_at timestamp [note: 'Soft Deletes']
 }
 
 Table collection_items [headercolor: #A5B4FC] {
   id uuid [primary key]
   collection_id uuid [ref: > collections.id]
-  item_type item_type
-  target_id_or_query varchar [note: 'Stores ID string, text query, or null if workspace_state']
+  itemable_type varchar [note: 'e.g., App\\Models\\Sentence']
+  itemable_id uuid [note: 'Stores the exact record UUID']
+  raw_query text [note: 'Used if this item is a saved dynamic search/workspace, not a direct record']
   metadata jsonb [note: 'Stores UI state like breadcrumbs, left/right panel configuration']
 }
 
@@ -228,6 +239,11 @@ Table user_habits [headercolor: #E0E7FF] {
   user_id uuid [ref: > users.id]
   sentence_id uuid [ref: > sentences.id, note: 'References a quranic_action sentence']
   checked_at timestamp
+
+  indexes {
+    checked_at
+    user_id
+  }
 }
 
 //// TABLE GROUPS (For visual organization in dbdiagram.io)
