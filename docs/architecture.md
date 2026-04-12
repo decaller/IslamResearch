@@ -48,10 +48,17 @@ For every segment, the pipeline performs:
 2.  **Translation:** Generating formal Indonesian translations via the **Aya** model.
 3.  **Vectorization:** Generating distinct, language-specific embeddings (`embedding_ar`, `embedding_id`) to prevent concept dilution during semantic search.
 
-### Stage 4: Webhook Completion (Prefect -> Laravel)
+### Stage 4: Webhook Completion (Prefect -> Laravel Horizon)
 When the processing is complete, Prefect calls a Laravel API endpoint to notify the system.
 - **Endpoint:** `POST /api/webhooks/prefect/job-completed`
-- **Logic:** Updates the `SourceBook` status to `completed` and records the final processed count.
+- **Logic:** The controller instantly returns a `202 Accepted` and pushes an `IntegratePrefectData` job onto a dedicated Laravel Horizon queue (`ai-callbacks`). This ensures massive JSON payloads don't lock up web server threads.
+
+---
+
+## 🧪 Testing Boundary (Pest PHP)
+
+Given the reliance on GPU-heavy local LLMs (Ollama) outside Laravel's control, testing the AI factory directly is impossible in standard CI/CD. 
+- **The Strategy:** Use **Pest PHP v4** to create strict boundary tests. We utilize `Http::fake()` to simulate Prefect sending both successful and malformed JSON webhook payloads. This guarantees that if the AI hallucinates bad schemas, the Laravel PostgreSQL ingestion layer handles the error gracefully locally without crashing the application.
 
 ---
 

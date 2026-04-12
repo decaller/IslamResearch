@@ -72,14 +72,18 @@ Because each resource type generates different metadata, PostgreSQL handles this
 
 ---
 
-## 🔍 Search Technology
+## 🔍 Hybrid Search Architecture (pgvector + Meilisearch)
 
-The platform utilizes **pgvector** with **HNSW** indexes. We implement a **Language Detection "Cheat"** to maintain millisecond latency:
+To guarantee ultimate performance, the platform splits query responsibilities between PostgreSQL and Meilisearch:
+1.  **Semantic Vectors (pgvector):** Used exclusively for deep conceptual questions matching similar dimensions via HNSW (e.g., finding identical contextual topics across Arabic and Indonesian).
+2.  **Lexicon Typo-Tolerance (Meilisearch):** Used exclusively for frontend autocomplete predicting search terms, and precise Lexicon root exact-matches.
+
+We also implement a **Language Detection "Cheat"** for routing to the correct vector tables:
 Instead of an expensive AI model for language detection, we use a blazing-fast PHP Regex in the search controller:
 ```php
 preg_match('/\p{Arabic}/u', $query)
 ```
-Arabic queries route to the `arabic_embedder` index, while Latin queries (Indo/English) route to the `multilingual_embedder`.
+Arabic queries hit the `embedding_ar` index, while Latin queries hit `embedding_id` or `embedding_en` respectively.
 
 ---
 

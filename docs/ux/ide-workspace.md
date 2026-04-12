@@ -33,6 +33,7 @@ This is where the actual texts are rendered. Unlike a standard webpage, this are
 The true power of the Scholar UI. The Editor Group can be split vertically or horizontally.
 - **Dual-Pane Study:** A user can pin an Arabic Mushaf (Quran) on the Left Pane, and click a verse to instantly load *Tafsir Ibn Kathir* on the Right Pane.
 - **Lexicon Popup/Pane:** Clicking an Arabic word containing a `positions` array highlight triggers the Right Pane to load the exact `lexicon_roots` and morphological details, without losing sight of the source sentence.
+- **Tailwind v4 Container Queries:** To handle unpredictable pane dimensions (e.g., dragging the left panel to be 300px wide), the CSS uses `@container` queries rather than global media queries, ensuring internal cards stack responsively relative to their surrounding pane!
 
 ---
 
@@ -73,9 +74,11 @@ Every single UI interaction (opening a tab, resizing the sidebar to 300px, split
 }
 ```
 
-### The Auto-Save Flow
-1. **Debounce (Frontend):** The frontend waits 2 seconds after the user stops interacting with the layout.
-2. **Redis Cache:** It sends an asynchronous patch request to securely store this JSON in the Redis Cache under `user_workspace_{$id}`.
-3. **Database Flush:** A Laravel background job pulls from Redis and updates the PostgreSQL `user_workspaces` table silently.
+### The Auto-Save Flow (Livewire 4 "Islands" & Alpine)
+To prevent constant DOM re-renders during intense dragging or tab managing, the UI depends on highly localized reactive islands:
+1. **Alpine State:** Complex pane splitting and dragging is mapped fully in Alpine.js `x-data` avoiding continuous Livewire round-trips.
+2. **Debounce (Frontend):** After 2 idle seconds, Alpine fires a singular Livewire event.
+3. **Redis Cache:** The minimal Livewire component catches the payload and safely writes it to Redis `user_workspace_{$id}`.
+4. **Database Flush:** A Laravel Horizon job pulls from Redis and flushes it to PostgreSQL silently.
 
 **Result:** A scholar can close their laptop on Friday, open it on Monday, and their exact tabs, search results, dual-panes, and scroll positions are restored instantly.

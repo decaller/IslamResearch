@@ -1,70 +1,60 @@
-# IslamResearch Project TODO List
+# IslamResearch Project Implementation Roadmap
 
-This document tracks the implementation status of the IslamResearch platform, focusing on the transition from documentation-only architecture to a functional MVP.
-
-## 🚀 MVP Implementation Plan (Step-by-Step)
-
-### Phase 1: Laravel Foundation (Backend & Database)
-- [ ] **Database Migrations**
-    - [ ] Create `source_books` table (id, title, author, resource_type, language, status, raw_content).
-    - [ ] Create `sentence_jobs` table (id, source_book_id, raw_text, status).
-    - [ ] Create `items` table (id, source_book_id, resource_type, text, metadata [JSONB], text_vector [vector]).
-- [ ] **Eloquent Models**
-    - [ ] Implement `SourceBook` with `hasMany` relationships.
-    - [ ] Implement `SentenceJob`.
-    - [ ] Implement `Item` (Sentence) with JSON cast for metadata.
-- [ ] **Filament Resources**
-    - [ ] Create `SourceBookResource` with file/text upload.
-    - [ ] Create `SentenceJobResource` (Read-only monitoring).
-    - [ ] Create `ItemResource` with JSON form editor for metadata enrichment.
-
-### Phase 2: AI Pipeline Integration
-- [ ] **Python Database Connector (`ai-scripts/database.py`)**
-    - [ ] Replace `fetch_pending_records` placeholder with real SQL to pull from `source_books` or `sentence_jobs`.
-    - [ ] Replace `save_to_db` placeholder with real SQL to insert into `items`.
-- [ ] **Prefect Orchestration**
-    - [ ] Update `main_pipeline.py` to accept `source_book_id` as a parameter.
-    - [ ] Ensure `vectorize.py` correctly handles the output structure of the selected embedding model.
-- [ ] **Laravel -> Prefect Trigger**
-    - [ ] Implement custom Filament Action "Process with AI" in `SourceBookResource`.
-    - [ ] Use `Http` facade to send POST request to Prefect API.
-
-### Phase 3: Completion & Feedback Loop
-- [ ] **Webhook Endpoint**
-    - [ ] Create `POST /api/webhooks/prefect/job-completed` in Laravel.
-    - [ ] Update `SourceBook` status and record total processed count upon callback.
-- [ ] **Manual UI Check**
-    - [ ] Verify that processed items appear in the "Sentences" list with correct classification and translation.
-    - [ ] Test the vector search manually via database query (until search UI is ready).
+This document outlines the step-by-step implementation plan for transforming the finalized architecture blueprints into a production-ready Laravel 13 Minimal Viable Product (MVP).
 
 ---
 
-## 🛠️ Mockups & Placeholders Found
+## 🚀 Phase 1: Database & Data Modeling (PostgreSQL)
+The target is the exact translation of `docs/database_schema.dbml` into Laravel migrations.
 
-The following code sections are currently non-functional and require implementation:
+- [ ] **Core Migrations Generation**
+  - [ ] Publish Laravel Migrations. Require `pgvector` and `ltree` PostgreSQL extensions explicitly in a setup migration.
+  - [ ] Implement `taxonomies` table utilizing PostgreSQL `ltree` type and `gist` index for massive hierarchy optimizations.
+  - [ ] Implement polymorphic relationships for `collection_items` (`itemable_type`, `itemable_id`).
+- [ ] **Scaling & AI Safety Models**
+  - [ ] Create `sentence_embeddings` migration utilizing `vector(1024)` type directly linked to language properties.
+  - [ ] Create `sentence_jobs` tracking migration with `attempts` and `error_log` tracking loops.
+  - [ ] Add `deleted_at` timestamps (Soft Deletes) to structural content (`source_books`, `taxonomies`, `collections`).
+  - [ ] Add B-Tree indexing to chronological query tables (`user_journeys`, `user_habits`, `user_searches`).
+- [ ] **Filament MVP Scaffolding**
+  - [ ] Auto-generate base Filament V5 resources for `SourceBooks`, `Taxonomies`, and `Scholars`.
+  - [ ] Create deep relation managers (e.g., viewing Lexicon words mapped to `lexicon_roots`).
 
-### 🐍 AI Scripts (Python)
-- [ ] **`ai-scripts/database.py`**: Functions `fetch_pending_records` and `save_to_db` are hardcoded mocks.
-- [ ] **`ai-scripts/tasks/vectorize.py`**: Vector extraction logic (`ar_vector[0][0]`) is likely incorrect for the `Transformers` pipeline output.
-- [ ] **`ai-scripts/tasks/classify.py`**: Classification categories are hardcoded; should potentially be dynamic or source-type dependent.
+## 🤖 Phase 2: Hybrid AI Orchestration (Prefect + Horizon)
+Implementing the GPU LLM pipeline seamlessly alongside Laravel webhooks.
 
-### 🐘 Laravel App (PHP)
-- [ ] **Models & Migrations**: Essential models (`SourceBook`, `SentenceJob`, `Item`) mentioned in `architecture.md` are missing.
-- [ ] **Filament Resources**: Admin interfaces for managing research data are missing.
-- [ ] **API Logic**: Webhook handlers for Prefect are missing.
+- [ ] **Python Pipeline (Prefect)**
+  - [ ] Bind CAMeL Tools or SpaCy into `tasks/text_prep.py` for Root extraction (`Jidhr`).
+  - [ ] Vectorize Arabic and translated text blocks into independent `embedding_ar` and `embedding_id` representations (`mxbai-embed-large`).
+- [ ] **Laravel Horizon Queue Mapping**
+  - [ ] Install Laravel Horizon and define scaling configurations (Supervisors).
+  - [ ] Create `IntegratePrefectData` Job queued heavily on an `ai-callbacks` pipe.
+  - [ ] Build the `POST /api/webhooks/prefect/job-completed` endpoint to instantly return `202 Accepted` and offload mapping logic to Horizon.
+- [ ] **Testing Webhook Boundary**
+  - [ ] Implement **Pest PHP** test suites targeting the Webhook API. Use `Http::fake()` to throw random/malformed LLM schema blobs to guarantee Horizon fails elegantly rather than crashing.
 
----
+## 🎨 Phase 3: The "Scholar IDE UI" (Livewire 4 + Tailwind v4)
+Constructing the split-pane, reactive study canvas for the end user.
 
-## 🔮 General Future Improvements (Post-MVP)
+- [ ] **Workspace Layout & Alpine Initialization**
+  - [ ] Scaffold the Activity Bar, Explorer Panel, and Editor Canvas using basic HTML.
+  - [ ] Embed the complex layout dragging logic natively in Alpine.js `x-data` avoiding DOM rehydration delays.
+- [ ] **Tailwind Container Layouts**
+  - [ ] Build the content cards utilizing `@container` queries dynamically adapting grid columns depending purely on their parent's panel width.
+- [ ] **State Emitting (Write-Behind Redis Cache)**
+  - [ ] Connect Alpine UI manipulation with Livewire generic listeners.
+  - [ ] Implement the 2-second debounce patch requests securely storing active tabs, horizontal scrolls, and split IDs in Redis.
+- [ ] **Syncing UI to Database**
+  - [ ] Map the Redis cached json blob to load and persist smoothly into the `user_workspaces` table on login/logout triggers.
 
-- [ ] **Advanced Scholarly Interface**: Side-by-side Arabic/Indonesian comparison with highlight-to-correct functionality.
-- [ ] **Hierarchical Metadata**: Support for nested scholarly tags (e.g., Fiqh -> Shalah -> Arkan).
-- [ ] **Multilingual Expansion**: Add support for English, Urdu, and French translations.
-- [ ] **Streaming Search UI**: A high-performance frontend for researchers using Meilisearch and vector embeddings.
-- [ ] **Batch Processing Optimization**: Shift from row-by-row saving to batch inserts in `ai-scripts`.
-- [ ] **Ollama Model Fine-tuning**: Fine-tune the **Aya** model on specific classical Arabic corpora for better Indonesian nuance.
+## 🔍 Phase 4: Hybrid Search Integration
+Activating high performance discovery pipelines.
 
----
-
-*Last Updated: 2026-04-10*
-*Status: Architecture Documented / Code Skeleton Incomplete*
+- [ ] **Laravel Scout Indexing (Meilisearch)**
+  - [ ] Deploy Meilisearch container within Sail.
+  - [ ] Expose Lexicon and basic titles to Scout for instant, typo-tolerant Autocomplete API endpoints.
+- [ ] **Semantic Vector Targeting (pgvector)**
+  - [ ] Implement the Regex Language "Cheat" in the central Search Controller.
+  - [ ] Execute native PostgreSQL `ORDER BY embedding_ar <-> [Query_Vector]` exclusively addressing philosophical or "murky" sentence searches.
+- [ ] **Action Highlighting UI**
+  - [ ] Bind the returned `positions integer[]` array across sentences to highlight identical morphology roots generated by CAMeL.

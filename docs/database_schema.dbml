@@ -36,6 +36,12 @@ Enum word_source {
   translation
 }
 
+Enum user_role {
+  admin
+  editor
+  researcher
+}
+
 //// CORE TABLES
 
 Table users [headercolor: #1E3A8A] {
@@ -43,6 +49,7 @@ Table users [headercolor: #1E3A8A] {
   name varchar
   email varchar [unique]
   password varchar
+  role user_role [default: 'researcher']
   metadata jsonb [note: 'Individual user preferences and profile settings']
   created_at timestamp
   updated_at timestamp
@@ -95,7 +102,10 @@ Table sentence_jobs [headercolor: #93C5FD] {
   id uuid [primary key, note: 'Read-Only monitoring table for the AI worker']
   source_book_id uuid [ref: > source_books.id]
   raw_text text
-  status varchar
+  status varchar [note: 'pending, processing, failed, completed']
+  attempts int [default: 0]
+  error_log text [note: 'Stores API error messages or stack traces']
+  completed_at timestamp [note: 'To calculate how long the AI took']
   created_at timestamp
   updated_at timestamp
 }
@@ -108,15 +118,23 @@ Table sentences [headercolor: #BFDBFE] {
   sentence_text text [note: 'The core sentence content']
   translation json [note: 'Translations in multiple languages']
   metadata jsonb [note: 'Dynamic LLM data (Isnad, Root, Target_Ayah, etc.)']
-  embedding_ar "vector(1024)" [note: 'Indexed with HNSW for accurate Arabic search (e.g., 1024d)']
-  embedding_id "vector(1024)" [note: 'Indexed with HNSW for accurate Indonesian search (e.g., 1024d)']
-  embedding_en "vector(1024)" [note: 'Indexed with HNSW for accurate English search (e.g., 1024d)']
   created_at timestamp
   updated_at timestamp
 
   indexes {
     metadata [name: 'idx_sentences_metadata', type: gin]
     source_book_id
+  }
+}
+
+Table sentence_embeddings [headercolor: #BFDBFE] {
+  id uuid [primary key]
+  sentence_id uuid [ref: > sentences.id]
+  language varchar [note: 'e.g., ar, id, en, ur']
+  embedding "vector(1024)" [note: '1024d HNSW Indexed']
+  
+  indexes {
+    (sentence_id, language) [unique]
   }
 }
 
@@ -223,6 +241,7 @@ Table collection_items [headercolor: #A5B4FC] {
   itemable_id uuid [note: 'Stores the exact record UUID']
   raw_query text [note: 'Used if this item is a saved dynamic search/workspace, not a direct record']
   metadata jsonb [note: 'Stores UI state like breadcrumbs, left/right panel configuration']
+  created_at timestamp [note: 'Allows sorting by recently added to collection']
 }
 
 Table user_feedbacks [headercolor: #C7D2FE] {
@@ -232,6 +251,8 @@ Table user_feedbacks [headercolor: #C7D2FE] {
   search_query varchar [note: 'The exact query used to find this sentence']
   relevance_score int [note: '0 to 100']
   status feedback_status
+  reviewed_by uuid [ref: > users.id, note: 'Which admin resolved this?']
+  resolved_at timestamp
 }
 
 Table user_habits [headercolor: #E0E7FF] {
@@ -256,6 +277,7 @@ TableGroup "Core Infrastructure" {
   source_book_taxonomy
   sentence_jobs
   sentences
+  sentence_embeddings
 }
 
 TableGroup "Linguistic Lexicon" {

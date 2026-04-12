@@ -47,6 +47,12 @@
       "y": 368
     },
     {
+      "name": "sentence_embeddings",
+      "schemaName": "public",
+      "x": 0,
+      "y": 1386
+    },
+    {
       "name": "lexicon_roots",
       "schemaName": "public",
       "x": 920,
@@ -202,6 +208,21 @@
         "source_book_id"
       ],
       "secondTableName": "sentences",
+      "secondSchemaName": "public",
+      "secondRelation": "*",
+      "checkPoints": []
+    },
+    {
+      "firstFieldNames": [
+        "id"
+      ],
+      "firstTableName": "sentences",
+      "firstSchemaName": "public",
+      "firstRelation": "1",
+      "secondFieldNames": [
+        "sentence_id"
+      ],
+      "secondTableName": "sentence_embeddings",
       "secondSchemaName": "public",
       "secondRelation": "*",
       "checkPoints": []
@@ -395,6 +416,21 @@
       "firstRelation": "1",
       "secondFieldNames": [
         "sentence_id"
+      ],
+      "secondTableName": "user_feedbacks",
+      "secondSchemaName": "public",
+      "secondRelation": "*",
+      "checkPoints": []
+    },
+    {
+      "firstFieldNames": [
+        "id"
+      ],
+      "firstTableName": "users",
+      "firstSchemaName": "public",
+      "firstRelation": "1",
+      "secondFieldNames": [
+        "reviewed_by"
       ],
       "secondTableName": "user_feedbacks",
       "secondSchemaName": "public",
