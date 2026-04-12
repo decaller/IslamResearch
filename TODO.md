@@ -7,31 +7,31 @@ This document outlines the step-by-step implementation plan for transforming the
 ## 🚀 Phase 1: Database & Data Modeling (PostgreSQL)
 The target is the exact translation of `docs/database_schema.dbml` into Laravel migrations.
 
-- [ ] **Core Migrations Generation**
-  - [ ] Publish Laravel Migrations. Require `pgvector` and `ltree` PostgreSQL extensions explicitly in a setup migration.
-  - [ ] Implement `taxonomies` table utilizing PostgreSQL `ltree` type and `gist` index for massive hierarchy optimizations.
-  - [ ] Implement polymorphic relationships for `collection_items` (`itemable_type`, `itemable_id`).
-- [ ] **Scaling & AI Safety Models**
-  - [ ] Add specific `embedding_ar` and `embedding_id` vector(1024) columns natively to the `sentences` table for maximum HNSW join performance.
-  - [ ] Create `sentence_jobs` tracking migration with `attempts` and `error_log` tracking loops.
-  - [ ] Add `deleted_at` timestamps (Soft Deletes) to structural content (`source_books`, `taxonomies`, `collections`).
-  - [ ] Add B-Tree indexing to chronological query tables (`user_journeys`, `user_habits`, `user_searches`).
-- [ ] **Filament MVP Scaffolding**
-  - [ ] Auto-generate base Filament V5 resources for `SourceBooks`, `Taxonomies`, and `Scholars`.
-  - [ ] Create deep relation managers (e.g., viewing Lexicon words mapped to `lexicon_roots`).
+- [x] **Core Migrations Generation**
+  - [x] Publish Laravel Migrations. Require `pgvector` and `ltree` PostgreSQL extensions explicitly in a setup migration.
+  - [x] Implement `taxonomies` table utilizing PostgreSQL `ltree` type and `gist` index for massive hierarchy optimizations.
+  - [x] Implement polymorphic relationships for `collection_items` (`itemable_type`, `itemable_id`).
+- [x] **Scaling & AI Safety Models**
+  - [x] Add specific `embedding_ar` and `embedding_id` vector(1024) columns natively to the `sentences` table for maximum HNSW join performance.
+  - [x] Create `sentence_jobs` tracking migration with `attempts` and `error_log` tracking loops.
+  - [x] Add `deleted_at` timestamps (Soft Deletes) to structural content (`source_books`, `taxonomies`, `collections`).
+  - [x] Add B-Tree indexing to chronological query tables (`user_journeys`, `user_habits`, `user_searches`).
+- [x] **Filament MVP Scaffolding**
+  - [x] Auto-generate base Filament V5 resources for `SourceBooks`, `Taxonomies`, and `Scholars`.
+  - [x] Create deep relation managers (e.g., viewing Lexicon words mapped to `lexicon_roots`).
 
 ## 🤖 Phase 2: Hybrid AI Orchestration (Prefect + Horizon)
 Implementing the GPU LLM pipeline seamlessly alongside Laravel webhooks.
 
-- [ ] **Python Pipeline (Prefect)**
-  - [ ] Bind CAMeL Tools or SpaCy into `tasks/text_prep.py` for Root extraction (`Jidhr`).
-  - [ ] Vectorize Arabic and translated text blocks into independent `embedding_ar` and `embedding_id` representations (`mxbai-embed-large`).
-- [ ] **Laravel Horizon Queue Mapping**
-  - [ ] Install Laravel Horizon and define scaling configurations (Supervisors).
-  - [ ] Create `IntegratePrefectData` Job queued heavily on an `ai-callbacks` pipe.
-  - [ ] Build the `POST /api/webhooks/prefect/job-completed` endpoint to instantly return `202 Accepted` and offload mapping logic to Horizon.
-- [ ] **Testing Webhook Boundary**
-  - [ ] Implement **Pest PHP** test suites targeting the Webhook API. Use `Http::fake()` to throw random/malformed LLM schema blobs to guarantee Horizon fails elegantly rather than crashing.
+- [x] **Python Pipeline (Prefect)**
+  - [x] Bind CAMeL Tools or SpaCy into `tasks/text_prep.py` for Root extraction (`Jidhr`).
+  - [x] Vectorize Arabic and translated text blocks into independent `embedding_ar` and `embedding_id` representations (`mxbai-embed-large`).
+- [x] **Laravel Horizon Queue Mapping**
+  - [x] Install Laravel Horizon and define scaling configurations (Supervisors).
+  - [x] Create `IntegratePrefectData` Job queued heavily on an `ai-callbacks` pipe.
+  - [x] Build the `POST /api/webhooks/prefect/job-completed` endpoint to instantly return `202 Accepted` and offload mapping logic to Horizon.
+- [x] **Testing Webhook Boundary**
+  - [x] Implement **Pest PHP** test suites targeting the Webhook API. Use `Http::fake()` to throw random/malformed LLM schema blobs to guarantee Horizon fails elegantly rather than crashing.
 
 ## 🎨 Phase 3: The "Scholar IDE UI" (Livewire 4 + Tailwind v4)
 Constructing the split-pane, reactive study canvas for the end user.

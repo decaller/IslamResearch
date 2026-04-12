@@ -98,6 +98,7 @@ return [
 
     'waits' => [
         'redis:default' => 60,
+        'redis:ai-callbacks' => 300,
     ],
 
     /*
@@ -206,8 +207,25 @@ return [
             'maxTime' => 0,
             'maxJobs' => 0,
             'memory' => 128,
-            'tries' => 1,
+            'tries' => 3,
             'timeout' => 60,
+            'nice' => 0,
+        ],
+
+        // Dedicated supervisor for Prefect webhook callbacks.
+        // Timeout chain: job (90s) < supervisor (120s) < queue retry_after (150s)
+        'supervisor-ai' => [
+            'connection' => 'redis',
+            'queue' => ['ai-callbacks'],
+            'balance' => 'simple',
+            'autoScalingStrategy' => 'time',
+            'minProcesses' => 2,
+            'maxProcesses' => 10,
+            'maxTime' => 0,
+            'maxJobs' => 0,
+            'memory' => 256,
+            'tries' => 3,
+            'timeout' => 120,
             'nice' => 0,
         ],
     ],
@@ -219,10 +237,18 @@ return [
                 'balanceMaxShift' => 1,
                 'balanceCooldown' => 3,
             ],
+            'supervisor-ai' => [
+                'maxProcesses' => 20,
+                'balanceCooldown' => 3,
+            ],
         ],
 
         'local' => [
             'supervisor-1' => [
+                'maxProcesses' => 3,
+            ],
+            'supervisor-ai' => [
+                'minProcesses' => 1,
                 'maxProcesses' => 3,
             ],
         ],
