@@ -19,6 +19,11 @@ The target is the exact translation of `docs/database_schema.dbml` into Laravel 
 - [x] **Filament MVP Scaffolding**
   - [x] Auto-generate base Filament V5 resources for `SourceBooks`, `Taxonomies`, and `Scholars`.
   - [x] Create deep relation managers (e.g., viewing Lexicon words mapped to `lexicon_roots`).
+- [x] **Quran Data Ingestion (alquran.cloud API)**
+  - [x] Build `AlQuranApiService` HTTP client wrapping `api.alquran.cloud/v1` (editions, surahs, meta).
+  - [x] Implement `ImportQuranSurahJob` (×114 per-surah queued jobs) — upserts `sentences` with full ayah metadata (juz, page, hizb, ruku) and `sentence_translations` per edition.
+  - [x] Create "Al Quran Cloud API" system Scholar record as author of imported translations.
+  - [x] Build Filament `ImportQuran` page (`/admin/import-quran`) under "Data Sources" nav group with: Arabic edition selector, translation checkboxes, confirmation dialog, and Livewire progress bar (2s poll).
 
 ## 🤖 Phase 2: Hybrid AI Orchestration (Prefect + Horizon)
 Implementing the GPU LLM pipeline seamlessly alongside Laravel webhooks.
@@ -49,8 +54,8 @@ Constructing the split-pane, reactive study canvas using **daisyUI v5** (Tailwin
 - [x] **State Emitting (Write-Behind Redis Cache)**
   - [x] Connect Alpine UI state (pane widths, active tab, scroll `Y`) with Livewire generic listeners via `$dispatch`.
   - [x] Implement the 2-second debounce patch requests securely storing active tabs, horizontal scrolls, and split IDs in Redis.
-- [ ] **Syncing UI to Database**
-  - [ ] Map the Redis cached json blob to load and persist smoothly into the `user_workspaces` table on login/logout triggers.
+- [x] **Syncing UI to Database**
+  - [x] Map the Redis cached json blob to load and persist smoothly into the `user_workspaces` table on login/logout triggers.
 
 ## 🔍 Phase 4: Hybrid Search Integration
 Activating high performance discovery pipelines.
@@ -78,6 +83,12 @@ This section tracks the granular progress across all phases, mapping the high-le
 - [x] **Management Layer**
   - [x] Filament resources for `SourceBooks`, `Scholars`, and `Taxonomies`.
   - [x] Seeder for base Quranic data structure.
+- [x] **Quran Import (alquran.cloud)**
+  - [x] `app/Services/AlQuranApiService.php` — HTTP client with timeout, retry, gzip.
+  - [x] `app/Jobs/ImportQuranSurahJob.php` — per-surah job with full ayah metadata, translations, scholar attribution.
+  - [x] `app/Filament/Pages/ImportQuran.php` — admin import UI at `/admin/import-quran`.
+  - [x] `resources/views/filament/pages/import-quran.blade.php` — live progress bar (2s Livewire poll).
+  - [x] "Al Quran Cloud API" system Scholar auto-created on first translation import.
 
 ### 🤖 Phase 2: AI Pipeline & Webhooks (Verified)
 - [x] **Ingestion Pipeline**
@@ -89,18 +100,18 @@ This section tracks the granular progress across all phases, mapping the high-le
   - [x] Horizon supervisors active on `ai-callbacks` queue.
 
 ### 🎨 Phase 3: Scholar IDE UI (Current Active Focus)
-- [x] **Infrastructure Setup**
-  - [x] `npm install -D daisyui@latest` (v5 compatibility).
-  - [x] Tailwind v4 `@import "tailwindcss";` setup in `app.css`.
-  - [x] Islamic theme tokens defined in daisyUI config.
-- [x] **Core Layout Components**
-  - [x] **Activity Bar:** Vertical slim nav with tooltips.
-  - [x] **Explorer Sidebar:** Drawer component with `ltree` recursion.
-  - [x] **Tabs & Editor:** Livewire 4 dynamic tabs with state persistence.
-  - [x] **Split Pane Handle:** Alpine.js drag logic for dynamic resizing.
-- [x] **Content & Search UI**
-  - [x] **Result Cards:** Container-query aware cards for search results.
-  - [x] **Detail Panel:** Slide-over or side-pane for word-by-word analysis.
+- [ ] **Infrastructure Setup**
+  - [ ] `npm install -D daisyui@latest` (v5 compatibility).
+  - [ ] Tailwind v4 `@import "tailwindcss";` setup in `app.css`.
+  - [ ] Islamic theme tokens defined in daisyUI config.
+- [ ] **Core Layout Components**
+  - [ ] **Activity Bar:** Vertical slim nav with tooltips.
+  - [ ] **Explorer Sidebar:** Drawer component with `ltree` recursion.
+  - [ ] **Tabs & Editor:** Livewire 4 dynamic tabs with state persistence.
+  - [ ] **Split Pane Handle:** Alpine.js drag logic for dynamic resizing.
+- [ ] **Content & Search UI**
+  - [ ] **Result Cards:** Container-query aware cards for search results.
+  - [ ] **Detail Panel:** Slide-over or side-pane for word-by-word analysis.
 
 ### 🔍 Phase 4: Search & Discovery (Pending)
 - [ ] **Engine Setup**
@@ -115,4 +126,4 @@ This section tracks the granular progress across all phases, mapping the high-le
 - [ ] **Cross-Browser:** Does the split-pane and grid system work in Chrome/Firefox/Safari?
 - [ ] **Mobile Adapation:** Is the sidebar collapsible and usable on mobile?
 - [ ] **AI Latency:** Are webhook callbacks processed correctly under load?
-- [ ] **Data Persistence:** Does workspace state survive session logout/login?
+- [x] **Data Persistence:** Does workspace state survive session logout/login?

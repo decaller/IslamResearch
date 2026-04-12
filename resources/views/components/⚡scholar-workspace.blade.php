@@ -5,14 +5,19 @@ use Illuminate\Support\Facades\Redis;
 
 new class extends Component
 {
-    public string $userId = 'guest';
     public int $activeTab = 0;
-    public string $paneWidth = '50%'; 
+    public string $paneWidth = '50%';
+
+    protected function getUserId(): string
+    {
+        return auth()->id() ?? session()->getId();
+    }
 
     public function mount()
     {
         try {
-            $cached = Redis::get("user_workspace_{$this->userId}");
+            $userId = $this->getUserId();
+            $cached = Redis::get("user_workspace_{$userId}");
             if ($cached) {
                 $data = json_decode($cached, true);
                 $this->activeTab = $data['activeTab'] ?? 0;
@@ -30,7 +35,8 @@ new class extends Component
         $this->paneWidth = $state['paneWidth'] ?? '50%';
 
         try {
-            Redis::set("user_workspace_{$this->userId}", json_encode([
+            $userId = $this->getUserId();
+            Redis::set("user_workspace_{$userId}", json_encode([
                 'activeTab' => $this->activeTab,
                 'paneWidth' => $this->paneWidth,
                 'updated_at' => now()->toDateTimeString(),
