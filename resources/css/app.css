@@ -1,4 +1,21 @@
 @import 'tailwindcss';
+@plugin "daisyui" {
+    themes: light --default, dark;
+}
+@plugin "daisyui/theme" {
+    name: "scholar";
+    default: true;
+    color-scheme: light;
+    --color-primary: #059669;
+    --color-primary-content: #ffffff;
+    --color-secondary: #d97706;
+    --color-base-100: #fbfdfc;
+    --color-base-200: #f1f5f4;
+    --color-base-300: #e4e8e7;
+    --color-base-content: #1f2937;
+    --color-warning: #f59e0b;
+    --color-success: #10b981;
+}
 
 @source '../views';
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';

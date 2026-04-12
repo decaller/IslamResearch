@@ -2,4 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::view('/', 'welcome')->name('home');
+Route::get('/', function () {
+    return redirect('/scholar');
+});
+
+Route::view('/scholar', 'scholar')->name('scholar.workspace');
