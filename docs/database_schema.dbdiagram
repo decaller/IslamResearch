@@ -1,0 +1,435 @@
+{
+  "version": "1.0.0",
+  "darkMode": true,
+  "gridEnabling": false,
+  "detailLevel": "All",
+  "tablePositions": [
+    {
+      "name": "users",
+      "schemaName": "public",
+      "x": 0,
+      "y": 0
+    },
+    {
+      "name": "scholars",
+      "schemaName": "public",
+      "x": 288,
+      "y": 0
+    },
+    {
+      "name": "source_books",
+      "schemaName": "public",
+      "x": 592,
+      "y": 0
+    },
+    {
+      "name": "taxonomies",
+      "schemaName": "public",
+      "x": 920,
+      "y": 0
+    },
+    {
+      "name": "source_book_taxonomy",
+      "schemaName": "public",
+      "x": 0,
+      "y": 304
+    },
+    {
+      "name": "sentence_jobs",
+      "schemaName": "public",
+      "x": 288,
+      "y": 176
+    },
+    {
+      "name": "sentences",
+      "schemaName": "public",
+      "x": 592,
+      "y": 368
+    },
+    {
+      "name": "lexicon_roots",
+      "schemaName": "public",
+      "x": 920,
+      "y": 272
+    },
+    {
+      "name": "lexicon_words",
+      "schemaName": "public",
+      "x": 0,
+      "y": 456
+    },
+    {
+      "name": "sentence_word",
+      "schemaName": "public",
+      "x": 288,
+      "y": 456
+    },
+    {
+      "name": "user_workspaces",
+      "schemaName": "public",
+      "x": 592,
+      "y": 840
+    },
+    {
+      "name": "user_journeys",
+      "schemaName": "public",
+      "x": 920,
+      "y": 520
+    },
+    {
+      "name": "searches",
+      "schemaName": "public",
+      "x": 0,
+      "y": 760
+    },
+    {
+      "name": "user_searches",
+      "schemaName": "public",
+      "x": 288,
+      "y": 664
+    },
+    {
+      "name": "collections",
+      "schemaName": "public",
+      "x": 592,
+      "y": 1112
+    },
+    {
+      "name": "collection_items",
+      "schemaName": "public",
+      "x": 920,
+      "y": 824
+    },
+    {
+      "name": "user_feedbacks",
+      "schemaName": "public",
+      "x": 0,
+      "y": 968
+    },
+    {
+      "name": "user_habits",
+      "schemaName": "public",
+      "x": 288,
+      "y": 936
+    }
+  ],
+  "tableGroupCollapseStates": [],
+  "stickyNoteLayouts": [],
+  "referencePaths": [
+    {
+      "firstFieldNames": [
+        "id"
+      ],
+      "firstTableName": "scholars",
+      "firstSchemaName": "public",
+      "firstRelation": "1",
+      "secondFieldNames": [
+        "scholar_id"
+      ],
+      "secondTableName": "source_books",
+      "secondSchemaName": "public",
+      "secondRelation": "*",
+      "checkPoints": []
+    },
+    {
+      "firstFieldNames": [
+        "id"
+      ],
+      "firstTableName": "taxonomies",
+      "firstSchemaName": "public",
+      "firstRelation": "1",
+      "secondFieldNames": [
+        "parent_id"
+      ],
+      "secondTableName": "taxonomies",
+      "secondSchemaName": "public",
+      "secondRelation": "*",
+      "checkPoints": []
+    },
+    {
+      "firstFieldNames": [
+        "id"
+      ],
+      "firstTableName": "source_books",
+      "firstSchemaName": "public",
+      "firstRelation": "1",
+      "secondFieldNames": [
+        "book_id"
+      ],
+      "secondTableName": "source_book_taxonomy",
+      "secondSchemaName": "public",
+      "secondRelation": "*",
+      "checkPoints": []
+    },
+    {
+      "firstFieldNames": [
+        "id"
+      ],
+      "firstTableName": "taxonomies",
+      "firstSchemaName": "public",
+      "firstRelation": "1",
+      "secondFieldNames": [
+        "taxonomy_id"
+      ],
+      "secondTableName": "source_book_taxonomy",
+      "secondSchemaName": "public",
+      "secondRelation": "*",
+      "checkPoints": []
+    },
+    {
+      "firstFieldNames": [
+        "id"
+      ],
+      "firstTableName": "source_books",
+      "firstSchemaName": "public",
+      "firstRelation": "1",
+      "secondFieldNames": [
+        "source_book_id"
+      ],
+      "secondTableName": "sentence_jobs",
+      "secondSchemaName": "public",
+      "secondRelation": "*",
+      "checkPoints": []
+    },
+    {
+      "firstFieldNames": [
+        "id"
+      ],
+      "firstTableName": "source_books",
+      "firstSchemaName": "public",
+      "firstRelation": "1",
+      "secondFieldNames": [
+        "source_book_id"
+      ],
+      "secondTableName": "sentences",
+      "secondSchemaName": "public",
+      "secondRelation": "*",
+      "checkPoints": []
+    },
+    {
+      "firstFieldNames": [
+        "id"
+      ],
+      "firstTableName": "lexicon_roots",
+      "firstSchemaName": "public",
+      "firstRelation": "1",
+      "secondFieldNames": [
+        "root_id"
+      ],
+      "secondTableName": "lexicon_words",
+      "secondSchemaName": "public",
+      "secondRelation": "*",
+      "checkPoints": []
+    },
+    {
+      "firstFieldNames": [
+        "id"
+      ],
+      "firstTableName": "sentences",
+      "firstSchemaName": "public",
+      "firstRelation": "1",
+      "secondFieldNames": [
+        "sentence_id"
+      ],
+      "secondTableName": "sentence_word",
+      "secondSchemaName": "public",
+      "secondRelation": "*",
+      "checkPoints": []
+    },
+    {
+      "firstFieldNames": [
+        "id"
+      ],
+      "firstTableName": "lexicon_words",
+      "firstSchemaName": "public",
+      "firstRelation": "1",
+      "secondFieldNames": [
+        "word_id"
+      ],
+      "secondTableName": "sentence_word",
+      "secondSchemaName": "public",
+      "secondRelation": "*",
+      "checkPoints": []
+    },
+    {
+      "firstFieldNames": [
+        "id"
+      ],
+      "firstTableName": "users",
+      "firstSchemaName": "public",
+      "firstRelation": "1",
+      "secondFieldNames": [
+        "user_id"
+      ],
+      "secondTableName": "user_workspaces",
+      "secondSchemaName": "public",
+      "secondRelation": "*",
+      "checkPoints": []
+    },
+    {
+      "firstFieldNames": [
+        "id"
+      ],
+      "firstTableName": "users",
+      "firstSchemaName": "public",
+      "firstRelation": "1",
+      "secondFieldNames": [
+        "user_id"
+      ],
+      "secondTableName": "user_journeys",
+      "secondSchemaName": "public",
+      "secondRelation": "*",
+      "checkPoints": []
+    },
+    {
+      "firstFieldNames": [
+        "id"
+      ],
+      "firstTableName": "sentences",
+      "firstSchemaName": "public",
+      "firstRelation": "1",
+      "secondFieldNames": [
+        "target_sentence_id"
+      ],
+      "secondTableName": "user_journeys",
+      "secondSchemaName": "public",
+      "secondRelation": "*",
+      "checkPoints": []
+    },
+    {
+      "firstFieldNames": [
+        "id"
+      ],
+      "firstTableName": "searches",
+      "firstSchemaName": "public",
+      "firstRelation": "1",
+      "secondFieldNames": [
+        "target_search_id"
+      ],
+      "secondTableName": "user_journeys",
+      "secondSchemaName": "public",
+      "secondRelation": "*",
+      "checkPoints": []
+    },
+    {
+      "firstFieldNames": [
+        "id"
+      ],
+      "firstTableName": "users",
+      "firstSchemaName": "public",
+      "firstRelation": "1",
+      "secondFieldNames": [
+        "user_id"
+      ],
+      "secondTableName": "user_searches",
+      "secondSchemaName": "public",
+      "secondRelation": "*",
+      "checkPoints": []
+    },
+    {
+      "firstFieldNames": [
+        "id"
+      ],
+      "firstTableName": "searches",
+      "firstSchemaName": "public",
+      "firstRelation": "1",
+      "secondFieldNames": [
+        "search_id"
+      ],
+      "secondTableName": "user_searches",
+      "secondSchemaName": "public",
+      "secondRelation": "*",
+      "checkPoints": []
+    },
+    {
+      "firstFieldNames": [
+        "id"
+      ],
+      "firstTableName": "users",
+      "firstSchemaName": "public",
+      "firstRelation": "1",
+      "secondFieldNames": [
+        "user_id"
+      ],
+      "secondTableName": "collections",
+      "secondSchemaName": "public",
+      "secondRelation": "*",
+      "checkPoints": []
+    },
+    {
+      "firstFieldNames": [
+        "id"
+      ],
+      "firstTableName": "collections",
+      "firstSchemaName": "public",
+      "firstRelation": "1",
+      "secondFieldNames": [
+        "collection_id"
+      ],
+      "secondTableName": "collection_items",
+      "secondSchemaName": "public",
+      "secondRelation": "*",
+      "checkPoints": []
+    },
+    {
+      "firstFieldNames": [
+        "id"
+      ],
+      "firstTableName": "users",
+      "firstSchemaName": "public",
+      "firstRelation": "1",
+      "secondFieldNames": [
+        "user_id"
+      ],
+      "secondTableName": "user_feedbacks",
+      "secondSchemaName": "public",
+      "secondRelation": "*",
+      "checkPoints": []
+    },
+    {
+      "firstFieldNames": [
+        "id"
+      ],
+      "firstTableName": "sentences",
+      "firstSchemaName": "public",
+      "firstRelation": "1",
+      "secondFieldNames": [
+        "sentence_id"
+      ],
+      "secondTableName": "user_feedbacks",
+      "secondSchemaName": "public",
+      "secondRelation": "*",
+      "checkPoints": []
+    },
+    {
+      "firstFieldNames": [
+        "id"
+      ],
+      "firstTableName": "users",
+      "firstSchemaName": "public",
+      "firstRelation": "1",
+      "secondFieldNames": [
+        "user_id"
+      ],
+      "secondTableName": "user_habits",
+      "secondSchemaName": "public",
+      "secondRelation": "*",
+      "checkPoints": []
+    },
+    {
+      "firstFieldNames": [
+        "id"
+      ],
+      "firstTableName": "sentences",
+      "firstSchemaName": "public",
+      "firstRelation": "1",
+      "secondFieldNames": [
+        "sentence_id"
+      ],
+      "secondTableName": "user_habits",
+      "secondSchemaName": "public",
+      "secondRelation": "*",
+      "checkPoints": []
+    }
+  ]
+}

@@ -24,17 +24,19 @@ Located just below the Omni-Search Bar, the UI dynamically renders the user's se
 
 ---
 
-## 2. Custom Collections (Bookmarks & Saved Queries)
+## 2. Custom Collections (Bookmarks, Saved Queries & Workspaces)
 
-Users can curate their own research libraries, saving both static excerpts and dynamic search queries.
+Users can curate their own research libraries, saving static excerpts, dynamic search queries, and entire workspace states (including breadcrumbs).
 
 ### A. Database Schema
 - **`collections` table:** `id`, `user_id`, `name` (e.g., "Ramadan Prep"), `is_public` (for sharing).
-- **`collection_items` table:** `id`, `collection_id`, `item_type` (`static_item`, `dynamic_query`), `target_id_or_query`.
+- **`collection_items` table:** `id`, `collection_id`, `item_type` (`static_item`, `dynamic_query`, `workspace_state`), `target_id_or_query`, `metadata`.
+  - *Note on workspace_state:* The `metadata` JSONB column stores the exact UI configuration, including the breadcrumb array and panel views, guaranteeing perfect session restoration.
 
 ### B. Frontend Integration
 - **Card-Level Saving:** Every card in the results pane features a "🔖 Save" icon to add the entry to a collection.
 - **Saved Queries:** A "Save this Search" button on the search bar allows users to bookmark a specific query to see refreshed results later.
+- **Save Workspace:** A "Save Current Session" button in the header saves the complete dual-pane layout and breadcrumb history into the `metadata` column as a `workspace_state`.
 
 ---
 
@@ -70,3 +72,19 @@ When an admin approves a global hide, the system severs the semantic link using 
 3.  **Search Controller Logic:** The controller automatically appends a filter to future searches: `NOT negative_queries = [current_query]`.
 
 **Result:** The system learns globally from a single admin action, permanently correcting AI hallucinations.
+
+---
+
+## 4. IDE-Like Workspace & Timeline
+
+To support complex scholarly research, the Scholar UI behaves dynamically like a code editor (e.g., VS Code), allowing users to maintain multiple active tabs and split panes without losing state.
+
+### A. The "Last State" (Active Workspace)
+- **Database Table:** `user_workspaces` stores the `layout_state` (JSONB) indicating exactly which tabs are open, which panes are split, and current scroll positions.
+- **Auto-Save:** Every time a user opens a tab or moves a pane, the `layout_state` is updated in the database. This guarantees that if a scholar closes their browser and returns later, their exact research environment is perfectly restored.
+- **Multiple Projects:** Users can switch between isolated workspaces (e.g., "Quran Study" vs "Fiqh Research") without cluttering their tabs.
+
+### B. The Audit Timeline (Action History)
+- **Extending Journeys:** The `user_journeys` table has been extended to act as an automatic audit log.
+- **New Actions:** Enum actions now include `open_tab`, `close_tab`, and `split_pane`.
+- **The Timeline UI:** As the user interacts with the IDE-like interface, a sequential timeline is naturally generated (e.g., *10:00 AM - Opened Search*, *10:05 AM - Split Pane: Tafsir Ibn Kathir*). This provides a historical path so scholars can review exactly how they arrived at a specific conclusion.

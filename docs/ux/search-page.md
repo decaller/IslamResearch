@@ -27,6 +27,7 @@ Powered directly by Meilisearch facets. Updates instantly without page reloads.
 *   **Source Filter:** Checkboxes for Al-Quran, Hadith, Tafsir, Linguistics.
 *   **Books:** Specific titles (Sahih Bukhari, Tafsir As-Sa'di).
 *   **Extracted Tags (AI-Generated):** A dynamic list of tags highly relevant to the current search (e.g., #Mekkah, #Rukun_Islam). Clicking one forces an exact metadata match.
+*   **Smart Contextual Filters:** Detects search intent or category and dynamically injects domain-specific filters. For example, if the user searches for a "Fiqh" topic (or selects the Fiqh category), the sidebar proactively suggests a "Madzhab" filter (Syafii, Hanafi, Maliki, Hanbali) to further refine the results.
 
 ### Zone 3: The Results Feed (Center Main)
 This is where the search hits are displayed as interactive cards.

@@ -24,6 +24,7 @@ Driven instantly by the Meilisearch Faceting engine.
 - **Resource Type:** Filter by Quran, Hadith, Exegesis, Linguistics, etc.
 - **Category Tree:** An accordion menu hierarchy (e.g., `Fiqh` -> `Muamalah` -> `Zakat`).
 - **AI Tags:** A dynamic list of the most frequent tags found in the current results (e.g., `#Mekkah`, `#Rukun_Islam`).
+- **Context-Aware Suggestions:** Domain-specific filters that dynamically appear based on query detection. (e.g., if "Fiqh" is detected in the search context, the UI automatically offers "Madzhab" as a new filtering dimension).
 
 ### C. The Results Pane (Center)
 - **Hits:** Displays the Arabic text and the Indonesian translation side-by-side in a responsive card layout.
