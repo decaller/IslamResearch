@@ -116,8 +116,8 @@ Table sentences [headercolor: #BFDBFE] {
   resource_type resource_type
   sequence_number int [note: 'Sequential order of sentence within the resource']
   sentence_text text [note: 'The core sentence content']
-  translation json [note: 'Translations in multiple languages']
   metadata jsonb [note: 'Dynamic LLM data (Isnad, Root, Target_Ayah, etc.)']
+  embedding_ar "vector(1024)" [note: 'Native Arabic semantic index for fastest HNSW retrieval']
   created_at timestamp
   updated_at timestamp
 
@@ -127,14 +127,27 @@ Table sentences [headercolor: #BFDBFE] {
   }
 }
 
-Table sentence_embeddings [headercolor: #BFDBFE] {
+Table sentence_transliterations [headercolor: #93C5FD] {
   id uuid [primary key]
   sentence_id uuid [ref: > sentences.id]
-  language varchar [note: 'e.g., ar, id, en, ur']
-  embedding "vector(1024)" [note: '1024d HNSW Indexed']
+  scheme varchar [note: 'e.g., ala_lc, buckwalter']
+  transliteration_text text
   
   indexes {
-    (sentence_id, language) [unique]
+    (sentence_id, scheme) [unique]
+  }
+}
+
+Table sentence_translations [headercolor: #93C5FD] {
+  id uuid [primary key]
+  sentence_id uuid [ref: > sentences.id]
+  language varchar [note: 'e.g., id, en, ur, fr']
+  scholar_id uuid [ref: > scholars.id, note: 'Optional author/source of this translation']
+  translation_text text
+  embedding "vector(1024)" [note: 'HNSW semantic index isolated for this localized language']
+  
+  indexes {
+    (sentence_id, language)
   }
 }
 
@@ -158,7 +171,8 @@ Table lexicon_words [headercolor: #059669] {
   language varchar [note: '''ar' or 'id''']
   word_raw varchar [note: 'Exact word from text (with Harakat for Arabic)']
   word_clean varchar [note: 'Stripped version (no Harakat)']
-  embedding "vector(1024)" [note: 'pgvector (1024d)']
+  embedding_raw "vector(1024)" [note: 'pgvector (1024d) for exact harakat matched search']
+  embedding_clean "vector(1024)" [note: 'pgvector (1024d) for generalized searches']
   metadata jsonb [note: 'Morphological details and usage frequency notes']
   
   indexes {
@@ -277,7 +291,8 @@ TableGroup "Core Infrastructure" {
   source_book_taxonomy
   sentence_jobs
   sentences
-  sentence_embeddings
+  sentence_transliterations
+  sentence_translations
 }
 
 TableGroup "Linguistic Lexicon" {

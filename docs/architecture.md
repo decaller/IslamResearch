@@ -20,7 +20,9 @@ Since ingestion processes thousands of sentences, this is a **Read-Only** monito
 
 ### 3. Item / Sentence (Enriched Search Database)
 The final, AI-enriched result. This resource allows for manual scholarly review and corrections.
-- **Database:** `sentences` (id, source_book_id, sequence_number, resource_type, sentence_text, translation, metadata [JSONB], embedding_ar [vector], embedding_id [vector], embedding_en [vector])
+- **Database:** `sentences` (id, source_book_id, sequence_number, resource_type, sentence_text, metadata [JSONB], embedding_ar [vector])
+- **Database:** `sentence_translations` (id, sentence_id, language, scholar_id, translation_text, embedding [vector])
+- **Database:** `sentence_transliterations` (id, sentence_id, scheme, transliteration_text)
 - **Filament Interface:** Uses a JSON form plugin to allow precise editing of tags, categories, and hierarchical arrays.
 
 ### 4. Linguistic Lexicon (Root & Word Explorer)

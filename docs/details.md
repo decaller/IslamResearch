@@ -66,9 +66,10 @@ Because each resource type generates different metadata, PostgreSQL handles this
 | **sequence_number** | Integer | Order index for dynamic `context_text` fetching without data bloat |
 | **resource_type** | Enum | quran, hadith, tafsir, syarh, language, quranic_action, etc. |
 | **sentence_text** | Text | The core Arabic sentence content |
-| **translation** | JSON | The mapped structural translations |
 | **metadata** | **JSONB** | **Dynamic LLM data (Isnad, Root, Target_Ayah, etc.)** |
-| **embedding_ar, ...** | Vector | Language-specific AI vectors |
+| **embedding_ar** | Vector | Native Arabic HNSW index |
+
+*(Note: Localized translations and programmatic transliterations map via 1-to-Many `sentence_translations` and `sentence_transliterations` tables to protect pgvector scale)*
 
 ---
 

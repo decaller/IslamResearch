@@ -12,7 +12,7 @@ The target is the exact translation of `docs/database_schema.dbml` into Laravel 
   - [ ] Implement `taxonomies` table utilizing PostgreSQL `ltree` type and `gist` index for massive hierarchy optimizations.
   - [ ] Implement polymorphic relationships for `collection_items` (`itemable_type`, `itemable_id`).
 - [ ] **Scaling & AI Safety Models**
-  - [ ] Create `sentence_embeddings` migration utilizing `vector(1024)` type directly linked to language properties.
+  - [ ] Add specific `embedding_ar` and `embedding_id` vector(1024) columns natively to the `sentences` table for maximum HNSW join performance.
   - [ ] Create `sentence_jobs` tracking migration with `attempts` and `error_log` tracking loops.
   - [ ] Add `deleted_at` timestamps (Soft Deletes) to structural content (`source_books`, `taxonomies`, `collections`).
   - [ ] Add B-Tree indexing to chronological query tables (`user_journeys`, `user_habits`, `user_searches`).

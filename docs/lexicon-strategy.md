@@ -43,7 +43,8 @@ Stores the actual variations found in the texts, linked to their parent root.
 | **language** | String | 'ar' or 'id' |
 | **word_raw** | String | Exact word from text (with Harakat for Arabic, e.g., 'يَعْلَمُونَ') |
 | **word_clean** | String | Stripped version (no Harakat for Arabic, e.g., 'يعلمون') |
-| **embedding** | Vector | pgvector |
+| **embedding_raw** | Vector | pgvector for exact matches |
+| **embedding_clean** | Vector | pgvector for generalized meaning search |
 
 **Index:** Unique constraint on `(language, word_raw, word_clean)`.
 
