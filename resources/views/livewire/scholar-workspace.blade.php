@@ -1,7 +1,7 @@
-<?php
-
+use App\Services\SearchService;
 use Livewire\Component;
 use Illuminate\Support\Facades\Redis;
+use Livewire\Attributes\On;
 
 new class extends Component
 {
@@ -10,6 +10,11 @@ new class extends Component
     public string $searchQuery = '';
     public array $results = [];
     public mixed $taxonomies = [];
+    
+    // Selection state
+    public ?string $selectedSentenceId = null;
+    public ?array $selectedSentence = null;
+    public ?array $selectedRoot = null;
 
     protected function getUserId(): string
     {
@@ -34,10 +39,46 @@ new class extends Component
     }
 
     #[On('scholar:results-updated')]
-    public function onSearchUpdated($query)
+    public function onSearchUpdated($query, SearchService $searchService)
     {
         $this->searchQuery = $query;
-        $this->results = \App\Models\Sentence::search($query)->take(10)->get()->toArray();
+        $searchResult = $searchService->hybridSearch($query);
+        
+        // Handle both Paginator and Collection/Array results from SearchService
+        if (method_exists($searchResult, 'toArray')) {
+            $data = $searchResult->toArray();
+            $this->results = isset($data['data']) ? $data['data'] : $data;
+        } else {
+            $this->results = (array) $searchResult;
+        }
+
+        // Auto-select first result if available
+        if (!empty($this->results)) {
+            $this->selectSentence($this->results[0]['id']);
+        }
+    }
+
+    public function selectSentence(string $id)
+    {
+        $this->selectedSentenceId = $id;
+        $sentence = \App\Models\Sentence::with(['translations', 'words.root'])->find($id);
+        
+        if ($sentence) {
+            $this->selectedSentence = $sentence->toArray();
+            
+            // Auto-select the first root found in the sentence
+            $firstWord = $sentence->words->first();
+            if ($firstWord && $firstWord->root) {
+                $this->selectedRoot = $firstWord->root->toArray();
+                
+                // Add some dynamic stats for the root
+                $this->selectedRoot['mentions_count'] = \App\Models\Sentence::whereHas('words', function($q) use ($firstWord) {
+                    $q->where('root_id', $firstWord->root_id);
+                })->count();
+            } else {
+                $this->selectedRoot = null;
+            }
+        }
     }
 
     #[On('updateWorkspaceState')]
@@ -192,11 +233,12 @@ new class extends Component
                     @endif
                   </ul>
                 </div>
-
                 <!-- Results Feed -->
                 <div class="grid grid-cols-1 @4xl:grid-cols-2 gap-4">
                     @forelse($results as $result)
-                        <div class="card bg-base-100 shadow border border-base-200 w-full hover:border-primary transition-colors cursor-pointer group">
+                        <div 
+                            wire:click="selectSentence('{{ $result['id'] }}')"
+                            class="card bg-base-100 shadow border-2 @if($selectedSentenceId === $result['id']) border-primary @else border-base-200 @endif w-full hover:border-primary transition-colors cursor-pointer group">
                           <div class="card-body p-4 relative pb-10">
                             <div class="flex justify-between items-start mb-4">
                                 <h2 class="card-title text-sm">
@@ -210,15 +252,15 @@ new class extends Component
                                 </button>
                             </div>
                             <div class="text-right text-lg font-arabic mb-4 leading-loose" dir="rtl">
-                                {!! preg_replace('/('.preg_quote($searchQuery, '/').')/ui', '<mark class="bg-warning/30 text-warning-content rounded px-1">$1</mark>', $result['sentence_text']) !!}
+                                {!! preg_replace('/('.preg_quote($searchQuery, '/').')/ui', '<mark class="bg-warning/30 text-warning-content rounded px-1">$1</mark>', $result['sentence_text'] ?? '') !!}
                             </div>
                             <p class="text-sm leading-relaxed mb-4 text-left opacity-80" dir="ltr">
-                                {{ $result['sentence_translation'] ?? '' }}
+                                {{ $result['sentence_translation'] ?? ($result['translations'][0]['translation_text'] ?? '') }}
                             </p>
                           </div>
                           <div class="absolute bottom-0 w-full h-8 opacity-0 group-hover:opacity-100 transition-opacity bg-base-200 px-4 border-t border-base-200 text-xs text-base-content/50 flex items-center justify-between rounded-b-xl">
-                              <span>Relevance Match</span>
-                              <div class="badge badge-ghost badge-xs">pgvector</div>
+                               <span>Relevance Match</span>
+                               <div class="badge badge-ghost badge-xs">hybrid</div>
                           </div>
                         </div>
                     @empty
@@ -228,7 +270,7 @@ new class extends Component
                                 <p class="text-base-content/50 italic">No exact matches found for "{{ $searchQuery }}". Try semantic search.</p>
                             </div>
                         @else
-                            <!-- Example loading skeletons / Empty state items -->
+                            <!-- Example loading skeletons -->
                             @for($i=0; $i<4; $i++)
                                 <div class="card shadow border border-base-200 bg-base-100 w-full p-4 opacity-50">
                                     <div class="flex items-center gap-4 mb-4">
@@ -259,33 +301,45 @@ new class extends Component
                 </div>
                 
                 <div class="flex-1 p-6 overflow-y-auto w-full">
-                    <div class="flex justify-between items-center mb-4">
-                      <h3 class="text-lg font-bold font-arabic">الزَّكَاةَ - Root: ز ك و</h3>
-                      <button class="btn btn-xs btn-primary">Search this Root</button>
-                    </div>
-                    
-                    <div class="stats stats-vertical xl:stats-horizontal shadow bg-base-100 border border-base-200 w-full mb-6 max-w-full overflow-hidden">
-                      <div class="stat p-3">
-                        <div class="stat-title text-xs">Quran Mentions</div>
-                        <div class="stat-value text-xl text-primary">32</div>
-                      </div>
-                      <div class="stat p-3">
-                        <div class="stat-title text-xs">Hadith Mentions</div>
-                        <div class="stat-value text-xl">1,240</div>
-                      </div>
-                      <div class="stat p-3">
-                        <div class="stat-title text-xs">Lexicon Form</div>
-                        <div class="stat-value text-sm font-arabic mt-1">Noun</div>
-                      </div>
-                    </div>
-
-                    <div class="prose prose-sm text-base-content max-w-none">
-                        <h4 class="text-base font-bold m-0 mb-1">Semantic Concept</h4>
-                        <p class="mt-0">The root <span class="badge badge-outline shadow-sm font-arabic mx-1">ز ك و</span> indicates purification, growth, and blessing. It is intricately connected to the linguistic flow of wealth purification...</p>
-                        <div class="divider my-4"></div>
-                        <h4 class="text-base font-bold m-0 mb-2">Tadabbur Directives</h4>
-                        <blockquote class="pl-4 border-l-4 border-primary italic m-0">Look closely at how Salah is paired with Zakah in this verse. It balances physical dedication with societal financial cleansing.</blockquote>
-                    </div>
+                    @if($selectedRoot)
+                        <div class="flex justify-between items-center mb-4">
+                          <h3 class="text-lg font-bold font-arabic">{{ $selectedRoot['root_value'] }}</h3>
+                          <button class="btn btn-xs btn-primary">Search this Root</button>
+                        </div>
+                        
+                        <div class="stats stats-vertical xl:stats-horizontal shadow bg-base-100 border border-base-200 w-full mb-6 max-w-full overflow-hidden">
+                          <div class="stat p-3">
+                            <div class="stat-title text-xs">Quran Mentions</div>
+                            <div class="stat-value text-xl text-primary">{{ $selectedRoot['mentions_count'] ?? 0 }}</div>
+                          </div>
+                          <div class="stat p-3">
+                            <div class="stat-title text-xs">Lexicon Form</div>
+                            <div class="stat-value text-sm font-arabic mt-1">{{ $selectedRoot['metadata']['form'] ?? 'Standard' }}</div>
+                          </div>
+                        </div>
+    
+                        <div class="prose prose-sm text-base-content max-w-none">
+                            <h4 class="text-base font-bold m-0 mb-1">Semantic Concept</h4>
+                            <p class="mt-0">{{ $selectedRoot['metadata']['description'] ?? 'No extended lexicon definition available for this root.' }}</p>
+                            @if(isset($selectedSentence['metadata']['tadabbur']))
+                                <div class="divider my-4"></div>
+                                <h4 class="text-base font-bold m-0 mb-2">Tadabbur Directives</h4>
+                                <blockquote class="pl-4 border-l-4 border-primary italic m-0">
+                                    {{ $selectedSentence['metadata']['tadabbur'] }}
+                                </blockquote>
+                            @endif
+                        </div>
+                    @elseif($selectedSentence)
+                        <div class="text-center py-20 opacity-50">
+                            <x-heroicon-o-beaker class="w-12 h-12 mx-auto mb-4"/>
+                            <p>Select a result with recognized linguistic roots to view detailed lexicon analysis.</p>
+                        </div>
+                    @else
+                        <div class="text-center py-20 opacity-30">
+                            <x-heroicon-o-cursor-arrow-ripple class="w-12 h-12 mx-auto mb-4"/>
+                            <p>Select a search result to begin in-depth study.</p>
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>

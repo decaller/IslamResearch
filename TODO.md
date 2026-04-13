@@ -137,3 +137,27 @@ This section tracks the granular progress across all phases, mapping the high-le
 - [ ] **Mobile Adapation:** Is the sidebar collapsible and usable on mobile?
 - [ ] **AI Latency:** Are webhook callbacks processed correctly under load?
 - [x] **Data Persistence:** Does workspace state survive session logout/login?
+
+---
+
+## 🚀 Phase 5: DevOps & Deployment (Envoy + Docker)
+Automation of production lifecycle.
+
+- [x] **Laravel Envoy Configuration**
+  - [x] Install `laravel/envoy` via Composer.
+  - [x] Configure `Envoy.blade.php` with Docker-based deployment strategy.
+  - [x] Implement `initial_setup` (CLONE + Docker Bootstrap).
+  - [x] Implement `deploy` story (PULL + BUILD + MIGRATE + OPTIMIZE).
+  - [x] Setup SSH key-based authentication for root on `100.92.183.79`.
+- [x] **Infrastructure Monitoring**
+  - [x] Integrate Slack notifications for deployment status in Envoy `@finished` hook.
+
+### 🚢 Phase 5: DevOps & Deployment (In Progress)
+- [x] **Envoy Automation**
+  - [x] `Envoy.blade.php` initialized and tested for `initial_setup`.
+  - [x] Production server (`100.92.183.79`) bootstrapped with SSH keys.
+  - [x] Docker/Sail lifecycle managed via Envoy tasks.
+  - [x] `.env` synchronization strategy implemented (`sync_env`).
+- [ ] **Production Validation**
+  - [ ] Verify first successful build completion on LXC (GPU/AI Pipeline dependencies).
+  - [ ] Test Slack/Discord webhook notifications.
