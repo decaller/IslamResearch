@@ -109,19 +109,19 @@ This section tracks the granular progress across all phases, mapping the high-le
   - [x] `IntegratePrefectData` job handling async data mapping (now includes `transliteration` field).
   - [x] Horizon supervisors active on `ai-callbacks` queue.
 
-### 🎨 Phase 3: Scholar IDE UI (Current Active Focus)
-- [ ] **Infrastructure Setup**
-  - [ ] `npm install -D daisyui@latest` (v5 compatibility).
-  - [ ] Tailwind v4 `@import "tailwindcss";` setup in `app.css`.
-  - [ ] Islamic theme tokens defined in daisyUI config.
-- [ ] **Core Layout Components**
-  - [ ] **Activity Bar:** Vertical slim nav with tooltips.
-  - [ ] **Explorer Sidebar:** Drawer component with `ltree` recursion.
-  - [ ] **Tabs & Editor:** Livewire 4 dynamic tabs with state persistence.
-  - [ ] **Split Pane Handle:** Alpine.js drag logic for dynamic resizing.
-- [ ] **Content & Search UI**
-  - [ ] **Result Cards:** Container-query aware cards for search results.
-  - [ ] **Detail Panel:** Slide-over or side-pane for word-by-word analysis.
+### 🎨 Phase 3: Scholar IDE UI (Verified)
+- [x] **Infrastructure Setup**
+  - [x] `daisyui@latest` (v5 compatibility) verified in package.json.
+  - [x] Tailwind v4 setup in `app.css`.
+  - [x] Islamic theme tokens defined in daisyUI config.
+- [x] **Core Layout Components**
+  - [x] **Activity Bar:** Vertical slim nav with tooltips.
+  - [x] **Explorer Sidebar:** Drawer component with dynamic `Taxonomy` recursion.
+  - [x] **Tabs & Editor:** Livewire 4 dynamic tabs with state persistence.
+  - [x] **Split Pane Handle:** Alpine.js drag logic for dynamic resizing.
+- [x] **Content & Search UI**
+  - [x] **Result Cards:** Container-query aware cards with live data integration.
+  - [x] **Detail Panel:** Contextual Intel panel with Tadabbur and Lexicon tabs.
 
 ### 🔍 Phase 4: Search & Discovery (Verified)
 - [x] **Engine Setup**

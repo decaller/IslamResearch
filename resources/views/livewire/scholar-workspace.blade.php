@@ -7,6 +7,9 @@ new class extends Component
 {
     public int $activeTab = 0;
     public string $paneWidth = '50%';
+    public string $searchQuery = '';
+    public array $results = [];
+    public mixed $taxonomies = [];
 
     protected function getUserId(): string
     {
@@ -15,6 +18,8 @@ new class extends Component
 
     public function mount()
     {
+        $this->taxonomies = \App\Models\Taxonomy::whereNull('parent_id')->with('children')->get();
+
         try {
             $userId = $this->getUserId();
             $cached = Redis::get("user_workspace_{$userId}");
@@ -26,6 +31,13 @@ new class extends Component
         } catch (\Exception $e) {
             // Redis container might not be running right now, catch & continue
         }
+    }
+
+    #[On('scholar:results-updated')]
+    public function onSearchUpdated($query)
+    {
+        $this->searchQuery = $query;
+        $this->results = \App\Models\Sentence::search($query)->take(10)->get()->toArray();
     }
 
     #[On('updateWorkspaceState')]
@@ -120,24 +132,23 @@ new class extends Component
             Explorer
         </div>
         <div class="overflow-y-auto flex-grow p-2">
-            <ul class="menu menu-xs bg-base-200 w-full rounded-box">
-              <li>
-                <details open>
-                  <summary><x-heroicon-s-folder class="w-4 h-4 text-warning inline"/> Fiqh</summary>
-                  <ul>
-                    <li><a><x-heroicon-o-document-text class="w-4 h-4 inline"/> Usul Fiqh</a></li>
-                    <li><a><x-heroicon-o-document-text class="w-4 h-4 inline"/> Muamalah</a></li>
-                  </ul>
-                </details>
-              </li>
-              <li>
-                <details>
-                  <summary><x-heroicon-s-folder class="w-4 h-4 text-warning inline"/> Tafsir</summary>
-                  <ul>
-                    <li><a><x-heroicon-o-document-text class="w-4 h-4 inline"/> Ibn Kathir</a></li>
-                  </ul>
-                </details>
-              </li>
+            <ul class="menu menu-sm bg-base-200 w-full rounded-box">
+              @foreach($taxonomies as $tax)
+                <li>
+                  @if($tax->children->count())
+                    <details open>
+                      <summary><x-heroicon-s-folder class="w-4 h-4 text-warning inline"/> {{ $tax->name }}</summary>
+                      <ul>
+                        @foreach($tax->children as $child)
+                          <li><a><x-heroicon-o-document-text class="w-4 h-4 inline"/> {{ $child->name }}</a></li>
+                        @endforeach
+                      </ul>
+                    </details>
+                  @else
+                    <a><x-heroicon-o-document-text class="w-4 h-4 inline"/> {{ $tax->name }}</a>
+                  @endif
+                </li>
+              @endforeach
             </ul>
         </div>
     </div>
@@ -168,65 +179,69 @@ new class extends Component
             <div x-ref="leftPane" :style="'width: ' + paneWidth" class="h-full overflow-y-auto min-w-[20%] p-4 bg-base-100 @container">
                 
                 <!-- Zone 1: Omni Bar -->
-                <div class="navbar bg-base-100 shadow-sm border border-base-200 rounded-box mb-6 relative z-10 min-h-0 py-2">
-                  <div class="flex-1">
-                    <div class="join w-full flex">
-                        <select class="select select-bordered join-item select-sm h-10 min-h-0 w-40 shrink-0">
-                          <option>✨ Semantic</option>
-                          <option>🔤 Exact Match</option>
-                          <option>🌱 Root (Jidhr)</option>
-                        </select>
-                        <div class="relative w-full flex-1">
-                            <input type="text" placeholder="Search across dimensions..." class="input input-bordered join-item w-full h-10 min-h-0" />
-                            <kbd class="kbd kbd-sm absolute right-3 top-2">⌘K</kbd>
-                        </div>
-                        <button class="btn btn-primary join-item btn-sm h-10 min-h-0">Search</button>
-                    </div>
-                  </div>
+                <div class="mb-6 relative z-10">
+                    <livewire:scholar.search-panel />
                 </div>
 
                 <!-- Breadcrumbs -->
                 <div class="text-sm breadcrumbs mb-4 text-base-content/70 px-2">
                   <ul>
-                    <li><a><x-heroicon-o-magnifying-glass class="w-4 h-4 mr-1 inline"/> Zakat Flow</a></li>
-                    <li><a><x-heroicon-o-book-open class="w-4 h-4 mr-1 inline"/> Bukhari #142</a></li>
-                    <li><span class="inline-flex items-center"><x-heroicon-s-cube-transparent class="w-4 h-4 mr-1 text-success inline"/> Root: ز ك و</span></li>
+                    <li><a><x-heroicon-o-magnifying-glass class="w-4 h-4 mr-1 inline"/> {{ $searchQuery ?: 'Recent Searches' }}</a></li>
+                    @if($searchQuery)
+                        <li><span class="inline-flex items-center"><x-heroicon-s-cube-transparent class="w-4 h-4 mr-1 text-success inline"/> Results: {{ count($results) }}</span></li>
+                    @endif
                   </ul>
                 </div>
 
-                <!-- Example Cards Container -->
+                <!-- Results Feed -->
                 <div class="grid grid-cols-1 @4xl:grid-cols-2 gap-4">
-                    <div class="card bg-base-100 shadow border border-base-200 w-full hover:border-primary transition-colors cursor-pointer group">
-                      <div class="card-body p-4 relative pb-10">
-                        <div class="flex justify-between items-start mb-4">
-                            <h2 class="card-title text-sm"><span class="badge badge-error badge-sm">Hadith</span> Bukhari #142</h2>
-                            <button class="btn btn-ghost btn-xs text-base-content/50 hover:text-primary p-0 h-auto min-h-0">
-                                <x-heroicon-o-bookmark class="w-4 h-4 inline"/>
-                            </button>
+                    @forelse($results as $result)
+                        <div class="card bg-base-100 shadow border border-base-200 w-full hover:border-primary transition-colors cursor-pointer group">
+                          <div class="card-body p-4 relative pb-10">
+                            <div class="flex justify-between items-start mb-4">
+                                <h2 class="card-title text-sm">
+                                    <span class="badge badge-error badge-sm">{{ $result['metadata']['source'] ?? 'Unknown' }}</span>
+                                    @if(isset($result['metadata']['surah_name']))
+                                        {{ $result['metadata']['surah_name'] }} #{{ $result['metadata']['ayah_number'] }}
+                                    @endif
+                                </h2>
+                                <button class="btn btn-ghost btn-xs text-base-content/50 hover:text-primary p-0 h-auto min-h-0">
+                                    <x-heroicon-o-bookmark class="w-4 h-4 inline"/>
+                                </button>
+                            </div>
+                            <div class="text-right text-lg font-arabic mb-4 leading-loose" dir="rtl">
+                                {!! preg_replace('/('.preg_quote($searchQuery, '/').')/ui', '<mark class="bg-warning/30 text-warning-content rounded px-1">$1</mark>', $result['sentence_text']) !!}
+                            </div>
+                            <p class="text-sm leading-relaxed mb-4 text-left opacity-80" dir="ltr">
+                                {{ $result['sentence_translation'] ?? '' }}
+                            </p>
+                          </div>
+                          <div class="absolute bottom-0 w-full h-8 opacity-0 group-hover:opacity-100 transition-opacity bg-base-200 px-4 border-t border-base-200 text-xs text-base-content/50 flex items-center justify-between rounded-b-xl">
+                              <span>Relevance Match</span>
+                              <div class="badge badge-ghost badge-xs">pgvector</div>
+                          </div>
                         </div>
-                        <p class="text-sm leading-relaxed mb-4 text-left" dir="ltr">And establish prayer and give <mark class="bg-warning/30 text-warning-content rounded px-1">zakah</mark>, and whatever good you put forward for yourselves - you will find it with Allah...</p>
-                        <p class="text-right text-lg font-arabic mb-4" dir="rtl">وَأَقِيمُوا الصَّلَاةَ وَآتُوا <mark class="bg-warning/30 text-warning-content rounded px-1">الزَّكَاةَ</mark> ۚ وَمَا تُقَدِّمُوا لِأَنفُسِكُم مِّنْ خَيْرٍ تَجِدُوهُ عِندَ اللَّهِ</p>
-                      </div>
-                      <div class="absolute bottom-0 w-full h-8 opacity-0 group-hover:opacity-100 transition-opacity bg-base-200 px-4 border-t border-base-200 text-xs text-base-content/50 flex items-center justify-between rounded-b-xl">
-                          <span>Relevance: 98%</span>
-                          <input type="range" min="0" max="100" value="98" class="range range-xs range-primary w-24" />
-                      </div>
-                    </div>
-
-                    <!-- Example loading skeleton -->
-                    <div class="card shadow border border-base-200 bg-base-100 w-full p-4">
-                        <div class="flex items-center gap-4 mb-4">
-                          <div class="skeleton h-6 w-24"></div>
-                          <div class="skeleton h-4 w-12 ml-auto"></div>
-                        </div>
-                        <div class="skeleton h-4 w-full mb-2"></div>
-                        <div class="skeleton h-4 w-full mb-2"></div>
-                        <div class="skeleton h-4 w-3/4"></div>
-                        
-                        <div class="flex justify-end mt-4">
-                            <div class="skeleton h-12 w-full"></div>
-                        </div>
-                    </div>
+                    @empty
+                        @if($searchQuery)
+                            <div class="col-span-full py-20 text-center">
+                                <x-heroicon-o-face-frown class="w-12 h-12 mx-auto mb-4 opacity-20"/>
+                                <p class="text-base-content/50 italic">No exact matches found for "{{ $searchQuery }}". Try semantic search.</p>
+                            </div>
+                        @else
+                            <!-- Example loading skeletons / Empty state items -->
+                            @for($i=0; $i<4; $i++)
+                                <div class="card shadow border border-base-200 bg-base-100 w-full p-4 opacity-50">
+                                    <div class="flex items-center gap-4 mb-4">
+                                      <div class="skeleton h-6 w-24"></div>
+                                      <div class="skeleton h-4 w-12 ml-auto"></div>
+                                    </div>
+                                    <div class="skeleton h-4 w-full mb-2"></div>
+                                    <div class="skeleton h-4 w-full mb-2"></div>
+                                    <div class="skeleton h-4 w-3/4"></div>
+                                </div>
+                            @endfor
+                        @endif
+                    @endforelse
                 </div>
 
             </div>

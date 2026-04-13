@@ -26,4 +26,9 @@ class Taxonomy extends Model
     {
         return $this->belongsTo(Taxonomy::class, 'parent_id');
     }
+
+    public function children()
+    {
+        return $this->hasMany(Taxonomy::class, 'parent_id')->orderBy('slug');
+    }
 }
