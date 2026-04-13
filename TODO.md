@@ -100,8 +100,10 @@ This section tracks the granular progress across all phases, mapping the high-le
   - [x] Morphological root extraction via CAMeL Tools.
   - [x] `tasks/transliterate.py` — Ollama generates ALA-LC romanisation per sentence.
   - [x] `database.save_transliteration()` — idempotent upsert to `sentence_transliterations`.
-  - [ ] **`OLLAMA_URL` set in `.env`** *(owner action: add your Ollama endpoint).*
-  - [ ] `OLLAMA_TRANSLITERATE_MODEL` configured in `.env`.
+  - [x] **`OLLAMA_URL` set in `.env`** (Tailscale IP: `100.75.239.40`).
+  - [x] `OLLAMA_LLM_MODEL` (Transliteration/Aya) configured in `.env`.
+  - [x] **Ollama Remote Accessibility:** Configured `OLLAMA_HOST=0.0.0.0` and verified connectivity from local machine.
+  - [x] **Essential AI Models Pulled:** `llama3.1`, `nomic-embed-text` (embeddings), and `aya` (translation).
 - [x] **Laravel Integration**
   - [x] `POST /api/webhooks/prefect/job-completed` endpoint functional.
   - [x] `IntegratePrefectData` job handling async data mapping (now includes `transliteration` field).
