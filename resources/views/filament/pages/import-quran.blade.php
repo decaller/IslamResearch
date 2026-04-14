@@ -1,8 +1,8 @@
 <x-filament-panels::page>
     {{-- Import Configuration Form --}}
-    <x-filament-panels::form wire:submit="startImport">
+    <x-filament-schemas::form wire:submit="startImport">
         {{ $this->form }}
-    </x-filament-panels::form>
+    </x-filament-schemas::form>
 
     {{-- Live Progress Panel (only shown once import is running) --}}
     @if ($this->isImporting && $this->progressKey)

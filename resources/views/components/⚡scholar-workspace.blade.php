@@ -1,3 +1,4 @@
+<?php
 use App\Services\SearchService;
 use Livewire\Component;
 use Illuminate\Support\Facades\Redis;

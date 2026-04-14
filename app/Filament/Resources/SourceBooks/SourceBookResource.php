@@ -27,7 +27,7 @@ class SourceBookResource extends Resource
 
     protected static ?int $navigationSort = 1;
 
-    public static function form(Schema $schema): Schema
+    public static function form(\Filament\Schemas\Schema $schema): \Filament\Schemas\Schema
     {
         return SourceBookForm::configure($schema);
     }
