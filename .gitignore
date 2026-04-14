@@ -15,6 +15,7 @@ Homestead.json
 Homestead.yaml
 npm-debug.log
 yarn-error.log
+/Envoy[0-9a-f]*.php
 /auth.json
 /.fleet
 /.idea

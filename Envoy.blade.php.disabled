@@ -8,15 +8,20 @@
 @endsetup
 
 @story('deploy')
-    initial_setup
     sync_env
+    initial_setup
     pull_repo
     build_containers
     migrate_database
     optimize_app
 @endstory
 
-@task('initial_setup')
+@task('sync_env', ['on' => 'local'])
+    echo "Syncing .env.production to server..."
+    scp .env.production root@100.92.183.79:{{ $app_dir }}/.env
+@endtask
+
+@task('initial_setup', ['on' => 'web'])
     echo "Checking deployment directory..."
     [ -d {{ $app_dir }} ] || mkdir -p {{ $app_dir }}
     cd {{ $app_dir }}
@@ -30,40 +35,36 @@
     fi
 @endtask
 
-@task('sync_env', ['on' => 'local'])
-    echo "Syncing .env.production to server..."
-    scp .env.production root@100.92.183.79:{{ $app_dir }}/.env
-@endtask
-
-@task('pull_repo')
+@task('pull_repo', ['on' => 'web'])
     echo "Pulling latest changes..."
     cd {{ $app_dir }}
     git pull origin main
 @endtask
 
-@task('build_containers')
+@task('build_containers', ['on' => 'web'])
     echo "Building and starting containers..."
     cd {{ $app_dir }}
     ./vendor/bin/sail build
     ./vendor/bin/sail up -d
 @endtask
 
-@task('migrate_database')
+@task('migrate_database', ['on' => 'web'])
     echo "Running migrations..."
     cd {{ $app_dir }}
     ./vendor/bin/sail artisan migrate --force
 @endtask
 
-@task('optimize_app')
+@task('optimize_app', ['on' => 'web'])
     echo "Optimizing Laravel..."
     cd {{ $app_dir }}
     ./vendor/bin/sail artisan optimize
+    ./vendor/bin/sail npm run build
 @endtask
 
 @finished
-    # Envoy doesn't strictly support @if inside @finished for all versions, 
-    # but let's try a simple message if webhook exists.
-    if [ ! -z "{{ $slack_webhook }}" ]; then
-        echo "Notification sent (simulated if directive fails)"
-    fi
+    if ($slack_webhook) {
+        echo "Deployment finished. Webhook: {$slack_webhook}\n";
+    } else {
+        echo "Deployment finished successfully.\n";
+    }
 @endfinished
