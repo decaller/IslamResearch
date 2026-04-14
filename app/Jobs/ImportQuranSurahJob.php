@@ -39,6 +39,8 @@ class ImportQuranSurahJob implements ShouldQueue
         public readonly string $arabicEdition,
         public readonly array $translationEditions,
         public readonly string $cacheProgressKey,
+        public readonly ?int $startAyah = null,
+        public readonly ?int $endAyah = null,
     ) {}
 
     /**
@@ -58,14 +60,42 @@ class ImportQuranSurahJob implements ShouldQueue
         $arabicSourceBook = $this->resolveArabicSourceBook($arabicSurah);
 
         DB::transaction(function () use ($arabicSurah, $arabicSourceBook, $api): void {
-            $this->upsertAyahs($arabicSourceBook, $arabicSurah['ayahs']);
+            $ayahs = collect($arabicSurah['ayahs'])
+                ->filter(function ($ayah) {
+                    if ($this->startAyah !== null && $ayah['numberInSurah'] < $this->startAyah) {
+                        return false;
+                    }
+
+                    if ($this->endAyah !== null && $ayah['numberInSurah'] > $this->endAyah) {
+                        return false;
+                    }
+
+                    return true;
+                })
+                ->all();
+
+            $this->upsertAyahs($arabicSourceBook, $ayahs);
 
             foreach ($this->translationEditions as $edition) {
                 $translationSurah = $api->getSurah($this->surahNumber, $edition);
                 $scholar = $this->resolveApiScholar();
                 $language = $translationSurah['edition']['language'] ?? 'en';
 
-                $this->upsertTranslations($arabicSourceBook, $translationSurah['ayahs'], $language, $scholar->id, $edition);
+                $translationAyahs = collect($translationSurah['ayahs'])
+                    ->filter(function ($ayah) {
+                        if ($this->startAyah !== null && $ayah['numberInSurah'] < $this->startAyah) {
+                            return false;
+                        }
+
+                        if ($this->endAyah !== null && $ayah['numberInSurah'] > $this->endAyah) {
+                            return false;
+                        }
+
+                        return true;
+                    })
+                    ->all();
+
+                $this->upsertTranslations($arabicSourceBook, $translationAyahs, $language, $scholar->id, $edition);
             }
         });
 

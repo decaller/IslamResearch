@@ -3,32 +3,18 @@
 namespace Database\Seeders;
 
 use App\Enums\UserRole;
-use App\Models\Collection;
-use App\Models\CollectionItem;
-use App\Models\LexiconRoot;
-use App\Models\LexiconWord;
-use App\Models\Scholar;
-use App\Models\Search;
-use App\Models\Sentence;
-use App\Models\SentenceJob;
-use App\Models\SentenceTranslation;
-use App\Models\SentenceTransliteration;
-use App\Models\SourceBook;
 use App\Models\Taxonomy;
 use App\Models\User;
-use App\Models\UserFeedback;
-use App\Models\UserHabit;
-use App\Models\UserJourney;
-use App\Models\UserSearch;
-use App\Models\UserWorkspace;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
 
 class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        $admin = User::firstOrCreate(
+        // Admin User
+        User::firstOrCreate(
             ['email' => 'admin@example.com'],
             [
                 'name' => 'Admin User',
@@ -37,72 +23,74 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
-        $scholars = Scholar::factory(5)->create();
-        $roots = LexiconRoot::factory(10)->create();
+        // Structural Data from Reference
+        $this->seedTaxonomies();
+    }
 
-        $roots->each(function ($root) {
-            LexiconWord::factory(3)->create(['root_id' => $root->id]);
-        });
+    private function seedTaxonomies(): void
+    {
+        $jsonPath = base_path('reference/taxonomy/main.json');
+        if (! File::exists($jsonPath)) {
+            return;
+        }
 
-        $words = LexiconWord::all();
+        $data = json_decode(File::get($jsonPath), true);
+        if (! isset($data['taxonomy'])) {
+            return;
+        }
 
-        $scholars->each(function ($scholar) use ($words) {
-            $books = SourceBook::factory(2)->create(['scholar_id' => $scholar->id]);
+        foreach ($data['taxonomy'] as $item) {
+            $this->createTaxonomy($item, null);
+        }
+    }
 
-            $books->each(function ($book) use ($words, $scholar) {
-                SentenceJob::factory(1)->create(['source_book_id' => $book->id]);
+    private function createTaxonomy(array $item, ?Taxonomy $parent): void
+    {
+        $nameAr = $item['name_ar'] ?? '';
+        $nameEn = $item['name_en'] ?? '';
+        $nameTransliteration = $item['name_transliteration'] ?? '';
 
-                $sentences = Sentence::factory(5)->create(['source_book_id' => $book->id]);
+        $name = $nameEn ?: $nameTransliteration ?: $nameAr;
+        if (! $name) {
+            return;
+        }
 
-                $sentences->each(function ($sentence) use ($words, $scholar) {
-                    SentenceTranslation::factory(2)->create([
-                        'sentence_id' => $sentence->id,
-                        'scholar_id' => $scholar->id,
-                    ]);
-                    SentenceTransliteration::factory(1)->create([
-                        'sentence_id' => $sentence->id,
-                    ]);
+        $slug = Str::slug($name);
 
-                    $sentence->words()->attach(
-                        $words->random(2)->pluck('id')->toArray(),
-                        ['source_type' => 'main_text', 'positions' => json_encode([1, 2])]
-                    );
-                });
-            });
-        });
+        // Ensure slug is unique globally
+        $slugBase = $slug;
+        $counter = 1;
+        while (Taxonomy::where('slug', $slug)->exists()) {
+            $slug = $slugBase.'-'.$counter++;
+        }
 
-        $taxonomies = Taxonomy::factory(5)->create();
+        $taxonomy = Taxonomy::create([
+            'parent_id' => $parent?->id,
+            'name' => $name,
+            'slug' => $slug,
+            'metadata' => [
+                'name_ar' => $nameAr,
+                'name_en' => $nameEn,
+                'name_transliteration' => $nameTransliteration,
+                'level' => $item['level'] ?? ($parent ? $parent->metadata['level'] + 1 : 1),
+            ],
+            // Path will be updated after creation to include its own UUID
+        ]);
 
-        SourceBook::all()->each(function ($book) use ($taxonomies) {
-            DB::table('source_book_taxonomy')->insert([
-                'book_id' => $book->id,
-                'taxonomy_id' => $taxonomies->random()->id,
-            ]);
-        });
+        // Generate ltree path
+        // ltree path labels must be Alphanumeric and underscores
+        $uuidLabel = str_replace('-', '_', $taxonomy->id);
+        $path = $parent ? $parent->path.'.'.$uuidLabel : $uuidLabel;
+        $taxonomy->update(['path' => $path]);
 
-        UserWorkspace::factory(2)->create(['user_id' => $admin->id]);
-        $search = Search::factory()->create();
-        UserSearch::factory()->create(['user_id' => $admin->id, 'search_id' => $search->id]);
-        UserJourney::factory(5)->create(['user_id' => $admin->id]);
-
-        $collection = Collection::factory()->create(['user_id' => $admin->id]);
-        $sentenceId = Sentence::inRandomOrder()->value('id');
-        if ($sentenceId) {
-            CollectionItem::factory(3)->create([
-                'collection_id' => $collection->id,
-                'itemable_type' => Sentence::class,
-                'itemable_id' => $sentenceId,
-            ]);
-
-            UserFeedback::factory(2)->create([
-                'user_id' => $admin->id,
-                'sentence_id' => $sentenceId,
-            ]);
-
-            UserHabit::factory(2)->create([
-                'user_id' => $admin->id,
-                'sentence_id' => $sentenceId,
-            ]);
+        // Recursively handle children
+        $childrenKeys = ['chapters', 'detailed_taxonomy', 'sections', 'abwaab'];
+        foreach ($childrenKeys as $key) {
+            if (isset($item[$key]) && is_array($item[$key])) {
+                foreach ($item[$key] as $child) {
+                    $this->createTaxonomy($child, $taxonomy);
+                }
+            }
         }
     }
 }
