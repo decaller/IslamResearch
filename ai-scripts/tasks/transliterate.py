@@ -20,9 +20,7 @@ from prefect import get_run_logger, task
 
 @task(retries=3, retry_delay_seconds=5)
 def run_ollama(arabic_text: str) -> dict[str, str]:
-    # Limit parallelism to avoid overwhelming Ollama
-    from prefect.concurrency.sync import rate_limit
-    rate_limit("ollama-calls", occupy=1, timeout_seconds=600)
+    from prefect.concurrency.sync import concurrency
 
     """
     Call the Ollama API to generate an ALA-LC transliteration of the given
@@ -40,25 +38,23 @@ def run_ollama(arabic_text: str) -> dict[str, str]:
     model = os.environ.get("OLLAMA_TRANSLITERATE_MODEL", "aya:latest")
     scheme = os.environ.get("OLLAMA_TRANSLITERATE_SCHEME", "ala_lc")
 
-    prompt = (
-        "You are an expert in Arabic romanisation following the ALA-LC (Library of Congress) "
-        "transliteration standard. Transliterate the following classical Arabic text into "
-        "Latin script using that standard. Return ONLY the transliteration, nothing else.\n\n"
-        f"Arabic text: {arabic_text}"
-    )
+    with concurrency("ollama-calls", occupy=1, timeout_seconds=600):
+        prompt = (
+            "You are an expert in Arabic romanisation following the ALA-LC (Library of Congress) "
+            "transliteration standard. Transliterate the following classical Arabic text into "
+            "Latin script using that standard. Return ONLY the transliteration, nothing else.\n\n"
+            f"Arabic text: {arabic_text}"
+        )
 
-    payload = {
-        "model": model,
-        "prompt": prompt,
-        "stream": False,
-    }
+        payload = {
+            "model": model,
+            "prompt": prompt,
+            "stream": False,
+        }
 
-    response = requests.post(f"{ollama_url}/api/generate", json=payload, timeout=30)
-
-    # Prefect will retry up to 3× with 5 s delay if Ollama is unavailable.
-    response.raise_for_status()
-
-    transliteration_text = response.json().get("response", "").strip()
+        response = requests.post(f"{ollama_url}/api/generate", json=payload, timeout=30)
+        response.raise_for_status()
+        transliteration_text = response.json().get("response", "").strip()
 
     logger.info(f"Transliterated ({scheme}): {transliteration_text[:60]}…")
 
