@@ -9,9 +9,10 @@ def run_ollama(text: str):
     rate_limit("ollama-calls", occupy=1, timeout_seconds=600)
     
     ollama_url = os.environ.get("OLLAMA_URL", "http://host.docker.internal:11434")
+    model = os.environ.get("OLLAMA_TRANSLATE_MODEL", "aya:latest")
     
     payload = {
-        "model": "aya-23-8b",
+        "model": model,
         "prompt": f"Translate to formal Indonesian. Return ONLY the translation: {text}",
         "stream": False
     }

@@ -37,7 +37,7 @@ def run_ollama(arabic_text: str) -> dict[str, str]:
     logger = get_run_logger()
 
     ollama_url = os.environ.get("OLLAMA_URL", "http://host.docker.internal:11434")
-    model = os.environ.get("OLLAMA_TRANSLITERATE_MODEL", "aya-23-8b")
+    model = os.environ.get("OLLAMA_TRANSLITERATE_MODEL", "aya:latest")
     scheme = os.environ.get("OLLAMA_TRANSLITERATE_SCHEME", "ala_lc")
 
     prompt = (
