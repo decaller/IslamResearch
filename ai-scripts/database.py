@@ -56,8 +56,8 @@ def save_to_db(
             # Note: resource_type is pulled from the job's source book
             cur.execute(
                 """
-                INSERT INTO sentences (id, source_book_id, resource_type, sequence_number, sentence_text, embedding_ar, status, created_at, updated_at)
-                SELECT %s, sb.id, sb.resource_type, %s, %s, %s, 'active', NOW(), NOW()
+                INSERT INTO sentences (id, source_book_id, resource_type, sequence_number, sentence_text, embedding_ar, created_at, updated_at)
+                SELECT %s, sb.id, sb.resource_type, %s, %s, %s, NOW(), NOW()
                 FROM sentence_jobs sj
                 JOIN source_books sb ON sj.source_book_id = sb.id
                 WHERE sj.id = %s

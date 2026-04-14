@@ -28,15 +28,25 @@ def get_camel_analyzer():
 
 @task
 def clean_arabic(text: str) -> list[str]:
-    """Strip Harakat using Regex, then segment sentences using SpaCy."""
-    # 1. Strip Harakat: Fatha, Kasra, Damma, Sukun, and Tanwin
+    """Strip Harakat and segment text into sentences / verses."""
+    # 1. Strip Harakat
     clean = re.sub(r'[\u0617-\u061A\u064B-\u0652]', '', text)
 
-    # 2. Segment sentences using SpaCy SBD
-    doc = nlp(clean)
+    # 2. Support for manual delimiters: Splitting by newlines or verse marker (۝)
+    # This ensures Quranic verses stay separate if they were on separate lines.
+    manual_splits = re.split(r'[\n\r\u06dd\u06de]+', clean)
+    
+    all_sentences = []
+    for snippet in manual_splits:
+        snippet = snippet.strip()
+        if not snippet:
+            continue
+            
+        # 3. Use SpaCy for natural sentence boundary detection within the snippet
+        doc = nlp(snippet)
+        all_sentences.extend([sent.text.strip() for sent in doc.sents if sent.text.strip()])
 
-    # Return as a clean list of sentence strings
-    return [sent.text.strip() for sent in doc.sents if sent.text.strip()]
+    return all_sentences
 
 
 @task

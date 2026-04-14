@@ -31,7 +31,10 @@ class SentencesTable
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('embedding_ar'),
+                TextColumn::make('embedding_ar')
+                    ->label('Arabic Vector')
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->limit(30),
             ])
             ->filters([
                 //

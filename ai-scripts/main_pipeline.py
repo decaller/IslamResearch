@@ -1,6 +1,7 @@
 import os
 import httpx
 from prefect import flow, get_run_logger
+from prefect.artifacts import create_markdown_artifact
 from tasks import classify, text_prep, translate, transliterate, vectorize
 from database import fetch_pending_records, save_to_db, save_transliteration
 
@@ -19,7 +20,6 @@ def process_batch():
         clean_sentences = text_prep.clean_arabic(text['content'])
 
         # 3. CPU: Extract Arabic roots (CAMeL Tools) for Global Lexicon
-        # This is fast so it runs once per job
         root_data = text_prep.extract_roots(clean_sentences)
 
         # ----------------------------------------------------------------------
@@ -34,7 +34,6 @@ def process_batch():
             tl_f = transliterate.run_ollama.submit(sentence)
 
             # B. Submit vectorizer (depends on translation)
-            # Prefect is smart: it won't start 'vec_f' until 'trans_f' completes.
             vec_f = vectorize.create_embeddings.submit(sentence, trans_f)
 
             sentence_pipelines.append({
@@ -46,6 +45,7 @@ def process_batch():
             })
 
         # 4. Final Stage: Collecting results and persisting
+        results_rows = []
         for idx, pipe in enumerate(sentence_pipelines):
             # .result() waits for these specific tasks to finish
             category = pipe["cat_f"].result()
@@ -80,6 +80,32 @@ def process_batch():
                 transliteration=transliteration,
                 lexicon_data=root_data[idx]['lexicon_data'],
             )
+
+            # Prepare visibility data
+            results_rows.append({
+                "arabic": pipe["sentence"],
+                "category": category,
+                "indonesian": indonesian,
+                "transliteration": transliteration['transliteration_text']
+            })
+
+        # 5. Create a Summary Artifact for visibility in the Prefect UI
+        artifact_content = f"### 🕌 Ingestion Results: {text['id']}\n\n"
+        artifact_content += "| Sentence (AR) | Category | Translation (ID) | Transliteration |\n"
+        artifact_content += "| :--- | :--- | :--- | :--- |\n"
+        
+        for row in results_rows:
+            short_ar = (row["arabic"][:40] + "...") if len(row["arabic"]) > 40 else row["arabic"]
+            short_id = (row["indonesian"][:40] + "...") if len(row["indonesian"]) > 40 else row["indonesian"]
+            short_tl = (row["transliteration"][:40] + "...") if len(row["transliteration"]) > 40 else row["transliteration"]
+            
+            artifact_content += f"| {short_ar} | {row['category']} | {short_id} | {short_tl} |\n"
+
+        create_markdown_artifact(
+            key=f"job-results-{text['id']}".lower().replace('_', '-'),
+            markdown=artifact_content,
+            description=f"Results for Job {text['id']}"
+        )
 
 
 def _notify_laravel(
