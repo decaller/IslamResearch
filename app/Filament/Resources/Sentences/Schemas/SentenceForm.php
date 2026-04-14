@@ -25,7 +25,13 @@ class SentenceForm
                 Textarea::make('sentence_text')
                     ->required()
                     ->columnSpanFull(),
-                TextInput::make('metadata'),
+                Textarea::make('metadata')
+                    ->columnSpanFull()
+                    ->rows(10)
+                    ->rule('json')
+                    ->afterStateHydrated(fn ($state, $set) => $set('metadata', json_encode($state, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE)))
+                    ->dehydrateStateUsing(fn ($state) => json_decode($state, true))
+                    ->extraInputAttributes(['style' => 'font-family: monospace']),
                 TextInput::make('embedding_ar'),
             ]);
     }

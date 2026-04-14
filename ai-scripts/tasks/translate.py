@@ -4,7 +4,11 @@ import os
 
 @task(retries=3, retry_delay_seconds=5)
 def run_ollama(text: str):
-    ollama_host = os.environ.get("OLLAMA_HOST", "http://ollama:11434")
+    # Limit parallelism to avoid overwhelming Ollama (Max 3 concurrent calls)
+    from prefect.concurrency.sync import rate_limit
+    rate_limit("ollama-calls", occupy=1, timeout_seconds=600)
+    
+    ollama_url = os.environ.get("OLLAMA_URL", "http://host.docker.internal:11434")
     
     payload = {
         "model": "aya-23-8b",
@@ -13,7 +17,7 @@ def run_ollama(text: str):
     }
     
     # Call the local Ollama container
-    response = requests.post(f"{ollama_host}/api/generate", json=payload)
+    response = requests.post(f"{ollama_url}/api/generate", json=payload)
     
     # If Ollama crashes, this triggers Prefect to wait 5 seconds and retry
     response.raise_for_status() 

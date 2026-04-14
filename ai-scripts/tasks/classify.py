@@ -1,13 +1,19 @@
 from prefect import task
-from transformers import pipeline
 
-# Loaded once globally into RAM
-classifier = pipeline("zero-shot-classification", model="MoritzLaurer/xlm-v-base-mnli-xnli")
+_classifier = None
+
+def get_classifier():
+    global _classifier
+    if _classifier is None:
+        from transformers import pipeline
+        _classifier = pipeline("zero-shot-classification", model="MoritzLaurer/xlm-v-base-mnli-xnli")
+    return _classifier
 
 @task
 def zero_shot(text: str):
     categories = ["Fiqh", "Aqidah", "Sirah", "Tafsir"]
     
+    classifier = get_classifier()
     result = classifier(text, categories)
     
     # Fallback Logic: Only accept if the AI is >60% confident

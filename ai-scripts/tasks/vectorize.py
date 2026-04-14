@@ -1,9 +1,13 @@
 from prefect import task
-from sentence_transformers import SentenceTransformer
 
-# Model: mixedbread-ai/mxbai-embed-large-v1 — 1024-dim multilingual embeddings
-# See: docs/pipeline.md §5 "The Vectorizer"
-_embedder = SentenceTransformer("mixedbread-ai/mxbai-embed-large-v1")
+_embedder = None
+
+def get_embedder():
+    global _embedder
+    if _embedder is None:
+        from sentence_transformers import SentenceTransformer
+        _embedder = SentenceTransformer("mixedbread-ai/mxbai-embed-large-v1")
+    return _embedder
 
 
 @task
@@ -15,8 +19,9 @@ def create_embeddings(arabic_text: str, indo_text: str) -> dict:
     dilution and maximizes recall accuracy for both Arabic and Indonesian queries.
     See: docs/pipeline.md §5 & docs/lexicon-strategy.md §4
     """
-    ar_vector: list[float] = _embedder.encode(arabic_text).tolist()
-    id_vector: list[float] = _embedder.encode(indo_text).tolist()
+    embedder = get_embedder()
+    ar_vector: list[float] = embedder.encode(arabic_text).tolist()
+    id_vector: list[float] = embedder.encode(indo_text).tolist()
 
     return {
         "vector_ar": ar_vector,  # 1024 floats — maps to sentences.embedding_ar

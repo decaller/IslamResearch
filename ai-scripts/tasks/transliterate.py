@@ -20,6 +20,10 @@ from prefect import get_run_logger, task
 
 @task(retries=3, retry_delay_seconds=5)
 def run_ollama(arabic_text: str) -> dict[str, str]:
+    # Limit parallelism to avoid overwhelming Ollama
+    from prefect.concurrency.sync import rate_limit
+    rate_limit("ollama-calls", occupy=1, timeout_seconds=600)
+
     """
     Call the Ollama API to generate an ALA-LC transliteration of the given
     Arabic sentence.
@@ -32,7 +36,7 @@ def run_ollama(arabic_text: str) -> dict[str, str]:
     """
     logger = get_run_logger()
 
-    ollama_url = os.environ.get("OLLAMA_URL", "http://ollama:11434")
+    ollama_url = os.environ.get("OLLAMA_URL", "http://host.docker.internal:11434")
     model = os.environ.get("OLLAMA_TRANSLITERATE_MODEL", "aya-23-8b")
     scheme = os.environ.get("OLLAMA_TRANSLITERATE_SCHEME", "ala_lc")
 

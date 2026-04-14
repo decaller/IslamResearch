@@ -2,22 +2,28 @@ from prefect import task
 import spacy
 import re
 
+from camel_tools.morphology.database import MorphologyDB
 from camel_tools.morphology.analyzer import Analyzer
 from camel_tools.utils.dediac import dediac_ar
 
-# Load SpaCy model once when worker starts
+# Load SpaCy Arabic blank model with sentencizer
 try:
-    nlp = spacy.load('ar_core_news_sm')
-except Exception:
-    # Fallback if model not found (though Dockerfile should handle it)
     nlp = spacy.blank('ar')
     nlp.add_pipe('sentencizer')
-
-# Load CAMeL Morphological Analyzer once at module level for performance
-try:
-    _camel_analyzer = Analyzer.builtin_analyzer()
 except Exception:
-    _camel_analyzer = None
+    nlp = None
+
+_camel_analyzer = None
+
+def get_camel_analyzer():
+    global _camel_analyzer
+    if _camel_analyzer is None:
+        try:
+            db = MorphologyDB.builtin_db()
+            _camel_analyzer = Analyzer(db)
+        except Exception:
+            _camel_analyzer = None
+    return _camel_analyzer
 
 
 @task
@@ -75,9 +81,10 @@ def _process_arabic_sentence(sentence_text: str) -> list[dict]:
         word_clean = dediac_ar(word)
         root = None
 
-        if _camel_analyzer is not None:
+        analyzer = get_camel_analyzer()
+        if analyzer is not None:
             try:
-                analyses = _camel_analyzer.analyze(word)
+                analyses = analyzer.analyze(word)
                 if analyses:
                     # Take the highest-ranked morphological analysis
                     root = analyses[0].get('root')

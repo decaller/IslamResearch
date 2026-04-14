@@ -1,5 +1,4 @@
 import os
-
 import httpx
 from prefect import flow, get_run_logger
 from tasks import classify, text_prep, translate, transliterate, vectorize
@@ -20,42 +19,58 @@ def process_batch():
         clean_sentences = text_prep.clean_arabic(text['content'])
 
         # 3. CPU: Extract Arabic roots (CAMeL Tools) for Global Lexicon
+        # This is fast so it runs once per job
         root_data = text_prep.extract_roots(clean_sentences)
 
-        for idx, sentence in enumerate(clean_sentences):
-            # 4. CPU: Zero-shot classification (>60% confidence threshold)
-            category = classify.zero_shot(sentence)
+        # ----------------------------------------------------------------------
+        # TURBO PARALLEL STAGE: Process all sentences concurrently
+        # ----------------------------------------------------------------------
+        sentence_pipelines = []
 
-            # 5. GPU via Ollama: Translate Arabic → Indonesian (Aya model)
-            indonesian = translate.run_ollama(sentence)
+        for sentence in clean_sentences:
+            # A. Submit independent tasks for THIS sentence
+            cat_f = classify.zero_shot.submit(sentence)
+            trans_f = translate.run_ollama.submit(sentence)
+            tl_f = transliterate.run_ollama.submit(sentence)
 
-            # 6. GPU via Ollama: Generate romanised transliteration (ALA-LC)
-            #    Model configured via OLLAMA_TRANSLITERATE_MODEL in .env
-            transliteration = transliterate.run_ollama(sentence)
+            # B. Submit vectorizer (depends on translation)
+            # Prefect is smart: it won't start 'vec_f' until 'trans_f' completes.
+            vec_f = vectorize.create_embeddings.submit(sentence, trans_f)
 
-            # 7. CPU/GPU: Dual-language vectorization (mxbai-embed-large-v1 / 1024-dim)
-            vectors = vectorize.create_embeddings(sentence, indonesian)
+            sentence_pipelines.append({
+                "sentence": sentence,
+                "cat_f": cat_f,
+                "trans_f": trans_f,
+                "tl_f": tl_f,
+                "vec_f": vec_f
+            })
 
-            # 8. Persist enriched sentence + lexicon data to PostgreSQL
+        # 4. Final Stage: Collecting results and persisting
+        for idx, pipe in enumerate(sentence_pipelines):
+            # .result() waits for these specific tasks to finish
+            category = pipe["cat_f"].result()
+            indonesian = pipe["trans_f"].result()
+            transliteration = pipe["tl_f"].result()
+            vectors = pipe["vec_f"].result()
+
+            # Persist enriched sentence + lexicon data to PostgreSQL
             sentence_id = save_to_db(
                 record_id=text['id'],
-                sentence_text=sentence,
+                sentence_text=pipe["sentence"],
                 category=category,
                 translation=indonesian,
                 vectors=vectors,
                 lexicon_data=root_data[idx]['lexicon_data'],
             )
 
-            # 9. Persist AI-generated transliteration to sentence_transliterations
+            # Persist AI-generated transliteration
             save_transliteration(
                 sentence_id=sentence_id,
                 scheme=transliteration['scheme'],
                 transliteration_text=transliteration['transliteration_text'],
             )
 
-            # 10. Call Laravel Horizon webhook so IntegratePrefectData job
-            #     can write the vectors & translations into the final schema.
-            #     Returns 202 immediately — Horizon takes care of the rest.
+            # Notify Laravel
             _notify_laravel(
                 sentence_job_id=text['id'],
                 sentence_id=sentence_id,
@@ -74,11 +89,7 @@ def _notify_laravel(
     transliteration: dict,
     lexicon_data: list[dict],
 ) -> None:
-    """
-    POST enriched payload to the Laravel webhook endpoint.
-    Laravel returns 202 immediately and queues an IntegratePrefectData Horizon job.
-    See: docs/architecture.md §Stage 4
-    """
+    """POST enriched payload to the Laravel webhook endpoint."""
     webhook_url = os.environ.get(
         'LARAVEL_WEBHOOK_URL',
         'http://laravel.test/api/webhooks/prefect/job-completed',
@@ -91,8 +102,6 @@ def _notify_laravel(
         "category": category,
         "embedding_ar": vectors["vector_ar"],
         "embedding_id": vectors["vector_id"],
-        # Include transliteration so Laravel can upsert it without
-        # querying Postgres separately — keeping the webhook self-contained.
         "transliteration": {
             "scheme": transliteration["scheme"],
             "text": transliteration["transliteration_text"],
@@ -104,8 +113,6 @@ def _notify_laravel(
         response = httpx.post(webhook_url, json=payload, timeout=10.0)
         response.raise_for_status()
     except httpx.HTTPError as exc:
-        # Log but do not crash the Prefect flow — Laravel Horizon will
-        # eventually reconcile any missing callbacks via SentenceJob status checks.
         import prefect
         logger = prefect.get_run_logger()
         logger.warning(f"Laravel webhook call failed for job {sentence_job_id}: {exc}")

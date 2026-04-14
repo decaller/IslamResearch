@@ -88,7 +88,7 @@ services:
             retries: 3
             timeout: 5s
     prefect-server:
-        image: prefecthq/prefect:2-python3.11
+        image: 'prefecthq/prefect:3-python3.11'
         command: prefect server start --host 0.0.0.0
         ports:
             - "4200:4200"
@@ -99,17 +99,17 @@ services:
             context: ./docker/python
         volumes:
             - ./ai-scripts:/app
+        network_mode: "host"
         environment:
-            - PREFECT_API_URL=http://prefect-server:4200/api
-            - DB_HOST=pgsql
+            - PREFECT_API_URL=http://localhost:4200/api
+            - DB_HOST=localhost
             - DB_USER=${DB_USERNAME}
             - DB_PASS=${DB_PASSWORD}
-            - OLLAMA_HOST=http://host.docker.internal:11434
+            - OLLAMA_URL=${OLLAMA_URL:-http://host.docker.internal:11434}
+        command: python -u /app/serve_pipeline.py
         depends_on:
             - pgsql
             - prefect-server
-        networks:
-            - sail
     horizon:
         image: 'sail-8.5/app'
         extra_hosts:

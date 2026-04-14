@@ -3,8 +3,8 @@
 namespace App\Filament\Resources\Taxonomies\Schemas;
 
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
-use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Schema;
@@ -29,18 +29,15 @@ class TaxonomyForm
                 TextInput::make('slug')
                     ->required()
                     ->unique(ignoreRecord: true),
-                Section::make('Multilingual Names')
+                Section::make('Metadata')
                     ->schema([
-                        Grid::make(3)
-                            ->schema([
-                                TextInput::make('metadata.name_ar')
-                                    ->label('Arabic Name')
-                                    ->extraInputAttributes(['dir' => 'rtl']),
-                                TextInput::make('metadata.name_en')
-                                    ->label('English Name'),
-                                TextInput::make('metadata.name_transliteration')
-                                    ->label('Transliteration'),
-                            ]),
+                        Textarea::make('metadata')
+                            ->columnSpanFull()
+                            ->rows(10)
+                            ->rule('json')
+                            ->afterStateHydrated(fn ($state, $set) => $set('metadata', json_encode($state, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE)))
+                            ->dehydrateStateUsing(fn ($state) => json_decode($state, true))
+                            ->extraInputAttributes(['style' => 'font-family: monospace']),
                     ]),
                 TextInput::make('path')
                     ->label('Hierarchy Path (LTree)')
