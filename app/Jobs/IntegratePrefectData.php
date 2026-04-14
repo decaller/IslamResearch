@@ -60,55 +60,56 @@ class IntegratePrefectData implements ShouldQueue
     public function handle(): void
     {
         $sentenceJobId = $this->payload['sentence_job_id'];
+        $sentenceJob = SentenceJob::with('sentence')->findOrFail($sentenceJobId);
 
-        $sentenceJob = SentenceJob::findOrFail($sentenceJobId);
-
-        // Guard: skip if already processed (idempotency)
+        // Idempotency: skip if already processed
         if ($sentenceJob->status === 'completed') {
             return;
         }
 
+        if ($this->payload['status'] === 'failed') {
+            $sentenceJob->update([
+                'status' => 'failed',
+                'error_log' => $this->payload['error'] ?? 'Unknown AI error',
+            ]);
+
+            return;
+        }
+
         DB::transaction(function () use ($sentenceJob): void {
-            // 1. Update vector embeddings on the Sentence row
-            if (isset($this->payload['sentence_id'])) {
-                $sentence = Sentence::findOrFail($this->payload['sentence_id']);
+            $sentence = $sentenceJob->sentence;
 
+            // 1. Update vectors
+            if ($sentenceJob->needs_embedding && ! empty($this->payload['embedding_ar'])) {
                 $sentence->update([
-                    // PostgreSQL pgvector accepts arrays cast to a vector literal
                     'embedding_ar' => $this->vectorLiteral($this->payload['embedding_ar']),
-                    'embedding_id' => $this->vectorLiteral($this->payload['embedding_id']),
+                    'embedding_id' => $this->vectorLiteral($this->payload['embedding_id'] ?? []),
                 ]);
-
-                // 2. Save Indonesian translation produced by the Aya model
-                if (! empty($sentenceJob->metadata['indonesian'])) {
-                    SentenceTranslation::firstOrCreate(
-                        [
-                            'sentence_id' => $sentence->id,
-                            'language' => 'id',
-                            'scholar_id' => null,
-                        ],
-                        ['translation_text' => $sentenceJob->metadata['indonesian'] ?? ''],
-                    );
-                }
-
-                // 3. Save AI-generated romanised transliteration
-                if (! empty($this->payload['transliteration']['text'])) {
-                    SentenceTransliteration::firstOrCreate(
-                        [
-                            'sentence_id' => $sentence->id,
-                            'scheme' => $this->payload['transliteration']['scheme'] ?? 'ala_lc',
-                        ],
-                        ['transliteration_text' => $this->payload['transliteration']['text']],
-                    );
-                }
-
-                // 4. Upsert Global Lexicon (roots + words) and attach pivot links
-                if (! empty($this->payload['lexicon_data'])) {
-                    $this->integrateGlobalLexicon($sentence, $this->payload['lexicon_data']);
-                }
             }
 
-            // 5. Mark the tracking record as completed
+            // 2. Update translation
+            if ($sentenceJob->needs_translation && ! empty($this->payload['status']) && $this->payload['status'] === 'completed') {
+                // Note: The Python pipeline SAVES directly, 
+                // but we keep this as a verification step or for metadata updates if needed.
+                // However, since we parameterized target_language, let's use it.
+                SentenceTranslation::updateOrCreate(
+                    ['sentence_id' => $sentence->id, 'language' => $sentenceJob->target_language],
+                    ['updated_at' => now()] // Just touch it to confirm integration
+                );
+            }
+
+            // 3. Update transliteration
+            if ($sentenceJob->needs_transliteration && ! empty($this->payload['transliteration']['text'])) {
+                SentenceTransliteration::updateOrCreate(
+                    [
+                        'sentence_id' => $sentence->id,
+                        'scheme' => $this->payload['transliteration']['scheme'] ?? 'ala_lc',
+                    ],
+                    ['transliteration_text' => $this->payload['transliteration']['text']]
+                );
+            }
+
+            // 4. Mark job as completed
             $sentenceJob->update([
                 'status' => 'completed',
                 'completed_at' => now(),

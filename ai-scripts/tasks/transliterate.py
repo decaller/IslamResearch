@@ -19,28 +19,27 @@ from prefect import get_run_logger, task
 
 
 @task(retries=3, retry_delay_seconds=5)
-def run_ollama(arabic_text: str) -> dict[str, str]:
+def run_ollama(arabic_text: str, scheme: str = "ala_lc") -> dict[str, str]:
     from prefect.concurrency.sync import concurrency
 
     """
-    Call the Ollama API to generate an ALA-LC transliteration of the given
-    Arabic sentence.
-
-    Returns:
-        {
-            "scheme": "ala_lc",          # or whatever OLLAMA_TRANSLITERATE_SCHEME is set to
-            "transliteration_text": str, # the romanised output
-        }
+    Call the Ollama API to generate a scholarly transliteration.
     """
     logger = get_run_logger()
 
     ollama_url = os.environ.get("OLLAMA_URL", "http://host.docker.internal:11434")
     model = os.environ.get("OLLAMA_TRANSLITERATE_MODEL", "aya:latest")
-    scheme = os.environ.get("OLLAMA_TRANSLITERATE_SCHEME", "ala_lc")
+
+    scheme_names = {
+        "ala_lc": "ALA-LC (Library of Congress)",
+        "iso": "ISO 233",
+        "scientific": "Scientific Journal (ZDMG)"
+    }
+    scheme_name = scheme_names.get(scheme, "ALA-LC")
 
     with concurrency("ollama-calls", occupy=1, timeout_seconds=600):
         prompt = (
-            "You are an expert in Arabic romanisation following the ALA-LC (Library of Congress) "
+            f"You are an expert in Arabic romanisation following the {scheme_name} "
             "transliteration standard. Transliterate the following classical Arabic text into "
             "Latin script using that standard. Return ONLY the transliteration, nothing else.\n\n"
             f"Arabic text: {arabic_text}"

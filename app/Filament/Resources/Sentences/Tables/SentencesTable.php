@@ -16,25 +16,39 @@ class SentencesTable
             ->columns([
                 TextColumn::make('id')
                     ->label('ID'),
-                TextColumn::make('source_book_id'),
-                TextColumn::make('resource_type')
+                TextColumn::make('sentence_text')
+                    ->label('Arabic Text')
+                    ->searchable()
+                    ->wrap()
+                    ->extraAttributes(['dir' => 'rtl', 'class' => 'text-right font-arabic']),
+
+                TextColumn::make('metadata.category')
+                    ->label('Domain')
                     ->badge()
-                    ->searchable(),
-                TextColumn::make('sequence_number')
-                    ->numeric()
-                    ->sortable(),
-                TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->color('success'),
+
+                TextColumn::make('metadata.tags')
+                    ->label('Scholar Tags')
+                    ->badge()
+                    ->separator(',')
+                    ->color('info')
+                    ->wrap(),
+
+                TextColumn::make('translations.translation_text')
+                    ->label('Translations')
+                    ->bulleted()
+                    ->wrap(),
+
+                TextColumn::make('transliterations.transliteration_text')
+                    ->label('Transliterations')
+                    ->bulleted()
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->wrap(),
+
                 TextColumn::make('embedding_ar')
                     ->label('Arabic Vector')
                     ->toggleable(isToggledHiddenByDefault: true)
-                    ->limit(30),
+                    ->limit(15),
             ])
             ->filters([
                 //

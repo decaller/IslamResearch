@@ -25,36 +25,18 @@ class PrefectWebhookRequest extends FormRequest
     {
         return [
             'sentence_job_id' => ['required', 'uuid', 'exists:sentence_jobs,id'],
-            'sentence_id' => ['nullable', 'uuid', 'exists:sentences,id'],
             'status' => ['required', 'string', 'in:completed,failed'],
+            'error' => ['nullable', 'string'],
 
-            // Embedding vectors: must be exactly 1024 floats
-            // matching the vector(1024) schema columns in the sentences table
-            'embedding_ar' => ['required', 'array', 'size:1024'],
-            'embedding_ar.*' => ['required', 'numeric'],
-            'embedding_id' => ['required', 'array', 'size:1024'],
-            'embedding_id.*' => ['required', 'numeric'],
-
-            'category' => ['nullable', 'string', 'max:255'],
-
-            // Transliteration data
+            // Optional fields if we ever decide to pass data back through webhook again
+            'sentence_id' => ['nullable', 'uuid', 'exists:sentences,id'],
+            'translation' => ['nullable', 'string'],
             'transliteration' => ['nullable', 'array'],
-            'transliteration.scheme' => ['required_with:transliteration', 'string', 'max:255'],
-            'transliteration.text' => ['required_with:transliteration', 'string'],
-
-            // Lexicon data from CAMeL Tools root extraction
-            'lexicon_data' => ['nullable', 'array'],
-            'lexicon_data.*.word_raw' => ['required_with:lexicon_data', 'string', 'max:255'],
-            'lexicon_data.*.word_clean' => ['required_with:lexicon_data', 'string', 'max:255'],
-            'lexicon_data.*.root' => ['nullable', 'string', 'max:255'],
         ];
     }
 
     public function messages(): array
     {
-        return [
-            'embedding_ar.size' => 'The embedding_ar must contain exactly 1024 float values (vector dimension mismatch).',
-            'embedding_id.size' => 'The embedding_id must contain exactly 1024 float values (vector dimension mismatch).',
-        ];
+        return [];
     }
 }

@@ -8,7 +8,7 @@ print("Starting AI Pipeline deployment runner...", flush=True)
 
 try:
     print("Importing pipeline flow...", flush=True)
-    from main_pipeline import process_batch
+    from main_pipeline import process_single_job
     print("Pipeline flow imported successfully.", flush=True)
 except Exception as e:
     print(f"Error importing main_pipeline: {e}", flush=True)
@@ -17,7 +17,7 @@ except Exception as e:
 if __name__ == "__main__":
     print("Serving Islamic Text Ingestion flow on Prefect v3...", flush=True)
     try:
-        process_batch.serve(
+        process_single_job.serve(
             name="ingestion-deployment",
             tags=["islamic-text"],
         )

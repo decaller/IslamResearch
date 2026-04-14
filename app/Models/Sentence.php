@@ -39,6 +39,11 @@ class Sentence extends Model
         return $this->hasMany(SentenceTranslation::class);
     }
 
+    public function sentenceJobs()
+    {
+        return $this->hasMany(SentenceJob::class);
+    }
+
     public function words()
     {
         return $this->belongsToMany(LexiconWord::class, 'sentence_word', 'sentence_id', 'word_id')

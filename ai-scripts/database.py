@@ -1,8 +1,5 @@
 """
 Database access layer for the AI ingestion pipeline.
-
-Provides connection helpers and Prefect tasks that read from / write to
-PostgreSQL so the pipeline tasks stay clean and serialisable.
 """
 
 import os
@@ -12,7 +9,6 @@ from psycopg2.extras import RealDictCursor
 from prefect import task
 
 def get_db_connection():
-    """Return a raw psycopg2 connection using Sail environment variables."""
     return psycopg2.connect(
         host=os.environ.get("DB_HOST", "localhost"),
         database=os.environ.get("DB_NAME", "laravel"),
@@ -22,79 +18,102 @@ def get_db_connection():
     )
 
 @task
-def fetch_pending_records() -> list[dict]:
-    """Fetch rows from `sentence_jobs` where status='pending'."""
+def fetch_job_details(job_id: str) -> dict:
+    """Fetch the specific sentence and its scholarly context (prev/next)."""
     conn = get_db_connection()
     try:
         with conn.cursor(cursor_factory=RealDictCursor) as cur:
+            # 1. First get the target sentence details
             cur.execute(
-                "SELECT id, raw_text as content FROM sentence_jobs WHERE status = 'pending' LIMIT 50"
+                """
+                SELECT sj.id as job_id, s.id as sentence_id, s.source_book_id,
+                       s.sequence_number, s.sentence_text as content,
+                       sj.needs_embedding, sj.needs_translation, sj.needs_transliteration,
+                       s.metadata as sentence_metadata
+                FROM sentence_jobs sj
+                JOIN sentences s ON sj.sentence_id = s.id
+                WHERE sj.id = %s
+                """,
+                (job_id,)
             )
-            return cur.fetchall()
+            job = cur.fetchone()
+            if not job:
+                return None
+
+            # 2. Fetch context (2 previous and 2 next sentences)
+            cur.execute(
+                """
+                SELECT sequence_number, sentence_text
+                FROM sentences
+                WHERE source_book_id = %s
+                AND sequence_number BETWEEN %s AND %s
+                ORDER BY sequence_number ASC
+                """,
+                (job['source_book_id'], job['sequence_number'] - 2, job['sequence_number'] + 2)
+            )
+            context = cur.fetchall()
+            
+            # Group context for AI
+            job['context_prev'] = [c['sentence_text'] for c in context if c['sequence_number'] < job['sequence_number']]
+            job['context_next'] = [c['sentence_text'] for c in context if c['sequence_number'] > job['sequence_number']]
+            
+            return job
     finally:
         conn.close()
 
 @task
 def save_to_db(
-    record_id: str,
-    sentence_text: str,
-    sequence_number: int,
-    category: str,
+    sentence_id: str,
+    categories: list,
     translation: str,
     vectors: dict,
-    lexicon_data: list[dict],
-) -> str:
-    """
-    Persist an enriched sentence and its translation to PostgreSQL.
-    """
+    needs_emb: bool,
+    needs_trans: bool,
+    lang: str = "id",
+    tags: list = None,
+    existing_metadata: dict = None
+) -> None:
+    """Enrich an existing sentence record."""
     conn = get_db_connection()
-    sentence_id = str(uuid.uuid4())
-    
     try:
         with conn, conn.cursor() as cur:
-            # 1. Insert or update sentences (using sentence_text + source_book_id as identity)
-            # Note: resource_type is pulled from the job's source book
-            cur.execute(
-                """
-                INSERT INTO sentences (id, source_book_id, resource_type, sequence_number, sentence_text, embedding_ar, created_at, updated_at)
-                SELECT %s, sb.id, sb.resource_type, %s, %s, %s, NOW(), NOW()
-                FROM sentence_jobs sj
-                JOIN source_books sb ON sj.source_book_id = sb.id
-                WHERE sj.id = %s
-                ON CONFLICT (source_book_id, sentence_text) DO UPDATE 
-                SET updated_at = NOW(), embedding_ar = EXCLUDED.embedding_ar, sequence_number = EXCLUDED.sequence_number
-                RETURNING id
-                """,
-                (sentence_id, sequence_number, sentence_text, vectors["vector_ar"], record_id)
-            )
-            row = cur.fetchone()
-            if row:
-                sentence_id = row[0]
+            # 1. Prepare Metadata
+            metadata = existing_metadata or {}
+            if tags:
+                metadata['tags'] = tags
+            metadata['categories'] = categories
+            if categories:
+                metadata['category'] = categories[0] # Legacy support for single category view
+
+            # 2. Update sentence (Embedding, Metadata)
+            update_sql = "UPDATE sentences SET metadata = %s, updated_at = NOW()"
+            params = [psycopg2.extras.Json(metadata)]
             
-            # 2. Insert or update sentence_translations
-            cur.execute(
-                """
-                INSERT INTO sentence_translations (id, sentence_id, language, translation_text, embedding, created_at, updated_at)
-                VALUES (%s, %s, 'id', %s, %s, NOW(), NOW())
-                ON CONFLICT (sentence_id, language) DO UPDATE
-                SET translation_text = EXCLUDED.translation_text, embedding = EXCLUDED.embedding, updated_at = NOW()
-                """,
-                (str(uuid.uuid4()), sentence_id, translation, vectors["vector_id"])
-            )
+            if needs_emb and vectors.get("vector_ar"):
+                update_sql += ", embedding_ar = %s"
+                params.append(vectors.get("vector_ar"))
             
-            # 3. Update job status
-            cur.execute(
-                "UPDATE sentence_jobs SET status = 'completed', completed_at = NOW() WHERE id = %s",
-                (record_id,)
-            )
+            update_sql += " WHERE id = %s"
+            params.append(sentence_id)
             
-        return sentence_id
+            cur.execute(update_sql, tuple(params))
+            
+            # 2. Upsert translation if needed
+            if needs_trans:
+                cur.execute(
+                    """
+                    INSERT INTO sentence_translations (id, sentence_id, language, translation_text, embedding, created_at, updated_at)
+                    VALUES (%s, %s, %s, %s, %s, NOW(), NOW())
+                    ON CONFLICT (sentence_id, language) DO UPDATE
+                    SET translation_text = EXCLUDED.translation_text, embedding = EXCLUDED.embedding, updated_at = NOW()
+                    """,
+                    (str(uuid.uuid4()), sentence_id, lang, translation, vectors.get("vector_id"))
+                )
     finally:
         conn.close()
 
 @task
 def save_transliteration(sentence_id: str, scheme: str, transliteration_text: str) -> None:
-    """Upsert a row into `sentence_transliterations`."""
     conn = get_db_connection()
     try:
         with conn, conn.cursor() as cur:

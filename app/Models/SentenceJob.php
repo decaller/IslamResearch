@@ -17,12 +17,15 @@ class SentenceJob extends Model
     protected function casts(): array
     {
         return [
+            'needs_embedding' => 'boolean',
+            'needs_translation' => 'boolean',
+            'needs_transliteration' => 'boolean',
             'completed_at' => 'datetime',
         ];
     }
 
-    public function sourceBook()
+    public function sentence()
     {
-        return $this->belongsTo(SourceBook::class);
+        return $this->belongsTo(Sentence::class);
     }
 }

@@ -99,6 +99,7 @@ return [
     'waits' => [
         'redis:default' => 60,
         'redis:ai-callbacks' => 300,
+        'redis:ai-enrichment' => 300,
     ],
 
     /*
@@ -216,7 +217,7 @@ return [
         // Timeout chain: job (90s) < supervisor (120s) < queue retry_after (150s)
         'supervisor-ai' => [
             'connection' => 'redis',
-            'queue' => ['ai-callbacks'],
+            'queue' => ['ai-callbacks', 'ai-enrichment'],
             'balance' => 'simple',
             'autoScalingStrategy' => 'time',
             'minProcesses' => 2,

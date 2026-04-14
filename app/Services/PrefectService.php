@@ -3,7 +3,6 @@
 namespace App\Services;
 
 use App\Models\SentenceJob;
-use App\Models\SourceBook;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
@@ -13,42 +12,44 @@ class PrefectService
 
     public function __construct()
     {
-        $this->baseUrl = 'http://prefect-server:4200/api';
+        $this->baseUrl = config('services.prefect.url', 'http://prefect-server:4200/api');
     }
 
     /**
-     * Trigger the Islamic Text Ingestion flow for a specific SourceBook.
+     * Trigger the Islamic Text Enrichment flow for a SPECIFIC job.
      */
-    public function triggerIngestion(SourceBook $sourceBook): bool
+    public function triggerEnrichment(SentenceJob $job): bool
     {
         try {
-            // 1. Prepare the SentenceJob if it doesn't exist
-            $job = SentenceJob::updateOrCreate(
-                [
-                    'source_book_id' => $sourceBook->id,
-                    'status' => 'pending',
-                ],
-                [
-                    'raw_text' => $sourceBook->title . " (Metadata: " . json_encode($sourceBook->metadata) . ")",
-                ]
-            );
+            $deploymentId = $this->getDeploymentIdByName('Islamic Text Enrichment', 'ingestion-deployment');
 
-            // 2. Trigger Prefect Deployment via API
-            $deploymentId = $this->getDeploymentIdByName('Islamic Text Ingestion', 'ingestion-deployment');
+            if (! $deploymentId) {
+                Log::warning("Prefect deployment 'ingestion-deployment' not found.");
 
-            if (!$deploymentId) {
-                Log::warning("Prefect deployment 'ingestion-deployment' not found. Please ensure ai-pipeline is serving.");
                 return false;
             }
 
+            // Trigger the flow with parameters
             $response = Http::post("{$this->baseUrl}/deployments/{$deploymentId}/create_flow_run", [
-                'name' => "Manual Trigger: " . $sourceBook->title,
+                'name' => 'Sentence Enrichment: '.$job->id,
+                'parameters' => [
+                    'sentence_job_id' => $job->id,
+                    'lang' => $job->target_language,
+                    'scheme' => $job->transliteration_scheme,
+                ],
                 'state' => ['type' => 'SCHEDULED'],
             ]);
 
-            return $response->successful();
+            if ($response->failed()) {
+                Log::error('Failed to create Prefect flow run: '.$response->body());
+
+                return false;
+            }
+
+            return true;
         } catch (\Exception $e) {
-            Log::error("Failed to trigger Prefect: " . $e->getMessage());
+            Log::error('Failed to trigger Prefect: '.$e->getMessage());
+
             return false;
         }
     }
@@ -57,11 +58,16 @@ class PrefectService
     {
         $response = Http::post("{$this->baseUrl}/deployments/filter", [
             'deployments' => [
-                'name' => ['any_' => [$deploymentName]]
-            ]
+                'operator' => 'and_',
+                'name' => ['any_' => [$deploymentName]],
+            ],
+            'flows' => [
+                'name' => ['any_' => [$flowName]],
+            ],
         ]);
 
-        if ($response->successful()) {
+        if ($response->successful() && ! empty($response->json())) {
+            // Find the one that matches the flow name explicitly if multiple returned
             return $response->json('0.id');
         }
 

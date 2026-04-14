@@ -2,160 +2,127 @@ import os
 import httpx
 from prefect import flow, get_run_logger
 from prefect.artifacts import create_markdown_artifact
-from tasks import classify, text_prep, translate, transliterate, vectorize
-from database import fetch_pending_records, save_to_db, save_transliteration
+from tasks import classify, translate, transliterate, vectorize, tags, ner
+from database import fetch_job_details, save_to_db, save_transliteration
 
-
-@flow(name="Islamic Text Ingestion")
-def process_batch():
+@flow(name="Islamic Text Enrichment")
+def process_single_job(sentence_job_id: str, lang: str = "id", scheme: str = "ala_lc"):
     logger = get_run_logger()
+    logger.info(f"🚀 Starting AI Enrichment for Sentence Job: {sentence_job_id} (Lang: {lang}, Scheme: {scheme})")
 
-    # 1. Fetch raw SentenceJob records with status='pending'
-    texts = fetch_pending_records()
+    # 1. Fetch Job Details (5-Verse Window)
+    job = fetch_job_details(sentence_job_id)
+    if not job:
+        logger.error(f"❌ Job {sentence_job_id} not found in database.")
+        return
 
-    for text in texts:
-        logger.info(f"Processing SentenceJob ID: {text['id']}")
+    sentence_id = job['sentence_id']
+    raw_text = job['content']
+    context_prev = "\n".join(job.get('context_prev', []))
+    context_next = "\n".join(job.get('context_next', []))
+    
+    try:
+        # 2. Logic: Only run what is requested in the job status
+        category = "Other"
+        translation = None
+        tl_result = None
+        vectors = {}
+        ner_tags = []
 
-        # 2. CPU: Strip Harakat + segment into sentences (SpaCy SBD)
-        clean_sentences = text_prep.clean_arabic(text['content'])
-
-        # 3. CPU: Extract Arabic roots (CAMeL Tools) for Global Lexicon
-        root_data = text_prep.extract_roots(clean_sentences)
-
-        # ----------------------------------------------------------------------
-        # TURBO PARALLEL STAGE: Process all sentences concurrently
-        # ----------------------------------------------------------------------
-        sentence_pipelines = []
-
-        for sentence in clean_sentences:
-            # A. Submit independent tasks for THIS sentence
-            cat_f = classify.zero_shot.submit(sentence)
-            trans_f = translate.run_ollama.submit(sentence)
-            tl_f = transliterate.run_ollama.submit(sentence)
-
-            # B. Submit vectorizer (depends on translation)
-            vec_f = vectorize.create_embeddings.submit(sentence, trans_f)
-
-            sentence_pipelines.append({
-                "sentence": sentence,
-                "cat_f": cat_f,
-                "trans_f": trans_f,
-                "tl_f": tl_f,
-                "vec_f": vec_f
-            })
-
-        # 4. Final Stage: Collecting results and persisting
-        results_rows = []
-        for idx, pipe in enumerate(sentence_pipelines):
-            # .result() waits for these specific tasks to finish
-            category = pipe["cat_f"].result()
-            indonesian = pipe["trans_f"].result()
-            transliteration = pipe["tl_f"].result()
-            vectors = pipe["vec_f"].result()
-
-            # Persist enriched sentence + lexicon data to PostgreSQL
-            sentence_id = save_to_db(
-                record_id=text['id'],
-                sentence_text=pipe["sentence"],
-                sequence_number=idx + 1,
-                category=category,
-                translation=indonesian,
-                vectors=vectors,
-                lexicon_data=root_data[idx]['lexicon_data'],
-            )
-
-            # Persist AI-generated transliteration
-            save_transliteration(
-                sentence_id=sentence_id,
-                scheme=transliteration['scheme'],
-                transliteration_text=transliteration['transliteration_text'],
-            )
-
-            # Notify Laravel
-            _notify_laravel(
-                sentence_job_id=text['id'],
-                sentence_id=sentence_id,
-                category=category,
-                vectors=vectors,
-                transliteration=transliteration,
-                lexicon_data=root_data[idx]['lexicon_data'],
-            )
-
-            # Prepare visibility data
-            results_rows.append({
-                "arabic": pipe["sentence"],
-                "category": category,
-                "indonesian": indonesian,
-                "transliteration": transliteration['transliteration_text']
-            })
-
-        # 5. Create a Summary Artifact for visibility in the Prefect UI
-        artifact_content = f"### 🕌 Ingestion Results: {text['id']}\n\n"
-        artifact_content += "| Sentence (AR) | Category | Translation (ID) | Transliteration |\n"
-        artifact_content += "| :--- | :--- | :--- | :--- |\n"
+        # A. Hybrid Tagging (Token Classification + LLM Thematic)
+        categories = classify.zero_shot(raw_text, context_prev, context_next)
         
-        for row in results_rows:
-            short_ar = (row["arabic"][:40] + "...") if len(row["arabic"]) > 40 else row["arabic"]
-            short_id = (row["indonesian"][:40] + "...") if len(row["indonesian"]) > 40 else row["indonesian"]
-            short_tl = (row["transliteration"][:40] + "...") if len(row["transliteration"]) > 40 else row["transliteration"]
-            
-            artifact_content += f"| {short_ar} | {row['category']} | {short_id} | {short_tl} |\n"
+        # 1. NER Entities (Proper Names, Locations)
+        found_entities = ner.extract_entities(raw_text)
+        
+        # 2. LLM Thematic Tags (Fiqh, Aqidah, etc.) using context
+        thematic_tags = tags.generate_scholarly_tags(raw_text, context_prev, context_next)
+        
+        # Combine unique tags
+        ner_tags = list(set(found_entities + thematic_tags))
 
-        create_markdown_artifact(
-            key=f"job-results-{text['id']}".lower().replace('_', '-'),
-            markdown=artifact_content,
-            description=f"Results for Job {text['id']}"
+        # B. Translation (Using 5-verse context for better flow)
+        if job['needs_translation']:
+            # We combine context into the prompt for the LLM
+            context_prompt = f"CONTEXT PREV:\n{context_prev}\n\nTARGET:\n{raw_text}\n\nCONTEXT NEXT:\n{context_next}"
+            translation = translate.run_ollama(context_prompt, target_lang=lang)
+        
+        # C. Transliteration
+        if job['needs_transliteration']:
+            tl_result = transliterate.run_ollama(raw_text, scheme=scheme)
+        
+        # D. Vectorization
+        if job['needs_embedding']:
+            vectors = vectorize.create_embeddings(raw_text, translation or "")
+
+        # 3. Persist results
+        save_to_db(
+            sentence_id=sentence_id,
+            categories=categories,
+            translation=translation or "",
+            vectors=vectors,
+            needs_emb=job['needs_embedding'],
+            needs_trans=job['needs_translation'],
+            lang=lang,
+            tags=ner_tags,
+            existing_metadata=job.get('sentence_metadata')
         )
 
+        if tl_result:
+            save_transliteration(
+                sentence_id=sentence_id,
+                scheme=tl_result['scheme'],
+                transliteration_text=tl_result['transliteration_text'],
+            )
 
-def _notify_laravel(
-    sentence_job_id: str,
-    sentence_id: str,
-    category: str,
-    vectors: dict,
-    transliteration: dict,
-    lexicon_data: list[dict],
-) -> None:
-    """POST enriched payload to the Laravel webhook endpoint."""
+        # 4. Create Detailed Markdown Artifact
+        artifact_content = f"""
+# 📜 Scholarly AI Enrichment Report
+**Sentence ID:** `{sentence_id}`
+**Job ID:** `{sentence_job_id}`
+
+## 🔍 Context Window
+- **Previous:** {context_prev or '_None_'}
+- **Target (Arabic):** `{raw_text}`
+- **Following:** {context_next or '_None_'}
+
+## 🕌 Scholarly Categorization
+- **Domains/Chapters:** {', '.join([f'`{c}`' for c in categories])}
+- **Scholar Tags:** {', '.join([f'#{t}' for t in ner_tags])}
+
+## 🌍 Multilingual Results
+- **Translation ({lang}):** {translation or '_Skipped_'}
+- **Transliteration ({scheme}):** {tl_result.get('transliteration_text') if tl_result else '_Skipped_'}
+        """
+        create_markdown_artifact(
+            key=f"enrichment-{sentence_job_id}",
+            markdown=artifact_content,
+            description=f"AI Enrichment for Sentence {sentence_id}"
+        )
+
+        # 5. Notify Laravel Success
+        _notify_laravel(sentence_job_id, "completed")
+        logger.info(f"✅ Successfully enriched sentence {sentence_id}. Alhamdulillah.")
+
+    except Exception as e:
+        logger.error(f"❌ Failed to process job {sentence_job_id}: {str(e)}")
+        _notify_laravel(sentence_job_id, "failed", str(e))
+        raise e
+
+def _notify_laravel(job_id: str, status: str, error: str = None) -> None:
     webhook_url = os.environ.get(
         'LARAVEL_WEBHOOK_URL',
         'http://localhost:8000/api/webhooks/prefect/job-completed',
     )
-
     payload = {
-        "sentence_job_id": sentence_job_id,
-        "sentence_id": sentence_id,
-        "status": "completed",
-        "category": category,
-        "embedding_ar": vectors["vector_ar"],
-        "embedding_id": vectors["vector_id"],
-        "transliteration": {
-            "scheme": transliteration["scheme"],
-            "text": transliteration["transliteration_text"],
-        },
-        "lexicon_data": lexicon_data,
+        "sentence_job_id": job_id,
+        "status": status,
+        "error": error
     }
-
-    headers = {
-        "Accept": "application/json",
-        "Content-Type": "application/json",
-    }
-
     try:
-        response = httpx.post(webhook_url, json=payload, headers=headers, timeout=10.0)
-        
-        # Log 4xx/5xx responses specifically to help debug validation
-        if response.status_code >= 400:
-            import prefect
-            logger = prefect.get_run_logger()
-            logger.error(f"Laravel rejected payload {sentence_job_id}: ({response.status_code}) {response.text}")
-
-        response.raise_for_status()
-    except httpx.HTTPError as exc:
-        import prefect
-        logger = prefect.get_run_logger()
-        logger.warning(f"Laravel webhook call failed for job {sentence_job_id}: {exc}")
-
+        httpx.post(webhook_url, json=payload, headers={"Accept": "application/json"}, timeout=10.0)
+    except Exception:
+        pass
 
 if __name__ == "__main__":
-    process_batch()
+    process_single_job(os.environ.get("JOB_ID", ""))
