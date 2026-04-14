@@ -1,23 +1,36 @@
-from prefect import task
+from prefect import task, get_run_logger
+import requests
+import os
 
-_classifier = None
+@task(retries=3, retry_delay_seconds=5)
+def zero_shot(text: str) -> str:
+    """
+    Classify text using Ollama (Aya model) via a prompt-based zero-shot approach.
+    This offloads classification to the GPU on the AI PC.
+    """
+    logger = get_run_logger()
+    ollama_url = os.environ.get("OLLAMA_URL", "http://host.docker.internal:11434")
+    model = os.environ.get("OLLAMA_TRANSLATE_MODEL", "aya:latest") # Use aya for its multilinguality
 
-def get_classifier():
-    global _classifier
-    if _classifier is None:
-        from transformers import pipeline
-        _classifier = pipeline("zero-shot-classification", model="MoritzLaurer/xlm-v-base-mnli-xnli")
-    return _classifier
+    prompt = (
+        "Classify the following Islamic text into EXACTLY one of these categories: "
+        "[Fiqh, Aqidah, Hadith, Tafsir, History, Ethics, Other]. "
+        "Return ONLY the category name, nothing else.\n\n"
+        f"Text: {text}"
+    )
 
-@task
-def zero_shot(text: str):
-    categories = ["Fiqh", "Aqidah", "Sirah", "Tafsir"]
+    payload = {
+        "model": model,
+        "prompt": prompt,
+        "stream": False,
+        "options": {"temperature": 0} # Strict output
+    }
+
+    from prefect.concurrency.sync import concurrency
+    with concurrency("ollama-calls", occupy=1, timeout_seconds=600):
+        response = requests.post(f"{ollama_url}/api/generate", json=payload)
+        response.raise_for_status()
+        category = response.json().get("response", "Other").strip().strip("[]'\"")
     
-    classifier = get_classifier()
-    result = classifier(text, categories)
-    
-    # Fallback Logic: Only accept if the AI is >60% confident
-    if result["scores"][0] > 0.60:
-        return result["labels"][0]
-        
-    return "Requires Review" # Sends to Filament waiting room
+    logger.info(f"Classified sentence as: {category}")
+    return category

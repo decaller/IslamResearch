@@ -108,6 +108,7 @@ services:
             - OLLAMA_URL=${OLLAMA_URL:-http://host.docker.internal:11434}
             - OLLAMA_TRANSLATE_MODEL=${OLLAMA_TRANSLATE_MODEL:-aya:latest}
             - OLLAMA_TRANSLITERATE_MODEL=${OLLAMA_TRANSLITERATE_MODEL:-aya:latest}
+            - LARAVEL_WEBHOOK_URL=http://localhost:8000/api/webhooks/prefect/job-completed
         command: python -u /app/serve_pipeline.py
         depends_on:
             - pgsql

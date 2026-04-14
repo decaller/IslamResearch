@@ -57,6 +57,7 @@ def process_batch():
             sentence_id = save_to_db(
                 record_id=text['id'],
                 sentence_text=pipe["sentence"],
+                sequence_number=idx + 1,
                 category=category,
                 translation=indonesian,
                 vectors=vectors,
@@ -92,7 +93,7 @@ def _notify_laravel(
     """POST enriched payload to the Laravel webhook endpoint."""
     webhook_url = os.environ.get(
         'LARAVEL_WEBHOOK_URL',
-        'http://laravel.test/api/webhooks/prefect/job-completed',
+        'http://localhost:8000/api/webhooks/prefect/job-completed',
     )
 
     payload = {
@@ -109,8 +110,20 @@ def _notify_laravel(
         "lexicon_data": lexicon_data,
     }
 
+    headers = {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+    }
+
     try:
-        response = httpx.post(webhook_url, json=payload, timeout=10.0)
+        response = httpx.post(webhook_url, json=payload, headers=headers, timeout=10.0)
+        
+        # Log 4xx/5xx responses specifically to help debug validation
+        if response.status_code >= 400:
+            import prefect
+            logger = prefect.get_run_logger()
+            logger.error(f"Laravel rejected payload {sentence_job_id}: ({response.status_code}) {response.text}")
+
         response.raise_for_status()
     except httpx.HTTPError as exc:
         import prefect
