@@ -42,19 +42,25 @@ def zero_shot(text: str, context_prev: str = "", context_next: str = "") -> list
         "options": {"temperature": 0} 
     }
 
+    import re
     from prefect.concurrency.sync import concurrency
     with concurrency("ollama-calls", occupy=1, timeout_seconds=600):
         response = requests.post(f"{ollama_url}/api/generate", json=payload)
         response.raise_for_status()
         raw_response = response.json().get("response", "Other").strip().strip("[]'\"")
         
-        # Robust cleaning for multiple labels
+        # Robust cleaning for multiple labels using Regex Word Boundaries
         found_categories = []
         for domain in valid_domains:
-            if domain.lower() in raw_response.lower():
+            # Use regex to find the domain as a distinct phrase/word
+            # Escape domain for safety
+            pattern = rf"\b{re.escape(domain)}\b"
+            if re.search(pattern, raw_response, re.IGNORECASE):
                 found_categories.append(domain)
         
     if not found_categories:
+        # Fallback: if it mentioned "Fiqh" but the list says "Jurisprudence", 
+        # let LLM be smart, but here we enforce taxonomy.
         found_categories = ["Other"]
         
     logger.info(f"Classified sentence into: {', '.join(found_categories)}")

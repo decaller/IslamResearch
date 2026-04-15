@@ -8,7 +8,8 @@ from database import fetch_job_details, save_to_db, save_transliteration
 @flow(name="Islamic Text Enrichment")
 def process_single_job(sentence_job_id: str, lang: str = "id", scheme: str = "ala_lc"):
     logger = get_run_logger()
-    logger.info(f"🚀 Starting AI Enrichment for Sentence Job: {sentence_job_id} (Lang: {lang}, Scheme: {scheme})")
+    logger.info(f"🚀 INCOMING PARAMETERS: JobID={sentence_job_id}, Lang={lang}, Scheme={scheme}")
+    logger.info(f"🚀 Starting AI Enrichment flow (Language: {lang})")
 
     # 1. Fetch Job Details (5-Verse Window)
     job = fetch_job_details(sentence_job_id)
