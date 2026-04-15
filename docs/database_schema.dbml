@@ -1,16 +1,32 @@
 // IslamResearch Platform Database Schema
 // Generated for dbdiagram.io
+// Last updated: 2026-04-15 — Full multilingual search architecture
 
 //// ENUMS
 
 Enum resource_type {
   quran
+  quran_translation
+  quran_irab
   hadith
   tafsir
   syarh
   language
   quranic_action
   other
+}
+
+Enum pipeline_id {
+  quran_api_flow         [note: 'Quran Arabic text via alquran.cloud API — book-level trigger']
+  quran_translation_flow [note: 'Quran translation editions via API — book-level trigger']
+  quran_irab_flow        [note: 'I\'rab grammatical analysis books — sentence-level']
+  tafsir_amal_flow       [note: 'Amali Tafseer custom TXT parser — sentence-level']
+  standard_txt_flow      [note: 'Generic .txt books (SpaCy + Ollama) — sentence-level']
+}
+
+Enum script_type {
+  arabic [note: 'Arabic script (Unicode range 0600–06FF)']
+  latin  [note: 'Latin script — covers transliterations and translations']
 }
 
 Enum action_type {
@@ -22,8 +38,6 @@ Enum action_type {
   close_tab
   split_pane
 }
-
-// Enum item_type replaced by Laravel Polymorphic relations
 
 Enum feedback_status {
   pending
@@ -50,7 +64,7 @@ Table users [headercolor: #1E3A8A] {
   email varchar [unique]
   password varchar
   role user_role [default: 'researcher']
-  metadata jsonb [note: 'Individual user preferences and profile settings']
+  metadata jsonb
   created_at timestamp
   updated_at timestamp
   deleted_at timestamp [note: 'Soft Deletes']
@@ -59,37 +73,81 @@ Table users [headercolor: #1E3A8A] {
 Table scholars [headercolor: #1D4ED8] {
   id uuid [primary key]
   name varchar
-  metadata jsonb [note: 'Scholarly attributes (bio, birth/death years, titles, etc.)']
+  metadata jsonb [note: 'Bio, birth/death years, titles']
 }
 
 Table source_books [headercolor: #2563EB] {
-  id uuid [primary key, note: 'The entry point for all research data']
+  id uuid [primary key, note: 'Entry point for all research data']
   title varchar
-  scholar_id uuid [ref: > scholars.id, note: 'Primary author/scholar']
+  scholar_id uuid [ref: > scholars.id]
   resource_type resource_type
-  language varchar
-  status varchar
-  metadata jsonb [note: 'Bibliographical details and source info']
+  pipeline_id pipeline_id [default: 'standard_txt_flow', note: 'Routes to the correct Prefect AI pipeline']
+  language varchar [note: 'ISO code of source language (e.g. ar)']
+  status varchar [note: 'pending | processing | completed | failed']
+  metadata jsonb [note: 'Bibliographical details']
   created_at timestamp
   updated_at timestamp
   deleted_at timestamp [note: 'Soft Deletes']
 }
 
+//// TAXONOMY TABLES
+
 Table taxonomies [headercolor: #3B82F6] {
   id uuid [primary key]
-  parent_id uuid [ref: > taxonomies.id, note: 'For nested categories']
-  path ltree [note: 'Materialized path (e.g., 001.004.009) for highly optimized hierarchical queries']
-  name varchar [note: 'e.g., Fiqh, Tafsir']
-  slug varchar [unique]
-  metadata jsonb [note: 'Flexible categorization data']
+  parent_id uuid [ref: > taxonomies.id]
+  path ltree [note: 'Materialized path for optimized hierarchical queries']
+
+  // Arabic-first naming
+  name varchar [note: 'Arabic canonical label — stored in sentences.metadata.categories[]']
+  name_ar varchar [note: 'Dedicated Arabic column for SQL filtering']
+  name_en varchar [note: 'English display name for UI']
+  name_transliteration varchar [note: 'ALA-LC transliteration (slug source)']
+
+  slug varchar [unique, note: 'Derived from name_transliteration']
+  embedding_ar "vector(1024)" [note: 'Arabic name embedding — for Arabic search against taxonomy']
+  metadata jsonb [note: 'Mirrors names + level for JSONB queries']
+  created_at timestamp
+  updated_at timestamp
   deleted_at timestamp [note: 'Soft Deletes']
-  
+
   indexes {
     path [type: gist]
+    name_ar
+    embedding_ar [type: hnsw, note: 'ANN search when query is Arabic']
   }
 }
 
-Table source_book_taxonomy [headercolor: #60A5FA] {
+Table taxonomy_translations [headercolor: #60A5FA] {
+  id uuid [primary key]
+  taxonomy_id uuid [ref: > taxonomies.id]
+  language varchar [note: 'ISO code (e.g. id, en, ms)']
+  translation_text varchar [note: 'Translated display name (e.g. "Tafsir al-Quran" in Indonesian)']
+  embedding "vector(1024)" [note: 'Embedding for cross-lingual taxonomy search (Latin queries)']
+  created_at timestamp
+  updated_at timestamp
+
+  indexes {
+    (taxonomy_id, language) [unique]
+    embedding [type: hnsw]
+  }
+}
+
+Table taxonomy_transliterations [headercolor: #93C5FD] {
+  id uuid [primary key]
+  taxonomy_id uuid [ref: > taxonomies.id]
+  scheme varchar [note: 'e.g. ala_lc, buckwalter']
+  transliteration_text varchar [note: 'Romanised form (e.g. "Ulum al-Quran")']
+  embedding "vector(1024)" [note: 'Embedding for transliteration-based taxonomy search']
+  created_at timestamp
+  updated_at timestamp
+
+  indexes {
+    (taxonomy_id, scheme) [unique]
+    embedding [type: hnsw]
+  }
+}
+
+Table source_book_taxonomy [headercolor: #BFDBFE] {
   book_id uuid [ref: > source_books.id]
   taxonomy_id uuid [ref: > taxonomies.id]
 
@@ -98,138 +156,197 @@ Table source_book_taxonomy [headercolor: #60A5FA] {
   }
 }
 
+//// TAG TABLES
+
+Table tags [headercolor: #065F46, note: 'Normalised tag entities (was JSONB in sentences.metadata.tags)'] {
+  id uuid [primary key]
+  name_ar varchar [note: 'Arabic canonical tag label (e.g. تزكية النفس)']
+  slug varchar [unique, note: 'URL-safe key derived from transliteration']
+  embedding_ar "vector(1024)" [note: 'Arabic tag embedding — for Arabic search']
+  created_at timestamp
+  updated_at timestamp
+
+  indexes {
+    name_ar [unique]
+    embedding_ar [type: hnsw]
+  }
+}
+
+Table tag_translations [headercolor: #059669] {
+  id uuid [primary key]
+  tag_id uuid [ref: > tags.id]
+  language varchar [note: 'ISO code (e.g. id, en)']
+  translation_text varchar [note: 'e.g. "Purification of the Soul" (en), "Tazkiyah" (id)']
+  embedding "vector(1024)" [note: 'Embedding for cross-lingual tag search']
+  created_at timestamp
+  updated_at timestamp
+
+  indexes {
+    (tag_id, language) [unique]
+    embedding [type: hnsw]
+  }
+}
+
+Table tag_transliterations [headercolor: #10B981] {
+  id uuid [primary key]
+  tag_id uuid [ref: > tags.id]
+  scheme varchar [note: 'e.g. ala_lc']
+  transliteration_text varchar [note: 'e.g. "Tazkiyat al-Nafs"']
+  embedding "vector(1024)" [note: 'Embedding for transliteration-based tag search']
+  created_at timestamp
+  updated_at timestamp
+
+  indexes {
+    (tag_id, scheme) [unique]
+    embedding [type: hnsw]
+  }
+}
+
+Table sentence_tag [headercolor: #6EE7B7, note: 'Pivot: links AI-enriched tags to sentences'] {
+  sentence_id uuid [ref: > sentences.id]
+  tag_id uuid [ref: > tags.id]
+
+  indexes {
+    (sentence_id, tag_id) [unique]
+  }
+}
+
+//// SENTENCE TABLES
+
 Table sentence_jobs [headercolor: #93C5FD] {
-  id uuid [primary key, note: 'Read-Only monitoring table for the AI worker']
-  source_book_id uuid [ref: > source_books.id]
-  raw_text text
-  status varchar [note: 'pending, processing, failed, completed']
+  id uuid [primary key]
+  sentence_id uuid [ref: > sentences.id]
+  needs_embedding boolean [default: false]
+  needs_translation boolean [default: false]
+  needs_transliteration boolean [default: false]
+  target_language varchar [note: 'ISO translation target (e.g. id, en)']
+  transliteration_scheme varchar [note: 'e.g. ala_lc']
+  status varchar [note: 'pending | processing | failed | completed']
   attempts int [default: 0]
-  error_log text [note: 'Stores API error messages or stack traces']
-  completed_at timestamp [note: 'To calculate how long the AI took']
+  error_log text
+  completed_at timestamp
   created_at timestamp
   updated_at timestamp
 }
 
 Table sentences [headercolor: #BFDBFE] {
-  id uuid [primary key, note: 'The final, AI-enriched result']
+  id uuid [primary key]
   source_book_id uuid [ref: > source_books.id]
   resource_type resource_type
-  sequence_number int [note: 'Sequential order of sentence within the resource']
-  sentence_text text [note: 'The core sentence content']
-  metadata jsonb [note: 'Dynamic LLM data (Isnad, Root, Target_Ayah, etc.)']
-  embedding_ar "vector(1024)" [note: 'Native Arabic semantic index for fastest HNSW retrieval']
+  sequence_number int
+  sentence_text text [note: 'Core Arabic content (with harakat)']
+  metadata jsonb [note: '''
+    AI output (Arabic-first):
+    - categories: list[str]  — Arabic taxonomy labels e.g. ["التفسير"]
+    - category: str          — Primary label (legacy single-value)
+    - surah_id, ayah_number  — Quran records
+    - segment_type           — Tafseer: "commentary" | "lesson"
+    - linked_ayah            — Cross-reference to Quran ayah
+    NOTE: tags now normalised → sentence_tag pivot
+  ''']
+  embedding_ar "vector(1024)" [note: 'Arabic source embedding (primary ANN index)']
   created_at timestamp
   updated_at timestamp
 
   indexes {
     metadata [name: 'idx_sentences_metadata', type: gin]
     source_book_id
+    embedding_ar [type: hnsw]
   }
 }
 
-Table sentence_transliterations [headercolor: #93C5FD] {
+Table sentence_translations [headercolor: #6EE7B7] {
   id uuid [primary key]
   sentence_id uuid [ref: > sentences.id]
-  scheme varchar [note: 'e.g., ala_lc, buckwalter']
+  language varchar [note: 'ISO code of translation (e.g. id, en, ms)']
+  scholar_id uuid [ref: > scholars.id, note: 'Optional: translator authority']
+  translation_text text
+  embedding "vector(1024)" [note: 'Translation embedding — ANN index for Latin queries']
+  metadata jsonb [note: 'edition, source (api|ai_generated), model']
+  created_at timestamp
+  updated_at timestamp
+
+  indexes {
+    (sentence_id, language) [unique]
+    embedding [type: hnsw, note: 'Latin query search on translations']
+  }
+}
+
+Table sentence_transliterations [headercolor: #A7F3D0] {
+  id uuid [primary key]
+  sentence_id uuid [ref: > sentences.id]
+  scheme varchar [note: 'ala_lc | buckwalter | dmg']
   transliteration_text text
-  
+  embedding "vector(1024)" [note: 'Transliteration embedding — ANN index for Latin queries']
+  metadata jsonb [note: 'model, confidence']
+  created_at timestamp
+  updated_at timestamp
+
   indexes {
     (sentence_id, scheme) [unique]
-  }
-}
-
-Table sentence_translations [headercolor: #93C5FD] {
-  id uuid [primary key]
-  sentence_id uuid [ref: > sentences.id]
-  language varchar [note: 'e.g., id, en, ur, fr']
-  scholar_id uuid [ref: > scholars.id, note: 'Optional author/source of this translation']
-  translation_text text
-  embedding "vector(1024)" [note: 'HNSW semantic index isolated for this localized language']
-  
-  indexes {
-    (sentence_id, language)
+    embedding [type: hnsw, note: 'Latin query search on transliterations']
   }
 }
 
 //// LINGUISTIC LEXICON TABLES
 
 Table lexicon_roots [headercolor: #065F46] {
-  id uuid [primary key, note: 'Stores the foundational base of words']
-  language varchar [note: '''ar' or 'id''']
-  root_value varchar [note: 'e.g., ع ل م, tulis']
-  embedding "vector(1024)" [note: 'pgvector (1024d)']
-  metadata jsonb [note: 'Hierarchical linguistic properties']
-  
+  id uuid [primary key]
+  language varchar [note: '"ar" — Arabic-only by design']
+  root_value varchar [note: 'e.g., ع ل م']
+  embedding "vector(1024)"
+  metadata jsonb
+
   indexes {
     (language, root_value) [unique]
   }
 }
 
 Table lexicon_words [headercolor: #059669] {
-  id uuid [primary key, note: 'Stores actual variations found in texts']
+  id uuid [primary key]
   root_id uuid [ref: > lexicon_roots.id]
-  language varchar [note: '''ar' or 'id''']
-  word_raw varchar [note: 'Exact word from text (with Harakat for Arabic)']
-  word_clean varchar [note: 'Stripped version (no Harakat)']
-  embedding_raw "vector(1024)" [note: 'pgvector (1024d) for exact harakat matched search']
-  embedding_clean "vector(1024)" [note: 'pgvector (1024d) for generalized searches']
-  metadata jsonb [note: 'Morphological details and usage frequency notes']
-  
+  language varchar
+  word_raw varchar [note: 'With harakat']
+  word_clean varchar [note: 'Stripped harakat']
+  embedding_raw "vector(1024)"
+  embedding_clean "vector(1024)"
+  metadata jsonb
+
   indexes {
     (language, word_raw, word_clean) [unique]
   }
 }
 
-// Pivot Table
 Table sentence_word [headercolor: #10B981] {
   sentence_id uuid [ref: > sentences.id]
   word_id uuid [ref: > lexicon_words.id]
-  source_type word_source [note: 'Identifies if the word was found in the main sentence_text or a translation']
-  positions "integer[]" [note: 'Array of exact word indices (e.g., [3,14]) for instant UI highlighting without re-parsing']
+  source_type word_source
+  positions "integer[]"
 
   indexes {
     (word_id, sentence_id) [unique]
   }
 }
 
-//// USER PERSONALIZATION TABLES
+//// SEARCH TABLES
 
-Table user_workspaces [headercolor: #312E81] {
+Table searches [headercolor: #4F46E5] {
   id uuid [primary key]
-  user_id uuid [ref: > users.id]
-  name varchar [note: 'e.g., Default Workspace, Fiqh Project']
-  is_active boolean [note: 'Is this the currently loaded workspace?']
-  layout_state jsonb [note: 'Stores active tabs, split pane config, and scroll positions']
-  updated_at timestamp [note: 'Every time they change a tab, this auto-saves']
-}
+  query varchar [unique, note: 'Raw query text']
+  script_type script_type [note: 'Detected: arabic | latin — determines which embedding indexes are queried']
+  embedding "vector(1024)" [note: 'Query embedding — compared against matching index based on script_type']
+  created_at timestamp
 
-Table user_journeys [headercolor: #4338CA] {
-  id uuid [primary key, note: 'Tracks user research journeys and breadcrumbs']
-  user_id uuid [ref: > users.id]
-  action_type action_type
-  target_sentence_id uuid [ref: > sentences.id, note: 'Nullable, if action relates to a specific sentence']
-  target_search_id uuid [ref: > searches.id, note: 'Nullable, if action relates to a cached search']
-  context_data jsonb [note: 'Strictly non-relational metadata like UI scroll position or raw query string']
-  created_at timestamp [note: 'Creation time for chronological sequencing']
-  
   indexes {
-    created_at
-    user_id
+    embedding [type: hnsw, note: 'Optional: find similar past queries']
   }
 }
 
-Table searches [headercolor: #4F46E5] {
-  id uuid [primary key, note: 'Caches query embeddings to minimize API costs']
-  query varchar [unique, note: 'The raw search text']
-  embedding "vector(1024)" [note: 'Stored query embedding (1024d)']
-  created_at timestamp
-}
-
 Table user_searches [headercolor: #6366F1] {
-  id uuid [primary key, note: 'Logs individual user search actions tying them to a cached search']
-  user_id uuid [ref: > users.id, note: 'Nullable for anonymous searches']
+  id uuid [primary key]
+  user_id uuid [ref: > users.id]
   search_id uuid [ref: > searches.id]
-  filters jsonb [note: 'Applied filters like taxonomies, scholars']
+  filters jsonb [note: 'Applied filters: taxonomy, scholar, language, resource_type']
   results_count int
   created_at timestamp
 
@@ -239,40 +356,66 @@ Table user_searches [headercolor: #6366F1] {
   }
 }
 
-Table collections [headercolor: #818CF8] {
-  id uuid [primary key, note: 'Custom collections, bookmarks, saved queries']
+//// USER PERSONALIZATION TABLES
+
+Table user_workspaces [headercolor: #312E81] {
+  id uuid [primary key]
   user_id uuid [ref: > users.id]
-  name varchar [note: 'e.g., Ramadan Prep']
+  name varchar
+  is_active boolean
+  layout_state jsonb
+  updated_at timestamp
+}
+
+Table user_journeys [headercolor: #4338CA] {
+  id uuid [primary key]
+  user_id uuid [ref: > users.id]
+  action_type action_type
+  target_sentence_id uuid [ref: > sentences.id]
+  target_search_id uuid [ref: > searches.id]
+  context_data jsonb
+  created_at timestamp
+
+  indexes {
+    created_at
+    user_id
+  }
+}
+
+Table collections [headercolor: #818CF8] {
+  id uuid [primary key]
+  user_id uuid [ref: > users.id]
+  name varchar
   is_public boolean
-  metadata jsonb [note: 'Collection customizations and tags']
+  metadata jsonb
   deleted_at timestamp [note: 'Soft Deletes']
 }
 
 Table collection_items [headercolor: #A5B4FC] {
   id uuid [primary key]
   collection_id uuid [ref: > collections.id]
-  itemable_type varchar [note: 'e.g., App\\Models\\Sentence']
-  itemable_id uuid [note: 'Stores the exact record UUID']
-  raw_query text [note: 'Used if this item is a saved dynamic search/workspace, not a direct record']
-  metadata jsonb [note: 'Stores UI state like breadcrumbs, left/right panel configuration']
-  created_at timestamp [note: 'Allows sorting by recently added to collection']
+  itemable_type varchar
+  itemable_id uuid
+  raw_query text
+  metadata jsonb
+  created_at timestamp
 }
 
 Table user_feedbacks [headercolor: #C7D2FE] {
-  id uuid [primary key, note: 'Tracks feedback for potential global search tuning']
+  id uuid [primary key]
   user_id uuid [ref: > users.id]
   sentence_id uuid [ref: > sentences.id]
-  search_query varchar [note: 'The exact query used to find this sentence']
+  search_query varchar
   relevance_score int [note: '0 to 100']
   status feedback_status
-  reviewed_by uuid [ref: > users.id, note: 'Which admin resolved this?']
+  reviewed_by uuid [ref: > users.id]
   resolved_at timestamp
 }
 
 Table user_habits [headercolor: #E0E7FF] {
-  id uuid [primary key, note: 'Tracks interactive checkbox for Al-Quran Tadabbur wa Amal']
+  id uuid [primary key]
   user_id uuid [ref: > users.id]
-  sentence_id uuid [ref: > sentences.id, note: 'References a quranic_action sentence']
+  sentence_id uuid [ref: > sentences.id]
   checked_at timestamp
 
   indexes {
@@ -281,18 +424,33 @@ Table user_habits [headercolor: #E0E7FF] {
   }
 }
 
-//// TABLE GROUPS (For visual organization in dbdiagram.io)
+//// TABLE GROUPS
 
 TableGroup "Core Infrastructure" {
   users
   scholars
   source_books
+}
+
+TableGroup "Taxonomy" {
   taxonomies
+  taxonomy_translations
+  taxonomy_transliterations
   source_book_taxonomy
+}
+
+TableGroup "Tags" {
+  tags
+  tag_translations
+  tag_transliterations
+  sentence_tag
+}
+
+TableGroup "Sentences & Language" {
   sentence_jobs
   sentences
-  sentence_transliterations
   sentence_translations
+  sentence_transliterations
 }
 
 TableGroup "Linguistic Lexicon" {
@@ -301,11 +459,14 @@ TableGroup "Linguistic Lexicon" {
   sentence_word
 }
 
+TableGroup "Search" {
+  searches
+  user_searches
+}
+
 TableGroup "User Personalization" {
   user_workspaces
   user_journeys
-  searches
-  user_searches
   collections
   collection_items
   user_feedbacks

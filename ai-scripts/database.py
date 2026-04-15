@@ -91,7 +91,7 @@ def save_to_db(
             
             if needs_emb and vectors.get("vector_ar"):
                 update_sql += ", embedding_ar = %s"
-                params.append(vectors.get("vector_ar"))
+                params.append(vectors.get("vector_ar"))  # Always Arabic source embedding
             
             update_sql += " WHERE id = %s"
             params.append(sentence_id)
@@ -107,7 +107,7 @@ def save_to_db(
                     ON CONFLICT (sentence_id, language) DO UPDATE
                     SET translation_text = EXCLUDED.translation_text, embedding = EXCLUDED.embedding, updated_at = NOW()
                     """,
-                    (str(uuid.uuid4()), sentence_id, lang, translation, vectors.get("vector_id"))
+                    (str(uuid.uuid4()), sentence_id, lang, translation, vectors.get("vector_translation") or None)
                 )
     finally:
         conn.close()

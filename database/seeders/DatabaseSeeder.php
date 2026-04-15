@@ -46,16 +46,21 @@ class DatabaseSeeder extends Seeder
 
     private function createTaxonomy(array $item, ?Taxonomy $parent): void
     {
-        $nameAr = $item['name_ar'] ?? '';
-        $nameEn = $item['name_en'] ?? '';
+        $nameAr             = $item['name_ar'] ?? '';
+        $nameEn             = $item['name_en'] ?? '';
         $nameTransliteration = $item['name_transliteration'] ?? '';
 
-        $name = $nameEn ?: $nameTransliteration ?: $nameAr;
+        // Arabic-first: the canonical `name` column stores the Arabic label.
+        // English and transliteration are display/URL helpers only.
+        $name = $nameAr ?: $nameTransliteration ?: $nameEn;
         if (! $name) {
             return;
         }
 
-        $slug = Str::slug($name);
+        // Slug derived from transliteration (URL-safe Latin script).
+        // Falls back to English, then slugified Arabic if nothing else is available.
+        $slugSource = $nameTransliteration ?: $nameEn ?: $nameAr;
+        $slug = Str::slug($slugSource);
 
         // Ensure slug is unique globally
         $slugBase = $slug;
@@ -65,20 +70,22 @@ class DatabaseSeeder extends Seeder
         }
 
         $taxonomy = Taxonomy::create([
-            'parent_id' => $parent?->id,
-            'name' => $name,
-            'slug' => $slug,
-            'metadata' => [
-                'name_ar' => $nameAr,
-                'name_en' => $nameEn,
+            'parent_id'           => $parent?->id,
+            'name'                => $name,              // Arabic (canonical)
+            'name_ar'             => $nameAr,
+            'name_en'             => $nameEn,
+            'name_transliteration' => $nameTransliteration,
+            'slug'                => $slug,
+            'metadata'            => [
+                // Keep in metadata too for JSONB queries in classify.py / UI filters
+                'name_ar'             => $nameAr,
+                'name_en'             => $nameEn,
                 'name_transliteration' => $nameTransliteration,
-                'level' => $item['level'] ?? ($parent ? $parent->metadata['level'] + 1 : 1),
+                'level'               => $item['level'] ?? ($parent ? ($parent->metadata['level'] ?? 0) + 1 : 1),
             ],
-            // Path will be updated after creation to include its own UUID
         ]);
 
         // Generate ltree path
-        // ltree path labels must be Alphanumeric and underscores
         $uuidLabel = str_replace('-', '_', $taxonomy->id);
         $path = $parent ? $parent->path.'.'.$uuidLabel : $uuidLabel;
         $taxonomy->update(['path' => $path]);

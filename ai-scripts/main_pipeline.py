@@ -54,7 +54,7 @@ def process_single_job(sentence_job_id: str, lang: str = "id", scheme: str = "al
         
         # D. Vectorization
         if job['needs_embedding']:
-            vectors = vectorize.create_embeddings(raw_text, translation or "")
+            vectors = vectorize.create_embeddings(arabic_text=raw_text, translation_text=translation or "")
 
         # 3. Persist results
         save_to_db(
@@ -103,7 +103,7 @@ def process_single_job(sentence_job_id: str, lang: str = "id", scheme: str = "al
 
         # 5. Notify Laravel Success
         _notify_laravel(sentence_job_id, "completed")
-        logger.info(f"✅ Successfully enriched sentence {sentence_id}. Alhamdulillah.")
+        logger.info(f"✅ Enriched sentence {sentence_id} (categories & tags in Arabic). Alhamdulillah.")
 
     except Exception as e:
         logger.error(f"❌ Failed to process job {sentence_job_id}: {str(e)}")
