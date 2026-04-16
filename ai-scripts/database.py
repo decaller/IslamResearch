@@ -128,3 +128,50 @@ def save_transliteration(sentence_id: str, scheme: str, transliteration_text: st
             )
     finally:
         conn.close()
+
+@task
+def get_book_metadata(book_id: str) -> dict:
+    """Fetch metadata for a specific source book."""
+    conn = get_db_connection()
+    try:
+        with conn.cursor(cursor_factory=RealDictCursor) as cur:
+            cur.execute("SELECT * FROM source_books WHERE id = %s", (book_id,))
+            return cur.fetchone()
+    finally:
+        conn.close()
+
+@task
+def save_quran_verse(book_id: str, verse: dict, vectors: dict, lexicon_data: list) -> str:
+    """Save a single Quran ayah and its linked lexicon entries."""
+    conn = get_db_connection()
+    try:
+        with conn, conn.cursor() as cur:
+            # 1. Prepare Metadata
+            metadata = {
+                "surah_id": verse['surah_number'],
+                "surah_name_ar": verse['surah_name_ar'],
+                "surah_name_en": verse['surah_name_en'],
+                "ayah_number": verse['ayah_number'],
+                "ayah_number_global": verse['ayah_number_global'],
+                "juz": verse['juz'],
+                "mushaf_page": verse['page'],
+                "arabic_edition": verse['arabic_edition'],
+            }
+
+            # 2. Upsert Sentence (Ayah)
+            sentence_id = str(uuid.uuid4())
+            cur.execute(
+                """
+                INSERT INTO sentences (id, source_book_id, resource_type, sequence_number, sentence_text, metadata, embedding_ar, created_at, updated_at)
+                VALUES (%s, %s, 'quran', %s, %s, %s, %s, NOW(), NOW())
+                ON CONFLICT (source_book_id, sequence_number) DO UPDATE
+                SET sentence_text = EXCLUDED.sentence_text, metadata = EXCLUDED.metadata, embedding_ar = EXCLUDED.embedding_ar, updated_at = NOW()
+                RETURNING id
+                """,
+                (sentence_id, book_id, verse['ayah_number_global'], verse['arabic_text'], psycopg2.extras.Json(metadata), vectors.get("vector_ar"))
+            )
+            sentence_id = cur.fetchone()[0]
+            
+            return sentence_id
+    finally:
+        conn.close()

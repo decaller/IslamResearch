@@ -11,6 +11,16 @@ enriches existing records with new language translations fetched from the alqura
 **Example use case:** Arabic + Kemenag (Indonesian) was already imported. Now the admin wants
 to add Pickthall (English), Sahih International, or Malay translations.
 
+```mermaid
+graph TD
+    A[Start Job] --> B[Fetch Translation Edition from alquran.cloud API]
+    B --> C{Process Translation}
+    C --> D[Match to Existing Arabic Ayah in DB]
+    D --> E[Vectorize Translated Text]
+    E --> F[Upsert to sentence_translations Table]
+    F --> G[Notify Laravel Completion]
+```
+
 ---
 
 ## 1. Filament Setup

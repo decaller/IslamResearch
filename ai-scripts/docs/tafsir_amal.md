@@ -12,6 +12,20 @@ to correctly segment the text before handing off to the shared task workers.
 > The exact regex rules for Amal's formatting are a work-in-progress and will be defined
 > as the source `.txt` file is analysed. This file documents the *intended architecture* for the pipeline.
 
+```mermaid
+graph TD
+    A[Start Job] --> B[Fetch Job Details & Context Window]
+    B --> C[Custom Block Extraction via Regex - Commentary/Lesson]
+    C --> D[Generate Translation with Tafseer Context]
+    C --> E[Generate Transliteration]
+    C --> F[Classify & Generate Scholarly Tags]
+    D --> G[Extract Roots & Create Embeddings]
+    E --> G
+    F --> G
+    G --> H[Save to DB with Segment & Linking Metadata]
+    H --> I[Notify Laravel Completion]
+```
+
 ---
 
 ## 1. Why a Custom Pipeline?

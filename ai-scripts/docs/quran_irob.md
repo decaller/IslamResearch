@@ -13,6 +13,20 @@ They require SpaCy sentence splitting and LLM-assisted translation, but have a
 - إعراب القرآن وبيانه — Muhyiddin Darwish
 - إعراب القرآن الكريم — Mahmoud Safwat
 
+```mermaid
+graph TD
+    A[Start Job] --> B[Fetch Job Details & Context]
+    B --> C[Clean Arabic & Detect Ayah References via Regex]
+    C --> D[Generate Indonesian Translation with Grammatical Context]
+    C --> E[Generate Transliteration]
+    C --> F[Classify & Tag]
+    D --> G[Create Semantic Embeddings]
+    E --> G
+    F --> G
+    G --> H[Save to DB & Link to Specific Ayah Record]
+    H --> I[Notify Laravel Completion]
+```
+
 ---
 
 ## 1. Filament Setup
