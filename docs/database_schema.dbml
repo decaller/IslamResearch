@@ -117,36 +117,6 @@ Table taxonomies [headercolor: #3B82F6] {
   }
 }
 
-Table taxonomy_translations [headercolor: #60A5FA] {
-  id uuid [primary key]
-  taxonomy_id uuid [ref: > taxonomies.id]
-  language varchar [note: 'ISO code (e.g. id, en, ms)']
-  translation_text varchar [note: 'Translated display name (e.g. "Tafsir al-Quran" in Indonesian)']
-  embedding "vector(1024)" [note: 'Embedding for cross-lingual taxonomy search (Latin queries)']
-  created_at timestamp
-  updated_at timestamp
-
-  indexes {
-    (taxonomy_id, language) [unique]
-    embedding [type: hnsw]
-  }
-}
-
-Table taxonomy_transliterations [headercolor: #93C5FD] {
-  id uuid [primary key]
-  taxonomy_id uuid [ref: > taxonomies.id]
-  scheme varchar [note: 'e.g. ala_lc, buckwalter']
-  transliteration_text varchar [note: 'Romanised form (e.g. "Ulum al-Quran")']
-  embedding "vector(1024)" [note: 'Embedding for transliteration-based taxonomy search']
-  created_at timestamp
-  updated_at timestamp
-
-  indexes {
-    (taxonomy_id, scheme) [unique]
-    embedding [type: hnsw]
-  }
-}
-
 Table source_book_taxonomy [headercolor: #BFDBFE] {
   book_id uuid [ref: > source_books.id]
   taxonomy_id uuid [ref: > taxonomies.id]
@@ -169,36 +139,6 @@ Table tags [headercolor: #065F46, note: 'Normalised tag entities (was JSONB in s
   indexes {
     name_ar [unique]
     embedding_ar [type: hnsw]
-  }
-}
-
-Table tag_translations [headercolor: #059669] {
-  id uuid [primary key]
-  tag_id uuid [ref: > tags.id]
-  language varchar [note: 'ISO code (e.g. id, en)']
-  translation_text varchar [note: 'e.g. "Purification of the Soul" (en), "Tazkiyah" (id)']
-  embedding "vector(1024)" [note: 'Embedding for cross-lingual tag search']
-  created_at timestamp
-  updated_at timestamp
-
-  indexes {
-    (tag_id, language) [unique]
-    embedding [type: hnsw]
-  }
-}
-
-Table tag_transliterations [headercolor: #10B981] {
-  id uuid [primary key]
-  tag_id uuid [ref: > tags.id]
-  scheme varchar [note: 'e.g. ala_lc']
-  transliteration_text varchar [note: 'e.g. "Tazkiyat al-Nafs"']
-  embedding "vector(1024)" [note: 'Embedding for transliteration-based tag search']
-  created_at timestamp
-  updated_at timestamp
-
-  indexes {
-    (tag_id, scheme) [unique]
-    embedding [type: hnsw]
   }
 }
 
@@ -255,73 +195,56 @@ Table sentences [headercolor: #BFDBFE] {
   }
 }
 
-Table sentence_translations [headercolor: #6EE7B7] {
+//// CENTRAL TRANSLATIONS
+
+Table translations [headercolor: #F59E0B, note: 'Unified translations for any entity'] {
   id uuid [primary key]
-  sentence_id uuid [ref: > sentences.id]
-  language varchar [note: 'ISO code of translation (e.g. id, en, ms)']
-  scholar_id uuid [ref: > scholars.id, note: 'Optional: translator authority']
+  language varchar [note: 'ISO code (e.g. id, en)']
   translation_text text
-  embedding "vector(1024)" [note: 'Translation embedding — ANN index for Latin queries']
-  metadata jsonb [note: 'edition, source (api|ai_generated), model']
+  embedding "vector(1024)" [note: 'ANN index for Latin queries']
+  metadata jsonb [note: 'edition, model, confidence']
   created_at timestamp
   updated_at timestamp
 
   indexes {
-    (sentence_id, language) [unique]
-    embedding [type: hnsw, note: 'Latin query search on translations']
+    embedding [type: hnsw]
   }
 }
 
-Table sentence_transliterations [headercolor: #A7F3D0] {
-  id uuid [primary key]
-  sentence_id uuid [ref: > sentences.id]
-  scheme varchar [note: 'ala_lc | buckwalter | dmg']
-  transliteration_text text
-  embedding "vector(1024)" [note: 'Transliteration embedding — ANN index for Latin queries']
-  metadata jsonb [note: 'model, confidence']
-  created_at timestamp
-  updated_at timestamp
+Table translatables [headercolor: #FCD34D, note: 'Polymorphic Pivot: Connects translations to entities'] {
+  translation_id uuid [ref: > translations.id]
+  translatable_id uuid [note: 'ID of sentence, tag, or taxonomy']
+  translatable_type varchar [note: 'e.g., App\\Models\\Sentence']
 
   indexes {
-    (sentence_id, scheme) [unique]
-    embedding [type: hnsw, note: 'Latin query search on transliterations']
+    (translatable_id, translatable_type, translation_id) [unique]
   }
 }
 
 //// LINGUISTIC LEXICON TABLES
 
-Table lexicon_roots [headercolor: #065F46] {
+Table words [headercolor: #059669, note: 'Unified table for all lexical tokens and roots'] {
   id uuid [primary key]
-  language varchar [note: '"ar" — Arabic-only by design']
-  root_value varchar [note: 'e.g., ع ل م']
-  embedding "vector(1024)"
+  root_id uuid [ref: > words.id, note: 'Self-reference. Null means this IS the root']
+  word_raw varchar [note: 'Text with harakat (e.g., يُؤْمِنُونَ)']
+  word_clean varchar [note: 'Text without harakat (e.g., يؤمنون)']
+  transliteration varchar [note: 'Romanized form']
+  translation varchar [note: 'Base dictionary meaning']
+  embedding "vector(1024)" [note: 'Dense semantic representation']
   metadata jsonb
+  created_at timestamp
+  updated_at timestamp
 
   indexes {
-    (language, root_value) [unique]
+    word_clean [note: 'Quick search on unvowelled text']
   }
 }
 
-Table lexicon_words [headercolor: #059669] {
-  id uuid [primary key]
-  root_id uuid [ref: > lexicon_roots.id]
-  language varchar
-  word_raw varchar [note: 'With harakat']
-  word_clean varchar [note: 'Stripped harakat']
-  embedding_raw "vector(1024)"
-  embedding_clean "vector(1024)"
-  metadata jsonb
-
-  indexes {
-    (language, word_raw, word_clean) [unique]
-  }
-}
-
-Table sentence_word [headercolor: #10B981] {
+Table sentence_word [headercolor: #10B981, note: 'Pivot: links words back to occurrence in sentence'] {
   sentence_id uuid [ref: > sentences.id]
-  word_id uuid [ref: > lexicon_words.id]
-  source_type word_source
-  positions "integer[]"
+  word_id uuid [ref: > words.id]
+  source_type word_source [note: 'main_text or translation']
+  positions "integer[]" [note: 'Word indices within sentence']
 
   indexes {
     (word_id, sentence_id) [unique]
@@ -434,28 +357,26 @@ TableGroup "Core Infrastructure" {
 
 TableGroup "Taxonomy" {
   taxonomies
-  taxonomy_translations
-  taxonomy_transliterations
   source_book_taxonomy
 }
 
 TableGroup "Tags" {
   tags
-  tag_translations
-  tag_transliterations
   sentence_tag
 }
 
 TableGroup "Sentences & Language" {
   sentence_jobs
   sentences
-  sentence_translations
-  sentence_transliterations
+}
+
+TableGroup "Global Translations" {
+  translations
+  translatables
 }
 
 TableGroup "Linguistic Lexicon" {
-  lexicon_roots
-  lexicon_words
+  words
   sentence_word
 }
 
