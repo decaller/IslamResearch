@@ -17,10 +17,9 @@ graph TD
     B --> C{Process Ayah}
     C --> D[Extract Morphological Roots via CAMeL Tools]
     C --> E[Create Semantic Vector Embeddings]
-    C --> F[Generate Scholarly Transliteration]
-    D --> G[Save Ayah to Database]
+    G[Save Ayah to Database]
+    D --> G
     E --> G
-    F --> G
     G --> H[Notify Laravel Completion]
 ```
 
@@ -90,9 +89,16 @@ No SpaCy. No Ollama. Pure API + CPU math.
 | `surah_id`            | `1`               | Filter by Surah                |
 | `surah_name_ar`       | `"الفاتحة"`       | Display data for UI            |
 | `surah_name_en`       | `"Al-Fatiha"`     | Latin display                  |
+| `surah_name_en_translation` | `"The Opening"` | English meaning of Surah name |
+| `revelation_type`      | `"Meccan"`        | Revelation context (Meccan/Medinan) |
+| `number_of_ayahs`     | `7`               | Total ayahs in the Surah       |
 | `ayah_number`         | `1`               | Sorting and ordering           |
 | `juz`                 | `1`               | Navigation by Juz              |
+| `manzil`              | `1`               | Navigation by Manzil           |
 | `mushaf_page`         | `1`               | Tadabbur dual-panel pagination |
+| `ruku`                | `1`               | Navigation by Ruku             |
+| `hizb_quarter`        | `1`               | Navigation by Hizb             |
+| `sajda`               | `false`           | Prostration requirement marker |
 | `arabic_edition`      | `"quran-uthmani"` | Which mushaf edition was used  |
 | `translation_edition` | `"id.indonesian"` | Which translation was stored   |
 

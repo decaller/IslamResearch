@@ -129,6 +129,29 @@ def save_transliteration(sentence_id: str, scheme: str, transliteration_text: st
     finally:
         conn.close()
 
+    finally:
+        conn.close()
+
+@task
+def find_ayah_id_by_position(surah_number: int, ayah_number: int) -> str:
+    """Find a sentence ID for a specific Quran ayah."""
+    conn = get_db_connection()
+    try:
+        with conn.cursor() as cur:
+            cur.execute(
+                """
+                SELECT id FROM sentences 
+                WHERE resource_type = 'quran' 
+                AND (metadata->>'surah_id')::int = %s 
+                AND (metadata->>'ayah_number')::int = %s
+                """,
+                (surah_number, ayah_number)
+            )
+            result = cur.fetchone()
+            return result[0] if result else None
+    finally:
+        conn.close()
+
 @task
 def get_book_metadata(book_id: str) -> dict:
     """Fetch metadata for a specific source book."""
@@ -151,12 +174,22 @@ def save_quran_verse(book_id: str, verse: dict, vectors: dict, lexicon_data: lis
                 "surah_id": verse['surah_number'],
                 "surah_name_ar": verse['surah_name_ar'],
                 "surah_name_en": verse['surah_name_en'],
+                "surah_name_en_translation": verse['surah_name_en_translation'],
+                "revelation_type": verse['revelation_type'],
+                "number_of_ayahs": verse['number_of_ayahs'],
                 "ayah_number": verse['ayah_number'],
                 "ayah_number_global": verse['ayah_number_global'],
                 "juz": verse['juz'],
+                "manzil": verse['manzil'],
                 "mushaf_page": verse['page'],
+                "ruku": verse['ruku'],
+                "hizb_quarter": verse['hizb_quarter'],
+                "sajda": verse['sajda'],
                 "arabic_edition": verse['arabic_edition'],
             }
+
+            if verse.get('transliteration'):
+                metadata['transliteration'] = verse['transliteration']
 
             # 2. Upsert Sentence (Ayah)
             sentence_id = str(uuid.uuid4())

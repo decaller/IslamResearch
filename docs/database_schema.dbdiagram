@@ -8,127 +8,127 @@
       "name": "users",
       "schemaName": "public",
       "x": 2800,
-      "y": 400
+      "y": 412.00835703157884
     },
     {
       "name": "scholars",
       "schemaName": "public",
-      "x": 0,
-      "y": 0
+      "x": 2800,
+      "y": 782.0083570315788
     },
     {
       "name": "source_books",
       "schemaName": "public",
-      "x": 0,
-      "y": 300
+      "x": 3104.26171875,
+      "y": 782.0083570315788
     },
     {
       "name": "taxonomies",
       "schemaName": "public",
-      "x": 800,
-      "y": 0
+      "x": 3431.45849609375,
+      "y": 782.0083570315788
     },
     {
       "name": "source_book_taxonomy",
       "schemaName": "public",
-      "x": 400,
-      "y": 600
+      "x": 3762.24072265625,
+      "y": 782.0083570315788
     },
     {
       "name": "tags",
       "schemaName": "public",
-      "x": 800,
-      "y": 700
+      "x": 2800,
+      "y": 960.0083570315788
     },
     {
       "name": "sentence_tag",
       "schemaName": "public",
-      "x": 800,
-      "y": 400
+      "x": 3104.26171875,
+      "y": 1216.0083570315787
     },
     {
       "name": "sentence_jobs",
       "schemaName": "public",
-      "x": 400,
-      "y": 0
+      "x": 3431.45849609375,
+      "y": 1280.0083570315787
     },
     {
       "name": "sentences",
       "schemaName": "public",
-      "x": 400,
-      "y": 300
+      "x": 3762.24072265625,
+      "y": 928.0083570315788
     },
     {
       "name": "translations",
       "schemaName": "public",
-      "x": 1200,
-      "y": 900
+      "x": 2800,
+      "y": 1234.0083570315787
     },
     {
       "name": "translatables",
       "schemaName": "public",
-      "x": 1200,
-      "y": 600
+      "x": 3104.26171875,
+      "y": 1362.0083570315787
     },
     {
       "name": "words",
       "schemaName": "public",
-      "x": 1200,
-      "y": 300
+      "x": 3431.45849609375,
+      "y": 1778.0083570315787
     },
     {
       "name": "sentence_word",
       "schemaName": "public",
-      "x": 1200,
-      "y": 0
+      "x": 3762.24072265625,
+      "y": 1298.0083570315787
     },
     {
       "name": "searches",
       "schemaName": "public",
-      "x": 1600,
-      "y": 400
+      "x": 2800,
+      "y": 1540.0083570315787
     },
     {
       "name": "user_searches",
       "schemaName": "public",
-      "x": 2000,
-      "y": 0
+      "x": 3104.26171875,
+      "y": 1540.0083570315787
     },
     {
       "name": "user_workspaces",
       "schemaName": "public",
-      "x": 2400,
-      "y": 900
+      "x": 3431.45849609375,
+      "y": 2180.0083570315787
     },
     {
       "name": "user_journeys",
       "schemaName": "public",
-      "x": 2400,
-      "y": 0
+      "x": 3762.24072265625,
+      "y": 1508.0083570315787
     },
     {
       "name": "collections",
       "schemaName": "public",
-      "x": 2000,
-      "y": 400
+      "x": 2800,
+      "y": 1782.0083570315787
     },
     {
       "name": "collection_items",
       "schemaName": "public",
-      "x": 2000,
-      "y": 700
+      "x": 3104.26171875,
+      "y": 1814.0083570315787
     },
     {
       "name": "user_feedbacks",
       "schemaName": "public",
-      "x": 2400,
-      "y": 300
+      "x": 3431.45849609375,
+      "y": 2454.0083570315787
     },
     {
       "name": "user_habits",
       "schemaName": "public",
-      "x": 2400,
-      "y": 600
+      "x": 3762.24072265625,
+      "y": 1814.0083570315787
     }
   ],
   "tableGroupCollapseStates": [],

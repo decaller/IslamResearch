@@ -27,27 +27,22 @@ def process_quran(book_id: str):
         # 2. Morphological analysis (extract_roots accepts a list of strings)
         lexicon_data = text_prep.extract_roots([arabic_text])
 
-        # 3. Transliterate (User requested ONLY transliteration, no AI translation)
-        # We use a scholarly scheme (ALA-LC by default)
-        scheme = book.get('metadata', {}).get('transliteration_scheme', 'ala_lc')
-        tl_result = transliterate.run_ollama(arabic_text, scheme=scheme)
+        # 3. Fetch Transliteration from API (No embedding, per user request)
+        transliteration = api_fetchers.get_ayah_transliteration(
+            verse['surah_number'], 
+            verse['ayah_number']
+        )
+        verse['transliteration'] = transliteration
 
         # 4. Vectorize Arabic (translation is skipped)
         vectors = vectorize.create_embeddings(arabic_text, "")
 
         # 5. Save Ayah to DB
-        sentence_id = save_quran_verse(
+        save_quran_verse(
             book_id=book_id,
             verse=verse,
             vectors=vectors,
             lexicon_data=lexicon_data,
-        )
-        
-        # 6. Save Transliteration
-        save_transliteration(
-            sentence_id=sentence_id,
-            scheme=tl_result['scheme'],
-            transliteration_text=tl_result['transliteration_text']
         )
 
     logger.info("✅ Quran ingestion complete. Alhamdulillah.")
