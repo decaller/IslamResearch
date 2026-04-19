@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\DB;
 use Laravel\Scout\Searchable;
 
 class Entity extends Model
@@ -22,6 +23,7 @@ class Entity extends Model
             'entity_type' => EntityType::class,
             'aliases' => 'array',
             'metadata' => 'array',
+            'last_enriched_at' => 'datetime',
         ];
     }
 
@@ -60,5 +62,67 @@ class Entity extends Model
             'aliases' => $this->aliases,
             'description' => $this->description,
         ];
+    }
+
+    /**
+     * Merge another entity into this one.
+     */
+    public function mergeWith(Entity $other): void
+    {
+        DB::transaction(function () use ($other) {
+            // 1. Move outgoing relationships
+            EntityRelationship::where('source_entity_id', $other->id)
+                ->update(['source_entity_id' => $this->id]);
+
+            // 2. Move incoming relationships
+            EntityRelationship::where('target_entity_id', $other->id)
+                ->update(['target_entity_id' => $this->id]);
+
+            // 3. Move sentence links
+            DB::table('sentence_entity')
+                ->where('entity_id', $other->id)
+                ->update(['entity_id' => $this->id]);
+
+            // 4. Update aliases
+            $currentAliases = $this->aliases ?? [];
+            if (! in_array($other->canonical_name, $currentAliases)) {
+                $currentAliases[] = $other->canonical_name;
+            }
+            if ($other->aliases) {
+                $currentAliases = array_unique(array_merge($currentAliases, $other->aliases));
+            }
+            $this->update(['aliases' => $currentAliases]);
+
+            // 5. Delete the other entity
+            $other->delete();
+        });
+    }
+
+    /**
+     * Get all connected entities recursively with PostgreSQL cycle protection.
+     */
+    public function getRecursiveRelationships(int $maxDepth = 3)
+    {
+        return DB::select('
+            WITH RECURSIVE graph_search AS (
+                -- Base Case
+                SELECT id, canonical_name, 0 as depth
+                FROM entities 
+                WHERE id = :entity_id
+                
+                UNION ALL
+                
+                -- Recursive Step
+                SELECT e.id, e.canonical_name, gs.depth + 1
+                FROM entities e
+                JOIN entity_relationships er ON e.id = er.target_entity_id
+                JOIN graph_search gs ON er.source_entity_id = gs.id
+                WHERE gs.depth < :max_depth
+            ) CYCLE id SET is_cycle USING path
+            SELECT * FROM graph_search WHERE NOT is_cycle;
+        ', [
+            'entity_id' => $this->id,
+            'max_depth' => $maxDepth,
+        ]);
     }
 }

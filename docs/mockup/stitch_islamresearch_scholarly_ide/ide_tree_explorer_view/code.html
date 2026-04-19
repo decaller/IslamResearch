@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>IslamResearch Workspace</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary-fixed": "#18181b",
+                        "tertiary-container": "#065f46",
+                        "on-secondary": "#09090b",
+                        "primary-fixed": "#ede9fe",
+                        "outline-variant": "#27272a",
+                        "surface-tint": "#a78bfa",
+                        "on-secondary-container": "#a1a1aa",
+                        "on-secondary-fixed-variant": "#3f3f46",
+                        "surface-container-low": "#0f0f12",
+                        "surface-container": "#121215",
+                        "on-primary": "#0a0012",
+                        "on-tertiary-container": "#bbf7d0",
+                        "primary-container": "#7c3aed",
+                        "secondary-container": "#27272a",
+                        "tertiary-fixed": "#bbf7d0",
+                        "primary-fixed-dim": "#c4b5fd",
+                        "error-container": "#3b1111",
+                        "error": "#ef4444",
+                        "inverse-on-surface": "#09090b",
+                        "tertiary-fixed-dim": "#6ee7b7",
+                        "on-error-container": "#fca5a5",
+                        "secondary-fixed": "#a1a1aa",
+                        "inverse-surface": "#fafafa",
+                        "secondary-fixed-dim": "#71717a",
+                        "primary": "#a78bfa",
+                        "surface": "#0c0c0f",
+                        "on-primary-container": "#ede9fe",
+                        "on-error": "#1a0000",
+                        "on-background": "#fafafa",
+                        "tertiary": "#34d399",
+                        "on-tertiary-fixed-variant": "#047857",
+                        "surface-dim": "#0c0c0f",
+                        "surface-bright": "#18181b",
+                        "background": "#09090b",
+                        "outline": "#52525b",
+                        "inverse-primary": "#5b21b6",
+                        "surface-variant": "#18181b",
+                        "on-primary-fixed-variant": "#5b21b6",
+                        "surface-container-highest": "#1e1e22",
+                        "on-surface": "#fafafa",
+                        "surface-container-high": "#18181b",
+                        "on-tertiary-fixed": "#003318",
+                        "surface-container-lowest": "#09090b",
+                        "on-tertiary": "#001a12",
+                        "secondary": "#71717a",
+                        "on-primary-fixed": "#2e1065",
+                        "on-surface-variant": "#a1a1aa"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Geist", "sans-serif"],
+                        "body": ["Geist", "sans-serif"],
+                        "label": ["Geist", "sans-serif"],
+                        "mono": ["ui-monospace", "SFMono-Regular", "Menlo", "Monaco", "Consolas", "monospace"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Geist', sans-serif; }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 20; }
+        .material-symbols-outlined.fill { font-variation-settings: 'FILL' 1, 'wght' 400; }
+        
+        /* Subtle custom scrollbar for density */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #27272a; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #3f3f46; }
+    </style>
+</head>
+<body class="bg-background text-on-surface antialiased overflow-hidden h-screen flex flex-col selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopAppBar -->
+<header class="flex justify-between items-center px-4 h-14 w-full bg-background w-full border-b border-outline-variant z-50 shrink-0">
+<div class="flex items-center gap-6">
+<h1 class="text-xl font-bold tracking-tighter text-on-background font-headline">IslamResearch</h1>
+<nav class="flex gap-4 pt-1">
+<a class="text-primary border-b-2 border-primary pb-1 font-body text-sm font-medium transition-colors duration-200 ease-in-out" href="#">Quran</a>
+<a class="text-on-secondary-container hover:bg-surface-variant hover:text-on-surface border-b-2 border-transparent pb-1 px-2 rounded-t-sm font-body text-sm transition-colors duration-200 ease-in-out" href="#">Lexicon</a>
+<a class="text-on-secondary-container hover:bg-surface-variant hover:text-on-surface border-b-2 border-transparent pb-1 px-2 rounded-t-sm font-body text-sm transition-colors duration-200 ease-in-out" href="#">Exegesis</a>
+<a class="text-on-secondary-container hover:bg-surface-variant hover:text-on-surface border-b-2 border-transparent pb-1 px-2 rounded-t-sm font-body text-sm transition-colors duration-200 ease-in-out" href="#">Habits</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative hidden md:flex items-center bg-surface-container-high rounded-full border border-outline-variant px-3 py-1 focus-within:border-primary focus-within:ring-1 focus-within:ring-primary transition-all">
+<span class="material-symbols-outlined text-on-secondary-container text-sm mr-2">search</span>
+<input class="bg-transparent border-none text-sm text-on-surface focus:ring-0 w-48 placeholder-on-secondary-container outline-none font-body" placeholder="Search corpus..." type="text"/>
+<span class="text-xs font-mono text-on-secondary-container border border-outline-variant rounded px-1 ml-2">⌘K</span>
+</div>
+<button class="text-on-secondary-container hover:text-on-surface transition-colors flex items-center justify-center p-1 rounded hover:bg-surface-variant">
+<span class="material-symbols-outlined text-xl">settings</span>
+</button>
+<button class="text-on-secondary-container hover:text-on-surface transition-colors flex items-center justify-center p-1 rounded hover:bg-surface-variant">
+<span class="material-symbols-outlined text-xl">account_circle</span>
+</button>
+</div>
+</header>
+<!-- Main Workspace -->
+<div class="flex flex-1 h-[calc(100vh-3.5rem)] overflow-hidden">
+<!-- SideNavBar (App Shell) -->
+<aside class="flex flex-col w-[60px] md:w-64 h-full p-2 md:p-4 gap-2 bg-surface border-r border-outline-variant shrink-0 z-40 transition-all duration-300">
+<div class="hidden md:flex items-center gap-3 mb-6 px-2 pt-2">
+<div class="w-8 h-8 rounded-full bg-surface-container-highest border border-outline-variant flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-on-secondary-container text-sm">person</span>
+</div>
+<div class="flex flex-col overflow-hidden">
+<span class="font-bold text-on-background font-headline text-sm truncate">Research Desk</span>
+<span class="text-xs text-on-secondary-container font-mono truncate">v1.0.4</span>
+</div>
+</div>
+<nav class="flex flex-col gap-1 w-full">
+<!-- History -->
+<a class="text-on-secondary-container hover:bg-surface-variant hover:text-on-surface rounded-lg p-2 flex items-center justify-center md:justify-start gap-3 transition-all duration-150 group" href="#">
+<span class="material-symbols-outlined text-[20px] group-hover:text-on-surface transition-colors">history</span>
+<span class="font-body text-sm hidden md:block">History</span>
+</a>
+<!-- Bookmarks -->
+<a class="text-on-secondary-container hover:bg-surface-variant hover:text-on-surface rounded-lg p-2 flex items-center justify-center md:justify-start gap-3 transition-all duration-150 group" href="#">
+<span class="material-symbols-outlined text-[20px] group-hover:text-on-surface transition-colors">bookmark</span>
+<span class="font-body text-sm hidden md:block">Bookmarks</span>
+</a>
+<!-- Drafts -->
+<a class="text-on-secondary-container hover:bg-surface-variant hover:text-on-surface rounded-lg p-2 flex items-center justify-center md:justify-start gap-3 transition-all duration-150 group" href="#">
+<span class="material-symbols-outlined text-[20px] group-hover:text-on-surface transition-colors">edit_note</span>
+<span class="font-body text-sm hidden md:block">Drafts</span>
+</a>
+<!-- Collections (Active Intent for Corpus View) -->
+<a class="bg-secondary-container text-primary rounded-lg p-2 flex items-center justify-center md:justify-start gap-3 transition-all duration-150" href="#">
+<span class="material-symbols-outlined fill text-[20px]">folder_open</span>
+<span class="font-body text-sm font-medium hidden md:block">Collections</span>
+</a>
+</nav>
+<div class="mt-auto w-full">
+<a class="text-on-secondary-container hover:bg-surface-variant hover:text-on-surface rounded-lg p-2 flex items-center justify-center md:justify-start gap-3 transition-all duration-150 group" href="#">
+<span class="material-symbols-outlined text-[20px] group-hover:text-on-surface transition-colors">settings</span>
+<span class="font-body text-sm hidden md:block">Settings</span>
+</a>
+</div>
+</aside>
+<!-- Secondary Sidebar: Tree Navigation -->
+<div class="w-64 md:w-72 bg-surface-container-lowest border-r border-outline-variant flex flex-col shrink-0">
+<div class="h-12 flex items-center px-4 border-b border-outline-variant justify-between bg-surface-container-lowest shrink-0">
+<span class="font-headline text-sm font-semibold tracking-tight text-on-surface">Corpus Structure</span>
+<button class="text-on-secondary-container hover:text-on-surface">
+<span class="material-symbols-outlined text-lg">filter_list</span>
+</button>
+</div>
+<div class="overflow-y-auto flex-1 p-2 py-3 font-body text-sm">
+<!-- Tree Node: Root Level -->
+<div class="flex flex-col gap-0.5">
+<!-- Expanded Surah -->
+<div class="flex flex-col">
+<div class="flex items-center px-2 py-1.5 rounded hover:bg-surface-variant cursor-pointer text-on-surface group transition-colors">
+<span class="material-symbols-outlined text-[16px] text-on-secondary-container mr-1 transition-transform rotate-90">chevron_right</span>
+<span class="font-mono text-xs text-on-secondary-container w-6 mr-2">002</span>
+<span class="truncate font-medium text-sm">Al-Baqarah</span>
+</div>
+<!-- Nested Ayahs -->
+<div class="flex flex-col ml-6 pl-2 border-l border-outline-variant mt-0.5 mb-1 gap-0.5">
+<div class="flex items-center px-2 py-1 rounded hover:bg-surface-variant cursor-pointer text-on-secondary-container group">
+<span class="font-mono text-xs w-8 text-on-surface-variant">253</span>
+<span class="truncate text-xs">Those messengers We en...</span>
+</div>
+<div class="flex items-center px-2 py-1 rounded hover:bg-surface-variant cursor-pointer text-on-secondary-container group">
+<span class="font-mono text-xs w-8 text-on-surface-variant">254</span>
+<span class="truncate text-xs">O you who have believe...</span>
+</div>
+<!-- Active Ayah -->
+<div class="flex items-center px-2 py-1 rounded bg-primary-fixed/10 text-primary cursor-pointer border border-primary/20 group relative overflow-hidden">
+<div class="absolute left-0 top-0 bottom-0 w-0.5 bg-primary"></div>
+<span class="font-mono text-xs w-8 text-primary font-medium">255</span>
+<span class="truncate text-xs font-medium">Allah - there is no de...</span>
+<span class="material-symbols-outlined text-[14px] ml-auto opacity-0 group-hover:opacity-100">visibility</span>
+</div>
+<div class="flex items-center px-2 py-1 rounded hover:bg-surface-variant cursor-pointer text-on-secondary-container group">
+<span class="font-mono text-xs w-8 text-on-surface-variant">256</span>
+<span class="truncate text-xs">There shall be no comp...</span>
+</div>
+</div>
+</div>
+<!-- Collapsed Surahs -->
+<div class="flex items-center px-2 py-1.5 rounded hover:bg-surface-variant cursor-pointer text-on-secondary-container group transition-colors mt-1">
+<span class="material-symbols-outlined text-[16px] mr-1 group-hover:text-on-surface">chevron_right</span>
+<span class="font-mono text-xs w-6 mr-2 group-hover:text-on-surface">003</span>
+<span class="truncate text-sm group-hover:text-on-surface">Aal-i-Imraan</span>
+</div>
+<div class="flex items-center px-2 py-1.5 rounded hover:bg-surface-variant cursor-pointer text-on-secondary-container group transition-colors mt-1">
+<span class="material-symbols-outlined text-[16px] mr-1 group-hover:text-on-surface">chevron_right</span>
+<span class="font-mono text-xs w-6 mr-2 group-hover:text-on-surface">004</span>
+<span class="truncate text-sm group-hover:text-on-surface">An-Nisaa</span>
+</div>
+<div class="flex items-center px-2 py-1.5 rounded hover:bg-surface-variant cursor-pointer text-on-secondary-container group transition-colors mt-1">
+<span class="material-symbols-outlined text-[16px] mr-1 group-hover:text-on-surface">chevron_right</span>
+<span class="font-mono text-xs w-6 mr-2 group-hover:text-on-surface">005</span>
+<span class="truncate text-sm group-hover:text-on-surface">Al-Maaida</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Split Pane 1: Quran Text View -->
+<div class="flex-1 flex flex-col bg-background min-w-[350px] relative">
+<!-- Breadcrumbs / Toolbar -->
+<div class="h-12 flex items-center px-6 border-b border-outline-variant justify-between bg-background shrink-0">
+<div class="flex items-center gap-2 text-sm font-body">
+<span class="text-on-secondary-container hover:text-on-surface cursor-pointer">Quran</span>
+<span class="material-symbols-outlined text-[14px] text-outline">chevron_right</span>
+<span class="text-on-secondary-container hover:text-on-surface cursor-pointer">Surah Al-Baqarah (2)</span>
+<span class="material-symbols-outlined text-[14px] text-outline">chevron_right</span>
+<span class="text-on-surface font-medium">Ayah 255</span>
+</div>
+<div class="flex items-center gap-3">
+<button class="text-on-secondary-container hover:text-on-surface flex items-center gap-1 text-xs font-mono border border-outline-variant rounded px-2 py-1 hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined text-[16px]">translate</span> EN
+                    </button>
+<div class="h-4 w-px bg-outline-variant"></div>
+<button class="text-on-secondary-container hover:text-on-surface">
+<span class="material-symbols-outlined text-lg">format_size</span>
+</button>
+<button class="text-on-secondary-container hover:text-on-surface">
+<span class="material-symbols-outlined text-lg">more_horiz</span>
+</button>
+</div>
+</div>
+<!-- Content Canvas -->
+<div class="flex-1 overflow-y-auto p-8 lg:p-12 relative hide-scrollbar">
+<div class="max-w-3xl mx-auto space-y-12">
+<!-- Target Ayah Display -->
+<div class="flex flex-col gap-6 relative group">
+<!-- Floating actions on hover -->
+<div class="absolute -left-12 top-2 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col gap-2">
+<button class="w-8 h-8 rounded-full bg-surface-container border border-outline-variant flex items-center justify-center text-on-secondary-container hover:text-primary hover:border-primary transition-all">
+<span class="material-symbols-outlined text-[18px]">bookmark_add</span>
+</button>
+<button class="w-8 h-8 rounded-full bg-surface-container border border-outline-variant flex items-center justify-center text-on-secondary-container hover:text-primary hover:border-primary transition-all">
+<span class="material-symbols-outlined text-[18px]">content_copy</span>
+</button>
+</div>
+<!-- Arabic -->
+<div class="text-right font-serif text-4xl leading-[2.5] text-on-surface" dir="rtl">
+                            اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ ۚ لَا تَأْخُذُهُ سِنَةٌ وَلَا نَوْمٌ ۚ لَّهُ مَا فِي السَّمَاوَاتِ وَمَا فِي الْأَرْضِ ۗ مَن ذَا الَّذِي يَشْفَعُ عِندَهُ إِلَّا بِإِذْنِهِ ۚ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ ۖ وَلَا يُحِيطُونَ بِشَيْءٍ مِّنْ عِلْمِهِ إِلَّا بِمَا شَاءَ ۚ وَسِعَ كُرْسِيُّهُ السَّمَاوَاتِ وَالْأَرْضَ ۖ وَلَا يَئُودُهُ حِفْظُهُمَا ۚ وَهُوَ <span class="bg-primary/20 text-primary border-b-2 border-primary cursor-pointer pb-1 transition-colors hover:bg-primary/30 rounded-sm px-1">الْعَلِيُّ</span> الْعَظِيمُ
+                        </div>
+<!-- Translation / Grammar inline -->
+<div class="flex flex-col gap-3 mt-4">
+<span class="text-on-secondary-container font-mono text-xs tracking-wider uppercase">Sahih International</span>
+<p class="text-lg text-on-surface leading-relaxed font-body">
+                                Allah - there is no deity except Him, the Ever-Living, the Sustainer of [all] existence. Neither drowsiness overtakes Him nor sleep. To Him belongs whatever is in the heavens and whatever is on the earth. Who is it that can intercede with Him except by His permission? He knows what is [presently] before them and what will be after them, and they encompass not a thing of His knowledge except for what He wills. His Kursi extends over the heavens and the earth, and their preservation tires Him not. And He is <span class="text-primary font-medium bg-primary/10 px-1 rounded">the Most High</span>, the Most Great.
+                            </p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Split Pane 2: Lexicon Analysis -->
+<div class="w-[350px] lg:w-[450px] border-l border-outline-variant bg-surface-container-low flex flex-col shrink-0 relative shadow-[-10px_0_30px_rgba(0,0,0,0.5)] z-20">
+<!-- Lexicon Header -->
+<div class="h-12 flex items-center px-4 border-b border-outline-variant justify-between bg-surface-container-low shrink-0">
+<div class="flex items-center gap-2 text-sm font-body">
+<span class="material-symbols-outlined text-[16px] text-tertiary">analytics</span>
+<span class="text-on-surface font-semibold tracking-tight">Morphology &amp; Lexicon</span>
+</div>
+<button class="text-on-secondary-container hover:text-on-surface p-1 rounded hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined text-lg">close_fullscreen</span>
+</button>
+</div>
+<!-- Analysis Canvas -->
+<div class="flex-1 overflow-y-auto p-4 space-y-4 hide-scrollbar">
+<!-- Target Word Card -->
+<div class="bg-surface-container border border-outline-variant rounded-lg p-5 flex flex-col gap-4 relative overflow-hidden">
+<div class="absolute top-0 left-0 w-1 h-full bg-primary"></div>
+<div class="flex justify-between items-start">
+<div class="flex flex-col">
+<span class="text-on-secondary-container text-xs font-mono uppercase tracking-wider mb-1">Selected Token</span>
+<span class="text-3xl font-serif text-on-surface" dir="rtl">الْعَلِيُّ</span>
+</div>
+<div class="bg-surface-container-highest border border-outline-variant rounded px-2 py-1 flex items-center gap-1.5">
+<div class="w-2 h-2 rounded-full bg-tertiary"></div>
+<span class="text-xs font-mono text-on-surface">Noun / Adjective</span>
+</div>
+</div>
+<div class="flex gap-2 text-sm">
+<span class="text-on-secondary-container">Root:</span>
+<span class="font-mono text-primary font-bold tracking-widest text-lg" dir="rtl">ع ل و</span>
+</div>
+</div>
+<!-- Morphology Breakdown -->
+<div class="flex flex-col gap-2">
+<h3 class="text-xs font-mono uppercase tracking-wider text-on-secondary-container px-1">Grammar Breakdown</h3>
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg overflow-hidden font-mono text-xs">
+<div class="grid grid-cols-12 border-b border-outline-variant bg-surface-container/50">
+<div class="col-span-3 p-2 text-on-secondary-container border-r border-outline-variant">Prefix</div>
+<div class="col-span-9 p-2 text-on-surface flex items-center gap-2">
+<span class="bg-surface-variant px-1.5 py-0.5 rounded text-primary">ال</span>
+<span>Definite article (Al)</span>
+</div>
+</div>
+<div class="grid grid-cols-12 border-b border-outline-variant">
+<div class="col-span-3 p-2 text-on-secondary-container border-r border-outline-variant">Stem</div>
+<div class="col-span-9 p-2 text-on-surface flex items-center gap-2">
+<span class="bg-surface-variant px-1.5 py-0.5 rounded text-tertiary">علي</span>
+<span>Active participle / Adjective</span>
+</div>
+</div>
+<div class="grid grid-cols-12 bg-surface-container/50">
+<div class="col-span-3 p-2 text-on-secondary-container border-r border-outline-variant">Case</div>
+<div class="col-span-9 p-2 text-on-surface">
+                                Nominative (مرفوع)
+                            </div>
+</div>
+</div>
+</div>
+<!-- Dictionary Entries -->
+<div class="flex flex-col gap-2 pt-2">
+<h3 class="text-xs font-mono uppercase tracking-wider text-on-secondary-container px-1">Lane's Lexicon</h3>
+<div class="bg-surface-container border border-outline-variant rounded-lg p-4 text-sm font-body text-on-surface-variant leading-relaxed">
+<p class="mb-2">
+<strong class="text-on-surface font-semibold">عَلِيٌّ</strong> (Aliyyun): High, elevated, exalted, lofty, eminent. Applied to God, <span class="italic">The Most High</span>; He who is exempt from, or clear of, the attributes of created beings.
+                        </p>
+<p class="mb-2">
+                            From the root <strong class="text-primary font-serif text-lg mx-1" dir="rtl">ع ل و</strong> meaning to be high, ascend, mount, excel, overcome.
+                        </p>
+<div class="mt-3 pt-3 border-t border-outline-variant flex justify-between items-center text-xs">
+<span class="text-on-secondary-container">Vol 5, Page 2146</span>
+<button class="text-primary hover:text-primary-fixed-dim transition-colors">Read Full Entry →</button>
+</div>
+</div>
+</div>
+<!-- Occurrences in Corpus -->
+<div class="flex flex-col gap-2 pt-2">
+<h3 class="text-xs font-mono uppercase tracking-wider text-on-secondary-container px-1">Corpus Occurrences</h3>
+<div class="bg-surface-container border border-outline-variant rounded-lg overflow-hidden">
+<div class="flex items-center justify-between p-3 border-b border-outline-variant hover:bg-surface-variant cursor-pointer transition-colors group">
+<div class="flex flex-col gap-1">
+<span class="text-xs text-on-secondary-container font-mono">Surah 2:255</span>
+<span class="text-sm text-on-surface truncate max-w-[200px]" dir="rtl">...وَهُوَ <span class="text-primary">الْعَلِيُّ</span> الْعَظِيمُ</span>
+</div>
+<span class="material-symbols-outlined text-outline group-hover:text-primary transition-colors text-[18px]">arrow_forward</span>
+</div>
+<div class="flex items-center justify-between p-3 border-b border-outline-variant hover:bg-surface-variant cursor-pointer transition-colors group">
+<div class="flex flex-col gap-1">
+<span class="text-xs text-on-secondary-container font-mono">Surah 4:34</span>
+<span class="text-sm text-on-surface truncate max-w-[200px]" dir="rtl">...إِنَّ اللَّهَ كَانَ <span class="text-primary">عَلِيًّا</span> كَبِيرًا</span>
+</div>
+<span class="material-symbols-outlined text-outline group-hover:text-primary transition-colors text-[18px]">arrow_forward</span>
+</div>
+<div class="p-2 text-center bg-surface-container-lowest">
+<button class="text-xs text-primary font-medium hover:underline">View all 8 occurrences</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</body></html>

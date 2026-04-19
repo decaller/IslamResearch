@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Islamic Jurisprudence (Fiqh) - Obsidian Scholar</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "inverse-on-surface": "#09090b",
+                        "on-primary-fixed": "#2e1065",
+                        "tertiary-fixed-dim": "#6ee7b7",
+                        "on-tertiary": "#001a12",
+                        "error": "#ef4444",
+                        "on-tertiary-container": "#bbf7d0",
+                        "on-surface-variant": "#a1a1aa",
+                        "on-background": "#fafafa",
+                        "on-secondary-fixed-variant": "#3f3f46",
+                        "inverse-primary": "#5b21b6",
+                        "surface-container-high": "#18181b",
+                        "primary-fixed": "#ede9fe",
+                        "on-secondary-fixed": "#18181b",
+                        "on-primary-fixed-variant": "#5b21b6",
+                        "surface-container": "#121215",
+                        "tertiary": "#34d399",
+                        "outline-variant": "#27272a",
+                        "tertiary-fixed": "#bbf7d0",
+                        "on-surface": "#fafafa",
+                        "surface-container-highest": "#1e1e22",
+                        "on-tertiary-fixed-variant": "#047857",
+                        "surface-container-low": "#0f0f12",
+                        "secondary-container": "#27272a",
+                        "on-primary-container": "#ede9fe",
+                        "on-primary": "#0a0012",
+                        "surface-bright": "#18181b",
+                        "on-error-container": "#fca5a5",
+                        "tertiary-container": "#065f46",
+                        "surface-variant": "#18181b",
+                        "on-secondary": "#09090b",
+                        "surface-tint": "#a78bfa",
+                        "on-tertiary-fixed": "#003318",
+                        "background": "#09090b",
+                        "surface": "#0c0c0f",
+                        "inverse-surface": "#fafafa",
+                        "secondary-fixed-dim": "#71717a",
+                        "secondary": "#71717a",
+                        "surface-container-lowest": "#09090b",
+                        "primary-fixed-dim": "#c4b5fd",
+                        "primary": "#a78bfa",
+                        "surface-dim": "#0c0c0f",
+                        "primary-container": "#7c3aed",
+                        "error-container": "#3b1111",
+                        "secondary-fixed": "#a1a1aa",
+                        "outline": "#52525b",
+                        "on-secondary-container": "#a1a1aa",
+                        "on-error": "#1a0000"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {},
+                    "fontFamily": {
+                        "headline": ["Geist", "sans-serif"],
+                        "body": ["Geist", "sans-serif"],
+                        "label": ["Geist", "sans-serif"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Geist', sans-serif; }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex flex-col antialiased">
+<!-- TopNavBar -->
+<nav class="flex justify-between items-center w-full px-6 h-14 bg-[#09090b] z-50 docked full-width top-0 border-b border-b-[#27272a] sticky">
+<div class="flex items-center gap-6">
+<span class="text-xl font-black text-[#fafafa] tracking-tighter">Obsidian Scholar</span>
+<!-- Search Bar on left -->
+<div class="relative hidden md:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-sm">search</span>
+<input class="bg-surface-container-high border outline-variant text-sm rounded px-9 py-1.5 focus:outline-none focus:ring-2 focus:ring-primary w-64 text-on-surface placeholder:text-on-surface-variant" placeholder="Search Obsidian..." type="text"/>
+</div>
+</div>
+<div class="hidden md:flex items-center gap-6 font-['Geist'] tracking-tight text-[#fafafa]">
+<a class="text-[#a1a1aa] hover:text-[#fafafa] hover:bg-[#27272a] transition-colors duration-200 px-3 py-2 rounded-md text-sm" href="#">Corpus</a>
+<a class="text-[#a1a1aa] hover:text-[#fafafa] hover:bg-[#27272a] transition-colors duration-200 px-3 py-2 rounded-md text-sm" href="#">Entities</a>
+<a class="text-[#a1a1aa] hover:text-[#fafafa] hover:bg-[#27272a] transition-colors duration-200 px-3 py-2 rounded-md text-sm" href="#">Lexicon</a>
+<a class="text-[#a1a1aa] hover:text-[#fafafa] hover:bg-[#27272a] transition-colors duration-200 px-3 py-2 rounded-md text-sm" href="#">Graph</a>
+<a class="text-[#a78bfa] border-b-2 border-[#a78bfa] pb-1 hover:bg-[#27272a] transition-colors duration-200 px-3 py-2 text-sm" href="#">Discussions</a>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-on-surface-variant hover:text-on-surface transition-colors p-2 rounded-full hover:bg-surface-container-high"><span class="material-symbols-outlined text-xl" data-icon="notifications">notifications</span></button>
+<button class="text-on-surface-variant hover:text-on-surface transition-colors p-2 rounded-full hover:bg-surface-container-high"><span class="material-symbols-outlined text-xl" data-icon="settings">settings</span></button>
+<img alt="Researcher Profile" class="w-8 h-8 rounded-full border border-outline-variant object-cover" data-alt="Portrait of a diverse young professional man against a plain background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCq7m4TyF8jzGoKtHx1zEAa8uQnc58sMos1BbYxZ1-eqJvNdmSFAMxczevBgEZzslLdn3cZ8xQCQg6mUrSjVPC4nrYDIsY2eBfs2EubaMj7fNbP20z2qb0cuPFnT8tdpV8gQlNHZqWCFyz9tUFC9zeRJjvfzgJSZIDfFqBqABH0tspNZjIZDStWaqGrXYuybyEubKMsdM3vac2TA9Fe5Q5LNcK3X0f_SZpegFV8hQykW40jXe_cVVQIC3jMJexRV6x4fcFAi_-loGVT"/>
+</div>
+</nav>
+<div class="flex flex-1 overflow-hidden">
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-14 h-[calc(100vh-3.5rem)] w-64 flex flex-col py-4 z-40 bg-[#0c0c0f] border-r border-[#27272a] docked left-0 hidden md:flex font-['Geist'] text-sm antialiased overflow-y-auto">
+<div class="px-6 pb-6 mb-6 border-b border-outline-variant">
+<div class="flex items-center gap-3 mb-1">
+<div class="w-8 h-8 rounded bg-surface-container-high flex items-center justify-center border border-outline-variant">
+<span class="material-symbols-outlined text-primary text-lg">book</span>
+</div>
+<div>
+<h2 class="text-lg font-bold text-[#fafafa] tracking-tight leading-none">Core Workspace</h2>
+<p class="text-xs text-on-surface-variant mt-1">Oxford Hellenic Corpus</p>
+</div>
+</div>
+<button class="mt-4 w-full bg-primary hover:bg-primary-container text-on-primary py-2 rounded font-medium transition-colors text-sm flex justify-center items-center gap-2">
+<span class="material-symbols-outlined text-sm">add</span> New Entry
+                </button>
+</div>
+<nav class="flex-1 px-3 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 text-[#a1a1aa] hover:text-[#fafafa] hover:bg-[#18181b] rounded transition-colors group" href="#">
+<span class="material-symbols-outlined text-[1.1rem] group-hover:text-on-surface text-on-surface-variant" data-icon="folder_open">folder_open</span>
+                    Workspace
+                </a>
+<a class="flex items-center gap-3 px-3 py-2 bg-[#27272a] text-[#a78bfa] font-semibold border-l-2 border-[#a78bfa] rounded-r transition-all translate-x-1" href="#">
+<span class="material-symbols-outlined text-[1.1rem]" data-icon="auto_stories" data-weight="fill" style="font-variation-settings: 'FILL' 1;">auto_stories</span>
+                    Library
+                </a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#a1a1aa] hover:text-[#fafafa] hover:bg-[#18181b] rounded transition-colors group" href="#">
+<span class="material-symbols-outlined text-[1.1rem] group-hover:text-on-surface text-on-surface-variant" data-icon="sell">sell</span>
+                    Tags
+                </a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#a1a1aa] hover:text-[#fafafa] hover:bg-[#18181b] rounded transition-colors group" href="#">
+<span class="material-symbols-outlined text-[1.1rem] group-hover:text-on-surface text-on-surface-variant" data-icon="category">category</span>
+                    Categories
+                </a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#a1a1aa] hover:text-[#fafafa] hover:bg-[#18181b] rounded transition-colors group" href="#">
+<span class="material-symbols-outlined text-[1.1rem] group-hover:text-on-surface text-on-surface-variant" data-icon="inventory_2">inventory_2</span>
+                    Archives
+                </a>
+</nav>
+<div class="mt-auto px-3 pt-4 border-t border-outline-variant space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 text-[#a1a1aa] hover:text-[#fafafa] hover:bg-[#18181b] rounded transition-colors group" href="#">
+<span class="material-symbols-outlined text-[1.1rem] group-hover:text-on-surface text-on-surface-variant" data-icon="help_outline">help_outline</span>
+                    Help
+                </a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#a1a1aa] hover:text-[#fafafa] hover:bg-[#18181b] rounded transition-colors group" href="#">
+<span class="material-symbols-outlined text-[1.1rem] group-hover:text-on-surface text-on-surface-variant" data-icon="sync">sync</span>
+                    Sync
+                </a>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="flex-1 md:ml-64 p-6 lg:p-10 overflow-y-auto">
+<header class="mb-10 max-w-5xl">
+<div class="flex items-center gap-2 text-sm text-on-surface-variant mb-4">
+<a class="hover:text-primary transition-colors" href="#">Library</a>
+<span class="material-symbols-outlined text-xs">chevron_right</span>
+<a class="hover:text-primary transition-colors" href="#">Theology &amp; Law</a>
+<span class="material-symbols-outlined text-xs">chevron_right</span>
+<span class="text-on-surface">Fiqh</span>
+</div>
+<h1 class="text-4xl md:text-5xl font-bold tracking-tight mb-4">Islamic Jurisprudence (Fiqh)</h1>
+<p class="text-lg text-on-surface-variant max-w-3xl leading-relaxed">
+                    The human understanding of the divine Islamic law as revealed in the Quran and the Sunnah. It expands and develops Sharia through interpretation (ijtihad) of the Quran and Sunnah by Islamic jurists (Ulema) and is implemented by the rulings (Fatwa) of jurists on questions presented to them.
+                </p>
+<div class="flex gap-4 mt-6">
+<button class="bg-primary text-on-primary px-4 py-2 rounded text-sm font-medium hover:bg-primary-container transition-colors focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background outline-none">Follow Category</button>
+<button class="border border-outline-variant text-on-surface px-4 py-2 rounded text-sm font-medium hover:bg-surface-container-high transition-colors flex items-center gap-2"><span class="material-symbols-outlined text-sm">edit</span> Edit Meta</button>
+</div>
+</header>
+<div class="grid grid-cols-1 xl:grid-cols-3 gap-8 max-w-7xl">
+<!-- Left Column: Knowledge Tree & Authorities -->
+<div class="xl:col-span-2 space-y-8">
+<!-- Knowledge Tree Bento -->
+<section class="bg-surface-container border border-outline-variant rounded-lg p-6 relative overflow-hidden">
+<div class="flex justify-between items-start mb-6 z-10 relative">
+<h2 class="text-xl font-bold tracking-tight flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">account_tree</span>
+                                Knowledge Tree
+                            </h2>
+<button class="text-on-surface-variant hover:text-on-surface"><span class="material-symbols-outlined">fullscreen</span></button>
+</div>
+<!-- Abstract Representation of Tree -->
+<div class="relative z-10 space-y-6">
+<div class="flex flex-col gap-4">
+<!-- Root node -->
+<div class="bg-surface border border-primary/30 p-4 rounded-lg w-full md:w-2/3 shadow-[0_0_15px_rgba(167,139,250,0.05)] border-l-4 border-l-primary">
+<h3 class="font-bold text-lg mb-1">Usul al-Fiqh</h3>
+<p class="text-sm text-on-surface-variant">Principles of Islamic Jurisprudence. The methodology by which rules are derived.</p>
+<div class="mt-3 flex gap-2 flex-wrap">
+<span class="text-xs bg-surface-container-high px-2 py-1 rounded border border-outline-variant">Quranic Exegesis</span>
+<span class="text-xs bg-surface-container-high px-2 py-1 rounded border border-outline-variant">Hadith Sciences</span>
+<span class="text-xs bg-surface-container-high px-2 py-1 rounded border border-outline-variant">Ijma (Consensus)</span>
+</div>
+</div>
+<!-- Branches -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 ml-0 md:ml-8 relative">
+<!-- Connector line for desktop -->
+<div class="hidden md:block absolute -left-4 top-0 bottom-0 w-px bg-outline-variant"></div>
+<div class="bg-surface-container-high border border-outline-variant p-4 rounded-lg relative">
+<div class="hidden md:block absolute top-1/2 -left-4 w-4 h-px bg-outline-variant"></div>
+<h3 class="font-medium text-on-surface mb-2">Furu' al-Fiqh</h3>
+<p class="text-xs text-on-surface-variant mb-3">Substantive law and practical applications.</p>
+<ul class="text-sm space-y-2">
+<li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-primary"></span> Ibadat (Worship)</li>
+<li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-primary"></span> Mu'amalat (Transactions)</li>
+<li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-primary"></span> Jinayat (Penal Law)</li>
+</ul>
+</div>
+<div class="bg-surface-container-high border border-outline-variant p-4 rounded-lg relative">
+<div class="hidden md:block absolute top-1/2 -left-4 w-4 h-px bg-outline-variant"></div>
+<h3 class="font-medium text-on-surface mb-2">Madhahib (Schools)</h3>
+<p class="text-xs text-on-surface-variant mb-3">Major schools of legal thought.</p>
+<div class="flex flex-wrap gap-2">
+<span class="text-xs bg-surface-container-highest px-2 py-1 rounded text-on-surface">Hanafi</span>
+<span class="text-xs bg-surface-container-highest px-2 py-1 rounded text-on-surface">Maliki</span>
+<span class="text-xs bg-surface-container-highest px-2 py-1 rounded text-on-surface">Shafi'i</span>
+<span class="text-xs bg-surface-container-highest px-2 py-1 rounded text-on-surface">Hanbali</span>
+<span class="text-xs bg-surface-container-highest px-2 py-1 rounded text-on-surface">Ja'fari</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Subtle background decoration -->
+<div class="absolute right-0 bottom-0 opacity-[0.03] pointer-events-none">
+<span class="material-symbols-outlined text-[20rem]">account_tree</span>
+</div>
+</section>
+<!-- Primary Authorities Grid -->
+<section class="space-y-4">
+<h2 class="text-xl font-bold tracking-tight border-b border-outline-variant pb-2">Primary Authorities &amp; Texts</h2>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+<!-- Authority Card -->
+<div class="group bg-surface-container-low border border-outline-variant hover:border-primary/50 transition-colors rounded-lg p-5 flex flex-col h-full cursor-pointer">
+<div class="flex justify-between items-start mb-3">
+<h3 class="font-medium group-hover:text-primary transition-colors text-lg">Al-Risala</h3>
+<span class="material-symbols-outlined text-on-surface-variant text-sm">open_in_new</span>
+</div>
+<p class="text-sm text-on-surface-variant mb-4 flex-1">Foundational text on Usul al-Fiqh by Al-Shafi'i, establishing the four primary sources of law.</p>
+<div class="flex items-center gap-3 pt-3 border-t border-outline-variant/50">
+<div class="w-6 h-6 rounded-full bg-surface-container-highest flex items-center justify-center text-xs border border-outline-variant">S</div>
+<span class="text-xs text-on-surface-variant">Al-Shafi'i (d. 820)</span>
+</div>
+</div>
+<!-- Authority Card -->
+<div class="group bg-surface-container-low border border-outline-variant hover:border-primary/50 transition-colors rounded-lg p-5 flex flex-col h-full cursor-pointer">
+<div class="flex justify-between items-start mb-3">
+<h3 class="font-medium group-hover:text-primary transition-colors text-lg">Al-Muwatta</h3>
+<span class="material-symbols-outlined text-on-surface-variant text-sm">open_in_new</span>
+</div>
+<p class="text-sm text-on-surface-variant mb-4 flex-1">Early compilation of hadith and legal opinions reflecting the practice of the people of Medina.</p>
+<div class="flex items-center gap-3 pt-3 border-t border-outline-variant/50">
+<div class="w-6 h-6 rounded-full bg-surface-container-highest flex items-center justify-center text-xs border border-outline-variant">M</div>
+<span class="text-xs text-on-surface-variant">Malik ibn Anas (d. 795)</span>
+</div>
+</div>
+<!-- Authority Card -->
+<div class="group bg-surface-container-low border border-outline-variant hover:border-primary/50 transition-colors rounded-lg p-5 flex flex-col h-full cursor-pointer">
+<div class="flex justify-between items-start mb-3">
+<h3 class="font-medium group-hover:text-primary transition-colors text-lg">Al-Hidayah</h3>
+<span class="material-symbols-outlined text-on-surface-variant text-sm">open_in_new</span>
+</div>
+<p class="text-sm text-on-surface-variant mb-4 flex-1">A major authoritative manual of Hanafi law, widely studied as a comprehensive primer.</p>
+<div class="flex items-center gap-3 pt-3 border-t border-outline-variant/50">
+<div class="w-6 h-6 rounded-full bg-surface-container-highest flex items-center justify-center text-xs border border-outline-variant">M</div>
+<span class="text-xs text-on-surface-variant">Al-Marghinani (d. 1197)</span>
+</div>
+</div>
+<!-- Authority Card -->
+<div class="group bg-surface-container-low border border-outline-variant hover:border-primary/50 transition-colors rounded-lg p-5 flex flex-col h-full cursor-pointer">
+<div class="flex justify-between items-start mb-3">
+<h3 class="font-medium group-hover:text-primary transition-colors text-lg">Al-Mughni</h3>
+<span class="material-symbols-outlined text-on-surface-variant text-sm">open_in_new</span>
+</div>
+<p class="text-sm text-on-surface-variant mb-4 flex-1">Extensive encyclopedic work of comparative fiqh from the Hanbali perspective.</p>
+<div class="flex items-center gap-3 pt-3 border-t border-outline-variant/50">
+<div class="w-6 h-6 rounded-full bg-surface-container-highest flex items-center justify-center text-xs border border-outline-variant">I</div>
+<span class="text-xs text-on-surface-variant">Ibn Qudamah (d. 1223)</span>
+</div>
+</div>
+</div>
+</section>
+</div>
+<!-- Right Column: Sidebar content -->
+<div class="space-y-6">
+<!-- Origins / Quick Info -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-5">
+<h3 class="font-bold text-sm text-on-surface-variant uppercase tracking-wider mb-4 border-b border-outline-variant pb-2">Overview</h3>
+<dl class="space-y-4 text-sm">
+<div>
+<dt class="text-on-surface-variant mb-1">Literal Meaning</dt>
+<dd class="text-on-surface">"Deep understanding" or "full comprehension"</dd>
+</div>
+<div>
+<dt class="text-on-surface-variant mb-1">Key Disciplines</dt>
+<dd class="text-on-surface">Usul (Roots/Principles), Furu' (Branches/Application)</dd>
+</div>
+<div>
+<dt class="text-on-surface-variant mb-1">Primary Sources</dt>
+<dd class="text-on-surface">Quran, Sunnah</dd>
+</div>
+<div>
+<dt class="text-on-surface-variant mb-1">Secondary Sources</dt>
+<dd class="text-on-surface">Ijma (Consensus), Qiyas (Analogy), Urf (Custom), Maslaha (Public Interest)</dd>
+</div>
+</dl>
+</div>
+<!-- Community Research Feed -->
+<div class="bg-surface-container rounded-lg border border-outline-variant overflow-hidden">
+<div class="p-4 bg-surface-container-high border-b border-outline-variant flex justify-between items-center">
+<h3 class="font-bold text-sm flex items-center gap-2">
+<span class="material-symbols-outlined text-tertiary text-sm">science</span>
+                                Community Research
+                            </h3>
+<span class="text-xs text-on-surface-variant bg-surface-container px-2 py-0.5 rounded border border-outline-variant">Live</span>
+</div>
+<div class="p-0 divide-y divide-outline-variant">
+<!-- Feed Item -->
+<a class="block p-4 hover:bg-surface-container-highest transition-colors" href="#">
+<div class="flex items-start gap-3">
+<img alt="Avatar" class="w-8 h-8 rounded-full border border-outline-variant" data-alt="Small portrait of a man wearing glasses" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBAR-owKzutNIxfJaLvQsSAEiciMRb4dVQCQu6KyQNlViAs6BNgzvFVLBSTSMa7KyqBSwjgSztd5kK5wYHLgckVlSkAUBQmF2MuxwcEuTAkpl0PTJ4jbSzIQymdE7zzSXB7NU9cDRJzoWuIyIBRtfbJxS06eEbiH9uWcV2DjqcFZZPs_qknYR2gF15Phk6R27qE4Lk7PNWBMSvjg14vHdfFPUQYjXIIAs8x0Ju3qpZwUSDPSR2mhFHZ-ZOBPXt0ME9F4JqAYsdUihod"/>
+<div>
+<h4 class="text-sm font-medium text-on-surface line-clamp-1">Draft: Evolution of Qiyas in Early Hanafi Thought</h4>
+<p class="text-xs text-on-surface-variant mt-1">Updated 2h ago by @r.ahmed</p>
+<div class="flex gap-2 mt-2">
+<span class="text-[10px] bg-primary/10 text-primary px-1.5 py-0.5 rounded border border-primary/20">Draft</span>
+<span class="text-[10px] bg-surface-container-low text-on-surface-variant px-1.5 py-0.5 rounded border border-outline-variant">Usul</span>
+</div>
+</div>
+</div>
+</a>
+<!-- Feed Item -->
+<a class="block p-4 hover:bg-surface-container-highest transition-colors" href="#">
+<div class="flex items-start gap-3">
+<div class="w-8 h-8 rounded-full bg-tertiary-container/30 text-tertiary flex items-center justify-center border border-tertiary/30">
+<span class="material-symbols-outlined text-sm">collections_bookmark</span>
+</div>
+<div>
+<h4 class="text-sm font-medium text-on-surface line-clamp-1">Collection: Contemporary Fatwas on Digital Finance</h4>
+<p class="text-xs text-on-surface-variant mt-1">3 new items added by @fiqh_study_group</p>
+</div>
+</div>
+</a>
+<!-- Feed Item -->
+<a class="block p-4 hover:bg-surface-container-highest transition-colors" href="#">
+<div class="flex items-start gap-3">
+<img alt="Avatar" class="w-8 h-8 rounded-full border border-outline-variant" data-alt="Small portrait of a woman" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCHpPuP6LFam2abfuMmttw-K_ITCV_hbtPDbLak1jRjCVdiHGHZRcTM2yV9q1ID5PkzsLNWMbq0bEMukFOmZC-TPYFOWSN9RkS8PDOhWj-83R2TIMdccgBuNccq-ZLE1GbbkbtD17YoeiA16IXF4u7YozBATlNrSoLtV4jXjycBD2mknX3R0sKJaMTNXkvQuJI5rAaFNVXF8ZBYt1gXejR80gVQVB1Kkz-ekHY6chMmomN8lz_nEfCfruOKLJf2WVM8QV1WbfizCI0z"/>
+<div>
+<h4 class="text-sm font-medium text-on-surface line-clamp-1">Discussion: Maqasid al-Shari'ah application in medical ethics</h4>
+<p class="text-xs text-on-surface-variant mt-1">14 replies • Last reply 5h ago</p>
+</div>
+</div>
+</a>
+</div>
+<div class="p-3 bg-surface-container-low border-t border-outline-variant text-center">
+<button class="text-xs text-primary hover:text-primary-fixed transition-colors font-medium">View All Activity</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

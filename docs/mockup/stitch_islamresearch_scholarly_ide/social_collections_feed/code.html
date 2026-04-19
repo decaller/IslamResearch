@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Public Collections - Obsidian</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-surface": "#fafafa",
+                        "on-background": "#fafafa",
+                        "tertiary-fixed": "#bbf7d0",
+                        "outline-variant": "#27272a",
+                        "surface-variant": "#18181b",
+                        "surface-dim": "#0c0c0f",
+                        "on-secondary-fixed": "#18181b",
+                        "on-surface-variant": "#a1a1aa",
+                        "on-primary-container": "#ede9fe",
+                        "surface-container-high": "#18181b",
+                        "on-primary": "#0a0012",
+                        "error": "#ef4444",
+                        "surface-container-lowest": "#09090b",
+                        "primary-container": "#7c3aed",
+                        "primary": "#a78bfa",
+                        "surface": "#0c0c0f",
+                        "error-container": "#3b1111",
+                        "surface-bright": "#18181b",
+                        "on-primary-fixed-variant": "#5b21b6",
+                        "on-secondary-fixed-variant": "#3f3f46",
+                        "on-error": "#1a0000",
+                        "on-primary-fixed": "#2e1065",
+                        "surface-container-highest": "#1e1e22",
+                        "on-tertiary-fixed-variant": "#047857",
+                        "surface-container": "#121215",
+                        "on-secondary": "#09090b",
+                        "inverse-on-surface": "#09090b",
+                        "primary-fixed-dim": "#c4b5fd",
+                        "primary-fixed": "#ede9fe",
+                        "on-tertiary": "#001a12",
+                        "inverse-primary": "#5b21b6",
+                        "surface-container-low": "#0f0f12",
+                        "tertiary-fixed-dim": "#6ee7b7",
+                        "tertiary": "#34d399",
+                        "on-error-container": "#fca5a5",
+                        "background": "#09090b",
+                        "surface-tint": "#a78bfa",
+                        "outline": "#52525b",
+                        "on-secondary-container": "#a1a1aa",
+                        "on-tertiary-container": "#bbf7d0",
+                        "on-tertiary-fixed": "#003318",
+                        "inverse-surface": "#fafafa",
+                        "secondary": "#71717a",
+                        "secondary-container": "#27272a",
+                        "tertiary-container": "#065f46",
+                        "secondary-fixed-dim": "#71717a",
+                        "secondary-fixed": "#a1a1aa"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {},
+                    "fontFamily": {
+                        "headline": ["Geist"],
+                        "body": ["Geist"],
+                        "label": ["Geist"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Geist', sans-serif;
+            background-color: #09090b;
+            color: #fafafa;
+        }
+        .pb-safe {
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex flex-col md:flex-row">
+<!-- SideNavBar (Hidden on Mobile) -->
+<nav class="hidden md:flex flex-col h-screen py-4 gap-2 bg-[#0c0c0f] docked left-0 w-64 border-r border-[#27272a] flat no shadows font-['Geist'] text-sm tracking-normal z-50 fixed">
+<div class="px-6 mb-8 mt-2">
+<h1 class="text-xl font-black text-[#fafafa] tracking-tight">Obsidian</h1>
+<p class="text-[#a1a1aa] text-xs mt-1">Research Hub</p>
+<p class="text-[#a1a1aa] text-[10px] mt-0.5">Precision Workspace</p>
+</div>
+<div class="px-4 mb-4">
+<button class="w-full bg-primary text-on-primary py-2 px-4 rounded-md font-medium flex items-center justify-center gap-2 hover:bg-primary-fixed transition-colors">
+<span class="material-symbols-outlined text-[18px]">add</span>
+                New Project
+            </button>
+</div>
+<div class="flex-1 flex flex-col gap-1 px-3">
+<a class="flex items-center gap-3 px-3 py-2 rounded-md text-[#a1a1aa] hover:bg-[#18181b] hover:bg-[#27272a] hover:text-[#fafafa] active:scale-95 transition-transform duration-100" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="edit_note">edit_note</span>
+                Notes
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-md text-[#a78bfa] bg-[#18181b] font-semibold border-r-2 border-[#a78bfa] hover:bg-[#27272a] hover:text-[#fafafa] active:scale-95 transition-transform duration-100" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="library_books" data-weight="fill" style="font-variation-settings: 'FILL' 1;">library_books</span>
+                Collections
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-md text-[#a1a1aa] hover:bg-[#18181b] hover:bg-[#27272a] hover:text-[#fafafa] active:scale-95 transition-transform duration-100" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="explore">explore</span>
+                Discovery
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-md text-[#a1a1aa] hover:bg-[#18181b] hover:bg-[#27272a] hover:text-[#fafafa] active:scale-95 transition-transform duration-100" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="article">article</span>
+                Drafts
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-md text-[#a1a1aa] hover:bg-[#18181b] hover:bg-[#27272a] hover:text-[#fafafa] active:scale-95 transition-transform duration-100" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="slideshow">slideshow</span>
+                Present
+            </a>
+</div>
+<div class="mt-auto flex flex-col gap-1 px-3">
+<a class="flex items-center gap-3 px-3 py-2 rounded-md text-[#a1a1aa] hover:bg-[#18181b] hover:bg-[#27272a] hover:text-[#fafafa] active:scale-95 transition-transform duration-100" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="archive">archive</span>
+                Archive
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-md text-[#a1a1aa] hover:bg-[#18181b] hover:bg-[#27272a] hover:text-[#fafafa] active:scale-95 transition-transform duration-100" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="settings">settings</span>
+                Settings
+            </a>
+</div>
+</nav>
+<!-- TopAppBar (Web only) -->
+<header class="hidden md:flex justify-between items-center w-full px-6 h-14 bg-[#09090b] docked full-width top-0 border-b border-b border-[#27272a] flat no shadows fixed ml-64 z-40" style="width: calc(100% - 16rem);">
+<div class="flex items-center gap-6 flex-1">
+<h2 class="text-lg font-bold tracking-tighter text-[#fafafa]">Public Collections</h2>
+<div class="relative w-96 hidden lg:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-sm" data-icon="search">search</span>
+<input class="w-full bg-surface-container border border-outline-variant rounded-md py-1.5 pl-9 pr-4 text-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent placeholder:text-on-surface-variant" placeholder="Search boards, scholars, or roots..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-[#a1a1aa] hover:text-[#fafafa] transition-colors p-1.5 rounded-md hover:bg-[#18181b]">
+<span class="material-symbols-outlined text-[20px]" data-icon="present_to_all">present_to_all</span>
+</button>
+<button class="text-[#a1a1aa] hover:text-[#fafafa] transition-colors p-1.5 rounded-md hover:bg-[#18181b]">
+<span class="material-symbols-outlined text-[20px]" data-icon="settings">settings</span>
+</button>
+<div class="w-8 h-8 rounded-full overflow-hidden border border-outline-variant shrink-0 cursor-pointer">
+<img alt="User profile" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB6nn8mSvJGn68u84KvqTspslOfbM2gTIe64i4U23rmSW0--EDD1x3XTgJv5l-sK6iGOBzO2vTUItqAfm_RX08XaRbQU01-7zGKcALPTzHkLqiR-q_zgkIuN-k1FaMkhg5wZwVceloAbxrUqOaKGiwsGCzHCwDeSMOP8YS3c7eur4ZBgkXDP3pPeXWeBoXWQYMZB5QTqpu-UioeW19hS9UMB9YynNW9xtcR2wvARrvDdEHfyQTR95qtoosfrRSC6GEBZhjeDA-g0zt9"/>
+</div>
+</div>
+</header>
+<!-- TopAppBar (Mobile only) -->
+<header class="md:hidden flex justify-between items-center w-full px-4 h-14 bg-[#09090b] fixed top-0 w-full z-40 border-b border-outline-variant">
+<h2 class="text-lg font-bold tracking-tighter text-[#fafafa]">Obsidian</h2>
+<div class="flex gap-3">
+<button class="text-[#a1a1aa]">
+<span class="material-symbols-outlined" data-icon="search">search</span>
+</button>
+<div class="w-7 h-7 rounded-full overflow-hidden border border-outline-variant shrink-0">
+<img alt="User profile" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBk3x0DUijgRE08jyWVWdYf9yu6ndePPl_j8pVvfRI4-xFdJF8xLzcgRywkK4D4BDhk93C9XaZvVYmUbs7x7JlMw5cX1eKI0U6O0978kPPahQkIs4KhtN7PFf8NVOvOI61Rw8U5qCnjpVeBFOv3P9BjOrGXctkQdhlJnTRF_n_QgEvArj5jsc7HsIbeGNIw0TF47qHzHSPszLyXNzho9kTZYrfgJkzp1FBxBhVlxsJ9S1pMcPPVSLk-B3GOt7mSBwqBo-cpDEkAShZ2"/>
+</div>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="flex-1 w-full md:ml-64 pt-14 pb-20 md:pb-0 min-h-screen">
+<div class="max-w-5xl mx-auto p-4 md:p-8">
+<!-- Header Section -->
+<div class="mb-8 hidden md:block">
+<h1 class="text-2xl font-bold tracking-tight text-on-surface mb-2">Explore the Network</h1>
+<p class="text-on-surface-variant text-sm">Discover and fork semantic maps curated by the global research community.</p>
+</div>
+<!-- Feed Grid -->
+<div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
+<!-- Post Card 1 -->
+<article class="bg-surface-container rounded-xl border border-outline-variant p-5 flex flex-col gap-4 group hover:border-outline transition-colors duration-200">
+<!-- Header -->
+<div class="flex justify-between items-start">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full overflow-hidden border border-outline-variant">
+<img alt="Scholar portrait" class="w-full h-full object-cover" data-alt="portrait of a serious male scholar in dark clothing against a dark background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB4rtV0NJE7ZJjyCv9JzA9GfSDAEA8kTkwDMWztFIr8rKJ3XISNxu0fkNbEY1O_pqEj35WchqqZQloNWNXC83lxjQfR_M-RYMBYBo0g7cGLayBxo9R5YmUBrJEmiOlsuF1FxHsxxWXkfMcOlcDUJ-IDvmymP5LevKxnFyDaP6bQpLTQULdDwhibIn3r_92e9lffLcJl9X667tniHdEWixbnOPR_j2xCzKAlmvBlgfMOdvu1FB5q4VqHQZZMKkyhIUHCfKyskTW3mj5Q"/>
+</div>
+<div>
+<h3 class="font-medium text-on-surface leading-tight">Dr. Tariq Rahman</h3>
+<p class="text-xs text-on-surface-variant">Linguistics Dept. • 2h ago</p>
+</div>
+</div>
+<button class="text-xs font-medium text-primary hover:text-primary-fixed border border-primary/30 rounded-md px-3 py-1.5 hover:bg-primary/10 transition-colors flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="person_add">person_add</span>
+                            Follow
+                        </button>
+</div>
+<!-- Title & Content -->
+<div>
+<h2 class="text-xl font-bold text-on-surface tracking-tight mb-2 group-hover:text-primary transition-colors cursor-pointer">Structural Symmetry in Surah Al-Baqarah</h2>
+<p class="text-sm text-on-surface-variant leading-relaxed line-clamp-2">An exploration of the ring composition (chiastic structure) central to the chapter, highlighting the thematic pivot around the Qibla change.</p>
+</div>
+<!-- Preview Map (Image/Graphic) -->
+<div class="w-full h-48 bg-surface-container-lowest rounded-lg border border-outline-variant overflow-hidden relative group-hover:border-primary/50 transition-colors cursor-pointer">
+<!-- Abstract Graph Representation -->
+<div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-surface-variant to-background opacity-50"></div>
+<img alt="Semantic graph visualization" class="w-full h-full object-cover mix-blend-screen opacity-80" data-alt="abstract dark network graph visualization with glowing purple nodes and connecting lines on a near-black background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAIlkE7iYxBwofud41tXVHZeyLxsf3DNWWYhWg0oOf7O2CfP3-9M_H1HyZfiW9axIWIo9PBVagguVyQX2myS6NgNJ9TFVKn_LRFM5MWV4qyoq9PAx4N17xFA1q3iMrNmrFj85L5tznHIfYulCxGLZcS97eutya0FI4YIhEuX_VxzGdhH-TN1Uk1l5EUB2zicJPSmhT_PHs1ZZbOuL1w5nMxslhEY3oNabMNdM961VjjLja6NdXRknj_YdABFLSbMl85FHOZ9DmVc1Jo"/>
+<div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-background/50 backdrop-blur-sm">
+<span class="bg-surface-variant text-on-surface px-4 py-2 rounded-full text-sm font-medium border border-outline-variant flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px]" data-icon="zoom_in">zoom_in</span>
+                                View Full Map
+                            </span>
+</div>
+</div>
+<!-- Roots Tags -->
+<div class="flex flex-wrap gap-2">
+<span class="px-2.5 py-1 text-xs font-medium bg-surface-container-high text-on-surface-variant rounded-md border border-outline-variant hover:border-outline cursor-pointer transition-colors font-mono">Q-B-L</span>
+<span class="px-2.5 py-1 text-xs font-medium bg-surface-container-high text-on-surface-variant rounded-md border border-outline-variant hover:border-outline cursor-pointer transition-colors font-mono">W-S-T</span>
+<span class="px-2.5 py-1 text-xs font-medium bg-surface-container-high text-on-surface-variant rounded-md border border-outline-variant hover:border-outline cursor-pointer transition-colors font-mono">H-D-Y</span>
+</div>
+<!-- Actions -->
+<div class="flex items-center justify-between pt-4 border-t border-outline-variant mt-2">
+<div class="flex gap-4">
+<button class="flex items-center gap-1.5 text-on-surface-variant hover:text-primary transition-colors text-sm">
+<span class="material-symbols-outlined text-[18px]" data-icon="favorite">favorite</span>
+<span>124</span>
+</button>
+<button class="flex items-center gap-1.5 text-on-surface-variant hover:text-primary transition-colors text-sm">
+<span class="material-symbols-outlined text-[18px]" data-icon="chat_bubble">chat_bubble</span>
+<span>18</span>
+</button>
+</div>
+<button class="flex items-center gap-1.5 bg-primary text-on-primary px-4 py-1.5 rounded-md text-sm font-medium hover:bg-primary-fixed transition-colors">
+<span class="material-symbols-outlined text-[18px]" data-icon="call_split">call_split</span>
+                            Fork
+                        </button>
+</div>
+</article>
+<!-- Post Card 2 -->
+<article class="bg-surface-container rounded-xl border border-outline-variant p-5 flex flex-col gap-4 group hover:border-outline transition-colors duration-200">
+<!-- Header -->
+<div class="flex justify-between items-start">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full overflow-hidden border border-outline-variant">
+<img alt="Scholar portrait" class="w-full h-full object-cover" data-alt="portrait of a serious female scholar with glasses in dark clothing against a dark background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB0MKJ2nBUnm8GndVNT1XIzPMVlIEu3_kIqsoqlkVB7pBAVd4MSc_SNWgONw0ylyOhey2rlz2aUbtSHSedz1tFxC7a9aPGzuUKIM4Btj7On-J-79NaiTRciPvcJGBDnXw_AyfGzmpK4wKQ0Yv3ZaShSyIqIgHoyIkY5Hx26H95PaKczUpcx9eNLHDgik68h8Kob_9ME1pIAzX1KsLdlzArwvoqiPru-52Y2zoExHoF_QSyKOPZAtn01fsXjTOF1QmDlmqmS0xwcyPBL"/>
+</div>
+<div>
+<h3 class="font-medium text-on-surface leading-tight">Aisha Al-Farsi</h3>
+<p class="text-xs text-on-surface-variant">Independent Researcher • 5h ago</p>
+</div>
+</div>
+<button class="text-xs font-medium text-on-surface-variant hover:text-on-surface border border-outline-variant rounded-md px-3 py-1.5 hover:bg-surface-variant transition-colors flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="check">check</span>
+                            Following
+                        </button>
+</div>
+<!-- Title & Content -->
+<div>
+<h2 class="text-xl font-bold text-on-surface tracking-tight mb-2 group-hover:text-primary transition-colors cursor-pointer">Lexical Mapping of 'Rahmah' across Meccan Surahs</h2>
+<p class="text-sm text-on-surface-variant leading-relaxed line-clamp-2">Tracking the frequency and contextual usage of mercy-related terminology during the early Meccan period.</p>
+</div>
+<!-- Preview Map (Image/Graphic) -->
+<div class="w-full h-48 bg-surface-container-lowest rounded-lg border border-outline-variant overflow-hidden relative group-hover:border-primary/50 transition-colors cursor-pointer">
+<img alt="Data visualization" class="w-full h-full object-cover mix-blend-screen opacity-70 grayscale contrast-125" data-alt="dark abstract data visualization with intricate intersecting lines and subtle glowing points on black background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAcYxDTBmXT2buo_hm5WQkIzRX8ZfsFDjv-9o7yqmbexHt_6hz1RRwtnl3pEZSKEyG_MIGb-SfpdCnY_pbYqa9CnPEydC3CBPANNIVZyzICW7bXCnUKHA0Oqc9kvr_INqIYKLePi6PX6pupEv_Zq99WZvmqMEBLSK0EcVcBK89TAlN2JlW3LE_dPHKvjcixF_Vfrtkg_t2o2abFGs8wkm_uquombwOoIRVypNe-u9fHNgl9bMwFjiUYhUt4XIi6KMPqcZP8WVY-tNT3"/>
+<div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-background/50 backdrop-blur-sm">
+<span class="bg-surface-variant text-on-surface px-4 py-2 rounded-full text-sm font-medium border border-outline-variant flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px]" data-icon="zoom_in">zoom_in</span>
+                                View Full Map
+                            </span>
+</div>
+</div>
+<!-- Roots Tags -->
+<div class="flex flex-wrap gap-2">
+<span class="px-2.5 py-1 text-xs font-medium bg-surface-container-high text-on-surface-variant rounded-md border border-outline-variant hover:border-outline cursor-pointer transition-colors font-mono">R-H-M</span>
+<span class="px-2.5 py-1 text-xs font-medium bg-surface-container-high text-on-surface-variant rounded-md border border-outline-variant hover:border-outline cursor-pointer transition-colors font-mono">W-D-D</span>
+</div>
+<!-- Actions -->
+<div class="flex items-center justify-between pt-4 border-t border-outline-variant mt-2">
+<div class="flex gap-4">
+<button class="flex items-center gap-1.5 text-on-surface-variant hover:text-primary transition-colors text-sm">
+<span class="material-symbols-outlined text-[18px]" data-icon="favorite">favorite</span>
+<span>89</span>
+</button>
+<button class="flex items-center gap-1.5 text-on-surface-variant hover:text-primary transition-colors text-sm">
+<span class="material-symbols-outlined text-[18px]" data-icon="chat_bubble">chat_bubble</span>
+<span>5</span>
+</button>
+</div>
+<button class="flex items-center gap-1.5 bg-surface-variant border border-outline-variant text-on-surface px-4 py-1.5 rounded-md text-sm font-medium hover:bg-secondary-container transition-colors">
+<span class="material-symbols-outlined text-[18px]" data-icon="call_split">call_split</span>
+                            Fork
+                        </button>
+</div>
+</article>
+</div>
+</div>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full flex justify-around items-center px-4 py-3 pb-safe bg-[#09090b] border-t border-[#27272a] shadow-2xl z-50 font-['Geist'] text-[10px] font-medium tap-highlight-transparent">
+<a class="flex flex-col items-center justify-center text-[#a1a1aa] active:bg-[#27272a] rounded-xl px-3 py-1" href="#">
+<span class="material-symbols-outlined text-[24px] mb-1" data-icon="home">home</span>
+            Home
+        </a>
+<a class="flex flex-col items-center justify-center text-[#a78bfa] bg-[#18181b] rounded-xl px-3 py-1 active:bg-[#27272a]" href="#">
+<span class="material-symbols-outlined text-[24px] mb-1" data-icon="search" data-weight="fill" style="font-variation-settings: 'FILL' 1;">search</span>
+            Search
+        </a>
+<a class="flex flex-col items-center justify-center text-[#a1a1aa] active:bg-[#27272a] rounded-xl px-3 py-1" href="#">
+<span class="material-symbols-outlined text-[24px] mb-1" data-icon="history_edu">history_edu</span>
+            Drafts
+        </a>
+<a class="flex flex-col items-center justify-center text-[#a1a1aa] active:bg-[#27272a] rounded-xl px-3 py-1" href="#">
+<span class="material-symbols-outlined text-[24px] mb-1" data-icon="account_circle">account_circle</span>
+            Profile
+        </a>
+</nav>
+</body></html>

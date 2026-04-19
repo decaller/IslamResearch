@@ -3,6 +3,7 @@ import httpx
 from prefect import flow, get_run_logger
 from prefect.artifacts import create_markdown_artifact
 from tasks import classify, translate, transliterate, vectorize, tags, ner
+from flows.knowledge_graph import enrich_entity_recursive
 from database import fetch_job_details, save_to_db, save_transliteration
 
 @flow(name="Islamic Text Enrichment")
@@ -68,6 +69,13 @@ def process_single_job(sentence_job_id: str, lang: str = "id", scheme: str = "al
             tags=ner_tags,
             existing_metadata=job.get('sentence_metadata')
         )
+
+        # E. Knowledge Graph Integration (Recursive Enrichment)
+        for entity_tag in found_entities:
+            # entities are in format "TYPE:Name", split them
+            if ":" in entity_tag:
+                entity_name = entity_tag.split(":", 1)[1]
+                enrich_entity_recursive(canonical_name=entity_name, sentence_id=sentence_id)
 
         if tl_result:
             save_transliteration(

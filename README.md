@@ -69,6 +69,7 @@ Built with the best-in-class Laravel ecosystem and modern AI tools:
 Detailed guides are available to help you understand and extend the platform:
 
 -   📖 **[Architecture Blueprint](./docs/architecture.md)**: Deep dive into the system design, queue systems, and boundary integrations.
+-   🧠 **[Technology Assumptions](./docs/technology_assumptions.md)**: Rationale behind the stack and the "Scholar IDE" philosophy.
 -   🎨 **[Scholar IDE Workspace](./docs/ux/ide-workspace.md)**: The structural UI layouts and Redis tab states.
 -   🤖 **[AI Pipeline Details](./docs/pipeline.md)**: Details on the NLP models and stage-by-stage transformations.
 -   📦 **[Data Schema Logic](./docs/details.md)**: Extended reasoning into the DB schema, `ltree`, and vector index isolations.

@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Research Journey - IslamResearch</title>
+<!-- Google Fonts: Geist -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Configuration -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "surface-dim": "#0c0c0f",
+                        "tertiary": "#34d399",
+                        "on-tertiary-fixed-variant": "#047857",
+                        "on-primary-container": "#ede9fe",
+                        "on-error": "#1a0000",
+                        "on-background": "#fafafa",
+                        "surface": "#0c0c0f",
+                        "primary": "#a78bfa",
+                        "secondary-fixed-dim": "#71717a",
+                        "inverse-surface": "#fafafa",
+                        "on-surface-variant": "#a1a1aa",
+                        "secondary": "#71717a",
+                        "on-primary-fixed": "#2e1065",
+                        "surface-container-lowest": "#09090b",
+                        "on-tertiary": "#001a12",
+                        "surface-container-high": "#18181b",
+                        "on-tertiary-fixed": "#003318",
+                        "surface-container-highest": "#1e1e22",
+                        "on-surface": "#fafafa",
+                        "surface-variant": "#18181b",
+                        "on-primary-fixed-variant": "#5b21b6",
+                        "outline": "#52525b",
+                        "inverse-primary": "#5b21b6",
+                        "surface-bright": "#18181b",
+                        "background": "#09090b",
+                        "on-tertiary-container": "#bbf7d0",
+                        "surface-container-low": "#0f0f12",
+                        "surface-container": "#121215",
+                        "on-primary": "#0a0012",
+                        "on-secondary-fixed-variant": "#3f3f46",
+                        "on-secondary-container": "#a1a1aa",
+                        "surface-tint": "#a78bfa",
+                        "primary-fixed": "#ede9fe",
+                        "outline-variant": "#27272a",
+                        "on-secondary": "#09090b",
+                        "tertiary-container": "#065f46",
+                        "on-secondary-fixed": "#18181b",
+                        "secondary-fixed": "#a1a1aa",
+                        "tertiary-fixed-dim": "#6ee7b7",
+                        "on-error-container": "#fca5a5",
+                        "inverse-on-surface": "#09090b",
+                        "error": "#ef4444",
+                        "primary-fixed-dim": "#c4b5fd",
+                        "error-container": "#3b1111",
+                        "tertiary-fixed": "#bbf7d0",
+                        "secondary-container": "#27272a",
+                        "primary-container": "#7c3aed"
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    fontFamily: {
+                        "headline": ["Geist", "sans-serif"],
+                        "body": ["Geist", "sans-serif"],
+                        "label": ["Geist", "sans-serif"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Geist', sans-serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .icon-fill { font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        
+        /* Custom scrollbar for dark theme */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #09090b; }
+        ::-webkit-scrollbar-thumb { background: #27272a; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #52525b; }
+
+        /* Map specific styles */
+        .node-line {
+            background: repeating-linear-gradient(to bottom, #27272a, #27272a 4px, transparent 4px, transparent 8px);
+        }
+    </style>
+</head>
+<body class="bg-[#09090b] text-[#fafafa] flex h-screen overflow-hidden antialiased selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopAppBar (Mapped from JSON) -->
+<header class="fixed z-50 bg-[#09090b] text-[#a78bfa] font-geist tracking-tight text-[#fafafa] docked full-width top-0 border-b border-[#27272a] transition-colors duration-200 ease-in-out flex justify-between items-center px-4 h-14 w-full md:hidden">
+<div class="flex items-center gap-3">
+<span class="text-xl font-bold tracking-tighter text-[#fafafa]">IslamResearch</span>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-[#a1a1aa] hover:bg-[#18181b] hover:text-[#fafafa] p-1.5 rounded-full transition-colors duration-200 ease-in-out">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<button class="text-[#a1a1aa] hover:bg-[#18181b] hover:text-[#fafafa] p-1.5 rounded-full transition-colors duration-200 ease-in-out">
+<span class="material-symbols-outlined">account_circle</span>
+</button>
+</div>
+</header>
+<div class="flex w-full h-full pt-14 md:pt-0">
+<!-- SideNavBar (Mapped from JSON) -->
+<nav class="hidden md:flex bg-[#0c0c0f] text-[#a78bfa] font-geist text-sm docked h-full left-0 border-r border-[#27272a] transition-all duration-150 flex-col w-64 h-screen p-4 gap-2 z-40 shrink-0">
+<div class="mb-8 px-2 pt-2">
+<h1 class="font-bold text-[#fafafa] text-lg tracking-tight">Research Desk</h1>
+<p class="text-[#a1a1aa] text-xs mt-0.5">v1.0.4</p>
+</div>
+<div class="flex flex-col gap-1 flex-1">
+<!-- Active Navigation: "History" -->
+<a class="flex items-center gap-3 px-3 py-2 bg-[#27272a] text-[#a78bfa] rounded-lg transition-all duration-150 group" href="#">
+<span class="material-symbols-outlined icon-fill" data-icon="history">history</span>
+<span class="font-medium">History</span>
+</a>
+<!-- Inactive Navigation -->
+<a class="flex items-center gap-3 px-3 py-2 text-[#a1a1aa] hover:bg-[#18181b] hover:text-[#fafafa] rounded-lg transition-all duration-150 group" href="#">
+<span class="material-symbols-outlined" data-icon="bookmark">bookmark</span>
+<span class="font-medium">Bookmarks</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#a1a1aa] hover:bg-[#18181b] hover:text-[#fafafa] rounded-lg transition-all duration-150 group" href="#">
+<span class="material-symbols-outlined" data-icon="edit_note">edit_note</span>
+<span class="font-medium">Drafts</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#a1a1aa] hover:bg-[#18181b] hover:text-[#fafafa] rounded-lg transition-all duration-150 group" href="#">
+<span class="material-symbols-outlined" data-icon="folder_open">folder_open</span>
+<span class="font-medium">Collections</span>
+</a>
+</div>
+<div class="mt-auto border-t border-[#27272a] pt-4">
+<a class="flex items-center gap-3 px-3 py-2 text-[#a1a1aa] hover:bg-[#18181b] hover:text-[#fafafa] rounded-lg transition-all duration-150 group" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-medium">Settings</span>
+</a>
+</div>
+</nav>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col h-full bg-[#09090b] relative overflow-hidden">
+<!-- Desktop Top Navigation Shell (Conceptual Extension of SideNav context) -->
+<div class="hidden md:flex h-16 border-b border-[#27272a] bg-[#0c0c0f]/80 backdrop-blur-md px-8 items-center justify-between shrink-0 sticky top-0 z-30">
+<div class="flex items-center gap-6 text-sm font-medium">
+<a class="text-[#a1a1aa] hover:text-[#fafafa] transition-colors" href="#">Quran</a>
+<a class="text-[#a1a1aa] hover:text-[#fafafa] transition-colors" href="#">Lexicon</a>
+<a class="text-[#a1a1aa] hover:text-[#fafafa] transition-colors" href="#">Exegesis</a>
+<a class="text-[#a1a1aa] hover:text-[#fafafa] transition-colors" href="#">Habits</a>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-[#a1a1aa] hover:text-[#fafafa] transition-colors"><span class="material-symbols-outlined">search</span></button>
+<div class="w-8 h-8 rounded-full bg-surface-container border border-outline-variant flex items-center justify-center overflow-hidden">
+<span class="material-symbols-outlined text-sm text-secondary">person</span>
+</div>
+</div>
+</div>
+<!-- Canvas Header -->
+<header class="px-6 py-8 md:px-12 md:py-10 shrink-0 z-20">
+<div class="max-w-5xl mx-auto flex flex-col md:flex-row md:items-end justify-between gap-4">
+<div>
+<h2 class="text-3xl md:text-4xl font-headline font-semibold tracking-tight text-on-background mb-2">Research Journey</h2>
+<p class="text-on-surface-variant text-sm max-w-xl leading-relaxed">A topological map of your recent inquiries, semantic connections, and lexical roots explored across the texts.</p>
+</div>
+<div class="flex items-center gap-2">
+<button class="flex items-center gap-2 px-3 py-1.5 bg-surface-container border border-outline-variant rounded-md text-xs font-medium text-on-surface-variant hover:text-on-background hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined text-[16px]">filter_list</span>
+                            Filter Map
+                        </button>
+<button class="flex items-center gap-2 px-3 py-1.5 bg-surface-container border border-outline-variant rounded-md text-xs font-medium text-on-surface-variant hover:text-on-background hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined text-[16px]">zoom_in_map</span>
+                            Reset View
+                        </button>
+</div>
+</div>
+</header>
+<!-- Map / Timeline Canvas -->
+<div class="flex-1 overflow-y-auto px-6 md:px-12 pb-20 scroll-smooth relative z-10">
+<div class="max-w-5xl mx-auto relative pt-4">
+<!-- Vertical Spine (The continuous thread) -->
+<div class="absolute left-[27px] md:left-[39px] top-0 bottom-0 w-[2px] node-line z-0"></div>
+<!-- Journey Node 1 (Active/Recent) -->
+<div class="relative z-10 mb-16 flex gap-6 md:gap-8 group">
+<!-- Node Marker -->
+<div class="flex flex-col items-center shrink-0">
+<div class="w-14 h-14 rounded-full bg-surface-container-high border-2 border-primary flex items-center justify-center shadow-[0_0_20px_rgba(167,139,250,0.15)] mt-1 relative z-20">
+<span class="material-symbols-outlined text-primary" data-icon="memory">memory</span>
+</div>
+<span class="text-[10px] font-semibold text-primary uppercase tracking-widest mt-3">Current</span>
+</div>
+<!-- Content Area -->
+<div class="flex-1 pt-3">
+<div class="flex items-center gap-3 mb-4">
+<h3 class="text-lg font-medium text-on-background tracking-tight">Semantic Analysis of Sabr</h3>
+<span class="px-2 py-0.5 rounded text-[10px] font-medium bg-surface-container border border-outline-variant text-on-surface-variant">Session active</span>
+</div>
+<!-- Bento Grid for Explored Concepts -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 relative">
+<!-- Connecting lines behind cards -->
+<div class="absolute -left-10 top-8 w-10 h-px bg-outline-variant hidden md:block"></div>
+<!-- Card: Root -->
+<div class="bg-surface-container border border-outline-variant rounded-xl p-5 hover:border-primary/50 transition-colors duration-300 relative overflow-hidden group/card cursor-pointer">
+<div class="absolute top-0 right-0 p-4 opacity-10 group-hover/card:opacity-20 transition-opacity">
+<span class="material-symbols-outlined text-4xl">account_tree</span>
+</div>
+<div class="flex items-center gap-2 mb-3">
+<div class="w-6 h-6 rounded bg-primary/10 flex items-center justify-center">
+<span class="text-primary text-xs font-bold font-mono">R</span>
+</div>
+<span class="text-xs font-medium text-on-surface-variant uppercase tracking-wider">Root Explored</span>
+</div>
+<div class="text-2xl font-bold text-on-background mb-1 font-arabic text-right dir-rtl">ص - ب - ر</div>
+<p class="text-sm text-on-surface-variant">ṣād-bā-rā</p>
+<div class="mt-4 pt-4 border-t border-outline-variant flex items-center justify-between text-xs text-on-surface-variant">
+<span>103 occurrences</span>
+<span class="material-symbols-outlined text-[16px] text-primary">arrow_forward</span>
+</div>
+</div>
+<!-- Card: Verse Connection -->
+<div class="bg-surface-container border border-outline-variant rounded-xl p-5 hover:border-tertiary/50 transition-colors duration-300 cursor-pointer">
+<div class="flex items-center gap-2 mb-3">
+<div class="w-6 h-6 rounded bg-tertiary/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-tertiary text-[14px]">menu_book</span>
+</div>
+<span class="text-xs font-medium text-on-surface-variant uppercase tracking-wider">Key Verse</span>
+</div>
+<div class="text-lg font-medium text-on-background mb-2">Al-Baqarah 2:153</div>
+<p class="text-xs text-on-surface-variant leading-relaxed line-clamp-3">O you who have believed, seek help through patience and prayer. Indeed, Allah is with the patient.</p>
+<div class="mt-4 flex gap-2">
+<span class="px-2 py-1 rounded bg-surface-variant text-[10px] text-on-surface-variant border border-outline-variant">Tafsir linked</span>
+</div>
+</div>
+<!-- Card: Lexicon Entry -->
+<div class="bg-surface-container border border-outline-variant rounded-xl p-5 hover:border-outline transition-colors duration-300 md:col-span-2 lg:col-span-1">
+<div class="flex items-center gap-2 mb-3">
+<span class="material-symbols-outlined text-secondary text-[16px]">library_books</span>
+<span class="text-xs font-medium text-on-surface-variant uppercase tracking-wider">Lexicon (Lane)</span>
+</div>
+<p class="text-sm text-on-background italic mb-3">"He restrained, withheld, or strictly regulated, himself, or his soul..."</p>
+<div class="h-1 w-full bg-surface-variant rounded-full overflow-hidden">
+<div class="h-full bg-secondary w-1/3"></div>
+</div>
+<p class="text-[10px] text-on-surface-variant mt-2 text-right">Partial read</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Journey Node 2 -->
+<div class="relative z-10 mb-16 flex gap-6 md:gap-8 group opacity-80 hover:opacity-100 transition-opacity">
+<!-- Node Marker -->
+<div class="flex flex-col items-center shrink-0">
+<div class="w-14 h-14 rounded-full bg-surface-container border border-outline-variant flex items-center justify-center mt-1 relative z-20 group-hover:border-outline transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant">search_insights</span>
+</div>
+<span class="text-[10px] font-medium text-on-surface-variant uppercase tracking-widest mt-3">2 Days Ago</span>
+</div>
+<!-- Content Area -->
+<div class="flex-1 pt-3">
+<div class="flex items-center gap-3 mb-4">
+<h3 class="text-lg font-medium text-on-background tracking-tight">Themes of Light &amp; Guidance</h3>
+</div>
+<div class="flex flex-wrap gap-4 relative">
+<!-- Flowing connection line simulation -->
+<svg class="absolute -left-8 top-1/2 -translate-y-1/2 w-8 h-8 text-outline-variant hidden md:block" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M0 12h24" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"></path>
+</svg>
+<!-- Concept Pill -->
+<div class="px-4 py-3 bg-surface-container-low border border-outline-variant rounded-lg flex items-center gap-3 min-w-[200px]">
+<span class="material-symbols-outlined text-tertiary">wb_incandescent</span>
+<div>
+<p class="text-xs text-on-surface-variant uppercase tracking-wider">Theme Tag</p>
+<p class="text-sm font-medium text-on-background">An-Nur (The Light)</p>
+</div>
+</div>
+<!-- Verse Connection -->
+<div class="px-4 py-3 bg-surface-container-low border border-outline-variant rounded-lg flex items-center gap-3 min-w-[250px]">
+<div class="w-8 h-8 rounded bg-surface-variant flex items-center justify-center shrink-0 border border-outline-variant">
+<span class="text-xs font-bold text-on-surface">24:35</span>
+</div>
+<div>
+<p class="text-xs text-on-surface-variant">Deep dive analysis</p>
+<p class="text-sm font-medium text-on-background">Ayat an-Nur</p>
+</div>
+</div>
+<!-- Note Connection -->
+<div class="px-4 py-3 bg-surface-container-low border border-outline-variant border-dashed rounded-lg flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary">edit_document</span>
+<p class="text-sm font-medium text-on-background">Draft: Metaphors of Illumination</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Journey Node 3 (Collapsed state example) -->
+<div class="relative z-10 flex gap-6 md:gap-8 opacity-60">
+<div class="flex flex-col items-center shrink-0">
+<div class="w-14 h-14 rounded-full bg-surface-container border border-outline-variant flex items-center justify-center mt-1 relative z-20">
+<span class="material-symbols-outlined text-outline">history</span>
+</div>
+<span class="text-[10px] font-medium text-outline uppercase tracking-widest mt-3">Last Week</span>
+</div>
+<div class="flex-1 pt-4">
+<div class="px-5 py-4 bg-surface-container-lowest border border-outline-variant rounded-xl flex items-center justify-between cursor-pointer hover:bg-surface-container-low transition-colors">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-outline">folder_open</span>
+<div>
+<h4 class="text-sm font-medium text-on-surface-variant">Collection: Prophets in Surah Al-Anbiya</h4>
+<p class="text-xs text-outline mt-0.5">12 items explored</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline">expand_more</span>
+</div>
+</div>
+</div>
+<!-- End of Timeline fade -->
+<div class="absolute bottom-0 left-[27px] md:left-[39px] w-[2px] h-32 bg-gradient-to-t from-[#09090b] to-transparent z-0"></div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

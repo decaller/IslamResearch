@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Angelology - Scholarly Corpus Hub</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "inverse-on-surface": "#09090b",
+                        "on-primary-fixed": "#2e1065",
+                        "tertiary-fixed-dim": "#6ee7b7",
+                        "on-tertiary": "#001a12",
+                        "error": "#ef4444",
+                        "on-tertiary-container": "#bbf7d0",
+                        "on-surface-variant": "#a1a1aa",
+                        "on-background": "#fafafa",
+                        "on-secondary-fixed-variant": "#3f3f46",
+                        "inverse-primary": "#5b21b6",
+                        "surface-container-high": "#18181b",
+                        "primary-fixed": "#ede9fe",
+                        "on-secondary-fixed": "#18181b",
+                        "on-primary-fixed-variant": "#5b21b6",
+                        "surface-container": "#121215",
+                        "tertiary": "#34d399",
+                        "outline-variant": "#27272a",
+                        "tertiary-fixed": "#bbf7d0",
+                        "on-surface": "#fafafa",
+                        "surface-container-highest": "#1e1e22",
+                        "on-tertiary-fixed-variant": "#047857",
+                        "surface-container-low": "#0f0f12",
+                        "secondary-container": "#27272a",
+                        "on-primary-container": "#ede9fe",
+                        "on-primary": "#0a0012",
+                        "surface-bright": "#18181b",
+                        "on-error-container": "#fca5a5",
+                        "tertiary-container": "#065f46",
+                        "surface-variant": "#18181b",
+                        "on-secondary": "#09090b",
+                        "surface-tint": "#a78bfa",
+                        "on-tertiary-fixed": "#003318",
+                        "background": "#09090b",
+                        "surface": "#0c0c0f",
+                        "inverse-surface": "#fafafa",
+                        "secondary-fixed-dim": "#71717a",
+                        "secondary": "#71717a",
+                        "surface-container-lowest": "#09090b",
+                        "primary-fixed-dim": "#c4b5fd",
+                        "primary": "#a78bfa",
+                        "surface-dim": "#0c0c0f",
+                        "primary-container": "#7c3aed",
+                        "error-container": "#3b1111",
+                        "secondary-fixed": "#a1a1aa",
+                        "outline": "#52525b",
+                        "on-secondary-container": "#a1a1aa",
+                        "on-error": "#1a0000"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Geist", "sans-serif"],
+                        "body": ["Geist", "sans-serif"],
+                        "label": ["Geist", "sans-serif"]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-background text-on-surface font-body antialiased min-h-screen flex flex-col md:flex-row">
+<!-- SideNavBar (Desktop) -->
+<nav class="hidden md:flex fixed left-0 top-0 h-screen w-64 flex-col py-4 z-40 bg-[#0c0c0f] border-r border-[#27272a] text-sm antialiased font-['Geist']">
+<div class="px-6 mb-8 flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-primary-container flex items-center justify-center text-on-primary-container font-bold shadow-sm">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">dataset</span>
+</div>
+<div>
+<div class="text-lg font-bold text-[#fafafa] tracking-tight">Obsidian Scholar</div>
+<div class="text-xs text-[#a1a1aa]">Core Workspace</div>
+</div>
+</div>
+<div class="px-4 mb-4">
+<button class="w-full bg-primary hover:bg-primary-fixed-dim text-on-primary py-2 px-4 rounded-md font-medium transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[18px]">add</span>
+                New Entry
+            </button>
+</div>
+<ul class="flex-1 px-3 space-y-1 overflow-y-auto">
+<li>
+<a class="flex items-center gap-3 px-3 py-2 rounded-md text-[#a1a1aa] hover:text-[#fafafa] hover:bg-[#18181b] transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">folder_open</span>
+                    Workspace
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-3 py-2 rounded-md text-[#a1a1aa] hover:text-[#fafafa] hover:bg-[#18181b] transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">auto_stories</span>
+                    Library
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-3 py-2 rounded-md bg-[#27272a] text-[#a78bfa] font-semibold border-l-2 border-[#a78bfa] translate-x-1 transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">sell</span>
+                    Tags
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-3 py-2 rounded-md text-[#a1a1aa] hover:text-[#fafafa] hover:bg-[#18181b] transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">category</span>
+                    Categories
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-3 py-2 rounded-md text-[#a1a1aa] hover:text-[#fafafa] hover:bg-[#18181b] transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">inventory_2</span>
+                    Archives
+                </a>
+</li>
+</ul>
+<div class="mt-auto px-3 border-t border-outline-variant pt-4 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 rounded-md text-on-surface-variant hover:text-on-surface hover:bg-surface-variant transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">help_outline</span>
+                Help
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-md text-on-surface-variant hover:text-on-surface hover:bg-surface-variant transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">sync</span>
+                Sync
+            </a>
+<div class="mt-4 px-3 flex items-center gap-3">
+<img alt="Project Emblem" class="w-8 h-8 rounded-full border border-outline-variant" data-alt="Small avatar of a male researcher in dark lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCKl_gIym_IHyWRRshz9Ws8gGOwWwnKclHlIeV83muBKtbqHYlJZ6WyHqyNY3nhZlH_ZcYdGjMKw7TjAYaC4LYBucCAbYgKlZdDcEDX_fG4d5huDwUao95sqic8M5YGkp42SvuJbsHwR6rYyYclT3ZCp1AEmn9hTD7MVWafFjFkYNocvuc-87DGqPR_1Dt97Cq9tewdu2J8agMJVZfovIcF2a1pgt7Pbf4mHV840hhxbbF8PwXkC0_JAdOePacUBXc_BZSKyrtpUqKi"/>
+<div class="text-xs">
+<p class="font-medium text-on-surface">Admin User</p>
+<p class="text-on-surface-variant">Sync Active</p>
+</div>
+</div>
+</div>
+</nav>
+<!-- TopNavBar (Mobile only for main nav, but used as header for Desktop) -->
+<header class="md:hidden flex justify-between items-center w-full px-4 h-14 bg-[#09090b] z-50 border-b border-[#27272a] sticky top-0">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">dataset</span>
+<span class="font-['Geist'] tracking-tight text-[#fafafa] text-lg font-black tracking-tighter">Obsidian Scholar</span>
+</div>
+<div class="flex items-center gap-4 text-on-surface-variant">
+<button class="hover:text-on-surface"><span class="material-symbols-outlined">search</span></button>
+<button class="hover:text-on-surface"><span class="material-symbols-outlined">menu</span></button>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="flex-1 md:ml-64 flex flex-col h-screen overflow-hidden">
+<!-- Entity Header & Tabs -->
+<div class="bg-surface border-b border-outline-variant shrink-0">
+<div class="px-6 py-4 flex justify-between items-start">
+<div>
+<div class="flex items-center gap-2 mb-1">
+<span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-surface-variant text-on-surface-variant border border-outline-variant">Tag Entity</span>
+<span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-primary/10 text-primary border border-primary/20">Theology</span>
+</div>
+<h1 class="text-3xl font-headline font-semibold tracking-tight text-on-surface flex items-center gap-3">
+                        Angelology
+                        <span class="material-symbols-outlined text-primary cursor-pointer hover:text-primary-fixed-dim" title="Bookmark Entity">bookmark</span>
+</h1>
+<p class="text-sm text-on-surface-variant mt-1 max-w-2xl">Study of angelic beings, their hierarchies, roles, and interactions with the physical realm as documented across the corpus.</p>
+</div>
+<div class="flex gap-2">
+<button class="px-3 py-1.5 rounded-md border border-outline-variant text-sm font-medium text-on-surface hover:bg-surface-variant transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">share</span>
+                        Share
+                    </button>
+<button class="px-3 py-1.5 rounded-md bg-primary text-on-primary text-sm font-medium hover:bg-primary-fixed-dim transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+                        Edit Wiki
+                    </button>
+</div>
+</div>
+<!-- Page Level Tabs -->
+<div class="px-6 flex gap-6 border-t border-outline-variant/50">
+<button class="py-3 text-sm font-medium text-primary border-b-2 border-primary">General</button>
+<button class="py-3 text-sm font-medium text-on-surface-variant hover:text-on-surface transition-colors border-b-2 border-transparent hover:border-outline-variant">Hierarchy</button>
+<button class="py-3 text-sm font-medium text-on-surface-variant hover:text-on-surface transition-colors border-b-2 border-transparent hover:border-outline-variant">Corpus References <span class="ml-1 px-1.5 py-0.5 rounded-full bg-surface-variant text-[10px]">142</span></button>
+<button class="py-3 text-sm font-medium text-on-surface-variant hover:text-on-surface transition-colors border-b-2 border-transparent hover:border-outline-variant">Discussion</button>
+</div>
+</div>
+<!-- Split View Layout -->
+<div class="flex-1 flex flex-col lg:flex-row overflow-hidden">
+<!-- LEFT PANE: Wiki Summary (40%) -->
+<div class="w-full lg:w-[40%] bg-surface-container-lowest border-r border-outline-variant overflow-y-auto custom-scrollbar">
+<div class="p-6 space-y-8">
+<!-- Intro Card -->
+<div class="bg-surface-container rounded-lg border border-outline-variant p-5">
+<h2 class="text-sm font-semibold uppercase tracking-wider text-on-surface-variant mb-3 flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">info</span>
+                            Overview
+                        </h2>
+<div class="prose prose-invert prose-sm max-w-none text-on-surface/90 leading-relaxed">
+<p>In Islamic theology, angels (<a class="text-primary hover:underline font-medium portal-word" href="#">Malā'ikah</a>) are celestial beings created from <a class="text-primary hover:underline font-medium portal-word" href="#">Nūr</a> (light). They are entirely obedient to God and execute various cosmic, earthly, and personal duties.</p>
+<p class="mt-2">Unlike jinn or humans, they do not possess free will in the sense of choosing to disobey; their nature is inherently submitted to the divine command.</p>
+</div>
+</div>
+<!-- Key Entities Bento -->
+<div>
+<h3 class="text-sm font-semibold text-on-surface mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">group_work</span>
+                            Prominent Archangels
+                        </h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+<div class="bg-surface-container-low rounded-md border border-outline-variant p-4 hover:border-primary/50 transition-colors cursor-pointer group">
+<div class="flex justify-between items-start mb-2">
+<h4 class="font-medium text-on-surface group-hover:text-primary transition-colors">Jibrīl</h4>
+<span class="text-[10px] px-1.5 py-0.5 rounded bg-surface-variant text-on-surface-variant">Gabriel</span>
+</div>
+<p class="text-xs text-on-surface-variant line-clamp-2">The angel of revelation, tasked with delivering divine messages to the prophets.</p>
+</div>
+<div class="bg-surface-container-low rounded-md border border-outline-variant p-4 hover:border-primary/50 transition-colors cursor-pointer group">
+<div class="flex justify-between items-start mb-2">
+<h4 class="font-medium text-on-surface group-hover:text-primary transition-colors">Mīkā'īl</h4>
+<span class="text-[10px] px-1.5 py-0.5 rounded bg-surface-variant text-on-surface-variant">Michael</span>
+</div>
+<p class="text-xs text-on-surface-variant line-clamp-2">Responsible for sustenance, rain, and the provision of earthly needs.</p>
+</div>
+<div class="bg-surface-container-low rounded-md border border-outline-variant p-4 hover:border-primary/50 transition-colors cursor-pointer group">
+<div class="flex justify-between items-start mb-2">
+<h4 class="font-medium text-on-surface group-hover:text-primary transition-colors">Isrāfīl</h4>
+<span class="text-[10px] px-1.5 py-0.5 rounded bg-surface-variant text-on-surface-variant">Raphael</span>
+</div>
+<p class="text-xs text-on-surface-variant line-clamp-2">The angel designated to blow the trumpet signaling the Day of Resurrection.</p>
+</div>
+<div class="bg-surface-container-low rounded-md border border-outline-variant p-4 hover:border-primary/50 transition-colors cursor-pointer group">
+<div class="flex justify-between items-start mb-2">
+<h4 class="font-medium text-on-surface group-hover:text-primary transition-colors">ʿIzrāʾīl</h4>
+<span class="text-[10px] px-1.5 py-0.5 rounded bg-surface-variant text-on-surface-variant">Azrael</span>
+</div>
+<p class="text-xs text-on-surface-variant line-clamp-2">The Angel of Death, responsible for parting the soul from the body.</p>
+</div>
+</div>
+</div>
+<!-- Roles List -->
+<div>
+<h3 class="text-sm font-semibold text-on-surface mb-3 border-b border-outline-variant pb-2">Classifications &amp; Roles</h3>
+<ul class="space-y-2">
+<li class="flex items-start gap-3 p-2 rounded hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined text-primary text-[18px] mt-0.5">edit_document</span>
+<div>
+<span class="text-sm font-medium text-on-surface block">Kirāman Kātibīn</span>
+<span class="text-xs text-on-surface-variant">The honorable scribes recording human deeds.</span>
+</div>
+</li>
+<li class="flex items-start gap-3 p-2 rounded hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined text-primary text-[18px] mt-0.5">shield</span>
+<div>
+<span class="text-sm font-medium text-on-surface block">Mu'aqqibat</span>
+<span class="text-xs text-on-surface-variant">Guardian angels protecting individuals from harm.</span>
+</div>
+</li>
+<li class="flex items-start gap-3 p-2 rounded hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined text-primary text-[18px] mt-0.5">admin_panel_settings</span>
+<div>
+<span class="text-sm font-medium text-on-surface block">Zabāniyah</span>
+<span class="text-xs text-on-surface-variant">The keepers and administrators of Hell (Jahannam).</span>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<!-- RIGHT PANE: Corpus Feed (60%) -->
+<div class="w-full lg:w-[60%] bg-background flex flex-col h-full">
+<!-- Feed Tools/Filters -->
+<div class="p-4 border-b border-outline-variant bg-surface-container-low flex items-center justify-between shrink-0">
+<div class="flex items-center gap-2">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[18px]">search</span>
+<input class="bg-surface-container border border-outline-variant rounded-md py-1.5 pl-9 pr-3 text-sm text-on-surface focus:border-primary focus:ring-1 focus:ring-primary w-64 placeholder-on-surface-variant/50" placeholder="Search references..." type="text"/>
+</div>
+<button class="p-1.5 rounded border border-outline-variant text-on-surface-variant hover:text-on-surface hover:bg-surface-variant" title="Advanced Filters">
+<span class="material-symbols-outlined text-[18px]">tune</span>
+</button>
+</div>
+<div class="flex gap-2">
+<select class="bg-surface-container border border-outline-variant rounded-md py-1 pr-8 pl-3 text-xs text-on-surface-variant focus:border-primary">
+<option>Source: All</option>
+<option>Quran Only</option>
+<option>Hadith Only</option>
+</select>
+<select class="bg-surface-container border border-outline-variant rounded-md py-1 pr-8 pl-3 text-xs text-on-surface-variant focus:border-primary">
+<option>Sort: Chronological</option>
+<option>Sort: Relevance</option>
+</select>
+</div>
+</div>
+<!-- Live Feed List -->
+<div class="flex-1 overflow-y-auto p-4 space-y-4 custom-scrollbar bg-surface-container-lowest">
+<!-- Card 1 -->
+<div class="bg-surface rounded-lg border border-outline-variant p-4 hover:border-primary/30 transition-colors">
+<div class="flex justify-between items-start mb-3">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-tertiary"></span>
+<span class="text-xs font-semibold tracking-wide text-on-surface-variant uppercase">Quran 2:97</span>
+</div>
+<div class="flex gap-1">
+<button class="text-on-surface-variant hover:text-primary"><span class="material-symbols-outlined text-[16px]">content_copy</span></button>
+<button class="text-on-surface-variant hover:text-primary"><span class="material-symbols-outlined text-[16px]">bookmark_border</span></button>
+</div>
+</div>
+<div class="mb-4">
+<p class="text-lg font-arabic text-right mb-2 text-on-surface leading-loose" dir="rtl">
+                                قُلْ مَن كَانَ عَدُوًّا لِّـ<span class="text-primary font-bold">جِبْرِيلَ</span> فَإِنَّهُ نَزَّلَهُ عَلَىٰ قَلْبِكَ بِإِذْنِ اللَّهِ مُصَدِّقًا لِّمَا بَيْنَ يَدَيْهِ وَهُدًى وَبُشْرَىٰ لِلْمُؤْمِنِينَ
+                            </p>
+<p class="text-sm text-on-surface-variant font-body">
+                                Say, "Whoever is an enemy to <a class="text-primary hover:underline portal-word" href="#">Gabriel</a> - it is [none but] he who has brought the Qur'an down upon your heart, [O Muhammad], by permission of Allah, confirming that which was before it and as guidance and good tidings for the believers."
+                            </p>
+</div>
+<div class="flex flex-wrap gap-2">
+<span class="px-2 py-1 rounded bg-surface-variant text-[10px] text-on-surface-variant border border-outline-variant">Revelation</span>
+<span class="px-2 py-1 rounded bg-surface-variant text-[10px] text-on-surface-variant border border-outline-variant">Jibril</span>
+<span class="px-2 py-1 rounded bg-surface-variant text-[10px] text-on-surface-variant border border-outline-variant flex items-center gap-1"><span class="material-symbols-outlined text-[12px]">forum</span> 3 Notes</span>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="bg-surface rounded-lg border border-outline-variant p-4 hover:border-primary/30 transition-colors">
+<div class="flex justify-between items-start mb-3">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-blue-400"></span>
+<span class="text-xs font-semibold tracking-wide text-on-surface-variant uppercase">Sahih al-Bukhari 3211</span>
+</div>
+<div class="flex gap-1">
+<button class="text-on-surface-variant hover:text-primary"><span class="material-symbols-outlined text-[16px]">content_copy</span></button>
+<button class="text-on-surface-variant hover:text-primary"><span class="material-symbols-outlined text-[16px]">bookmark_border</span></button>
+</div>
+</div>
+<div class="mb-4">
+<p class="text-sm text-on-surface-variant font-body italic mb-2">Narrated 'Aisha:</p>
+<p class="text-sm text-on-surface font-body">
+                                The Prophet (ﷺ) said, "<a class="text-primary hover:underline portal-word" href="#">Angels</a> were created from light, Jinns were created from a smokeless flame of fire, and Adam was created from that which you have been told (i.e. sounding clay like the clay of pottery)."
+                            </p>
+</div>
+<div class="flex flex-wrap gap-2">
+<span class="px-2 py-1 rounded bg-surface-variant text-[10px] text-on-surface-variant border border-outline-variant">Creation</span>
+<span class="px-2 py-1 rounded bg-surface-variant text-[10px] text-on-surface-variant border border-outline-variant">Nature of Entities</span>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="bg-surface rounded-lg border border-outline-variant p-4 hover:border-primary/30 transition-colors">
+<div class="flex justify-between items-start mb-3">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-tertiary"></span>
+<span class="text-xs font-semibold tracking-wide text-on-surface-variant uppercase">Quran 82:10-12</span>
+</div>
+<div class="flex gap-1">
+<button class="text-on-surface-variant hover:text-primary"><span class="material-symbols-outlined text-[16px]">content_copy</span></button>
+<button class="text-on-surface-variant hover:text-primary"><span class="material-symbols-outlined text-[16px]">bookmark_border</span></button>
+</div>
+</div>
+<div class="mb-4">
+<p class="text-lg font-arabic text-right mb-2 text-on-surface leading-loose" dir="rtl">
+                                وَإِنَّ عَلَيْكُمْ لَـ<span class="text-primary font-bold">حَافِظِينَ</span> ۝ كِرَامًا <span class="text-primary font-bold">كَاتِبِينَ</span> ۝ يَعْلَمُونَ مَا تَفْعَلُونَ
+                            </p>
+<p class="text-sm text-on-surface-variant font-body">
+                                And indeed, [appointed] over you are <a class="text-primary hover:underline portal-word" href="#">keepers</a>, Noble and <a class="text-primary hover:underline portal-word" href="#">recording</a>; They know whatever you do.
+                            </p>
+</div>
+<div class="flex flex-wrap gap-2">
+<span class="px-2 py-1 rounded bg-surface-variant text-[10px] text-on-surface-variant border border-outline-variant">Recording Deeds</span>
+<span class="px-2 py-1 rounded bg-surface-variant text-[10px] text-on-surface-variant border border-outline-variant">Kiraman Katibin</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<style>
+        /* Custom Scrollbar for dark theme */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #09090b; 
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #27272a; 
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #3f3f46; 
+        }
+        
+        /* Font for Arabic text if available, fallback to sans */
+        .font-arabic {
+            font-family: "Amiri", "Traditional Arabic", serif;
+        }
+    </style>
+</body></html>

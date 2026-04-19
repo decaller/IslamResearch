@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Scholarly IDE - Command Center</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "background": "#09090b",
+                        "surface": "#0c0c0f",
+                        "inverse-surface": "#fafafa",
+                        "secondary-fixed-dim": "#71717a",
+                        "secondary": "#71717a",
+                        "surface-container-lowest": "#09090b",
+                        "primary-fixed-dim": "#c4b5fd",
+                        "primary": "#a78bfa",
+                        "surface-dim": "#0c0c0f",
+                        "primary-container": "#7c3aed",
+                        "error-container": "#3b1111",
+                        "secondary-fixed": "#a1a1aa",
+                        "outline": "#52525b",
+                        "on-secondary-container": "#a1a1aa",
+                        "on-error": "#1a0000",
+                        "surface-container-low": "#0f0f12",
+                        "secondary-container": "#27272a",
+                        "on-primary-container": "#ede9fe",
+                        "on-primary": "#0a0012",
+                        "surface-bright": "#18181b",
+                        "on-error-container": "#fca5a5",
+                        "tertiary-container": "#065f46",
+                        "surface-variant": "#18181b",
+                        "on-secondary": "#09090b",
+                        "surface-tint": "#a78bfa",
+                        "on-tertiary-fixed": "#003318",
+                        "surface-container-high": "#18181b",
+                        "primary-fixed": "#ede9fe",
+                        "on-secondary-fixed": "#18181b",
+                        "on-primary-fixed-variant": "#5b21b6",
+                        "surface-container": "#121215",
+                        "tertiary": "#34d399",
+                        "outline-variant": "#27272a",
+                        "tertiary-fixed": "#bbf7d0",
+                        "on-surface": "#fafafa",
+                        "surface-container-highest": "#1e1e22",
+                        "on-tertiary-fixed-variant": "#047857",
+                        "inverse-on-surface": "#09090b",
+                        "on-primary-fixed": "#2e1065",
+                        "tertiary-fixed-dim": "#6ee7b7",
+                        "on-tertiary": "#001a12",
+                        "error": "#ef4444",
+                        "on-tertiary-container": "#bbf7d0",
+                        "on-surface-variant": "#a1a1aa",
+                        "on-background": "#fafafa",
+                        "on-secondary-fixed-variant": "#3f3f46",
+                        "inverse-primary": "#5b21b6"
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    fontFamily: {
+                        "headline": ["Geist", "sans-serif"],
+                        "body": ["Geist", "sans-serif"],
+                        "label": ["Geist", "sans-serif"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Geist', sans-serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+    </style>
+</head>
+<body class="bg-background text-on-background h-screen flex overflow-hidden">
+<!-- TopNavBar (Horizontal shell) -->
+<nav class="fixed top-0 w-full z-50 bg-[#09090b] text-violet-400 font-geist tracking-tight antialiased border-b border-zinc-800 flex justify-between items-center px-4 h-12 transition-all duration-150 ease-in-out">
+<div class="flex items-center gap-6 h-full">
+<span class="text-lg font-black text-violet-400 tracking-tighter">Obsidian IDE</span>
+<!-- Contextual Top Nav (Hypothetical for this view) -->
+<div class="hidden md:flex h-full items-center gap-4">
+<div class="h-full flex items-center text-zinc-400 hover:text-zinc-100 transition-colors cursor-pointer px-2">File</div>
+<div class="h-full flex items-center text-zinc-400 hover:text-zinc-100 transition-colors cursor-pointer px-2">Edit</div>
+<div class="h-full flex items-center text-zinc-400 hover:text-zinc-100 transition-colors cursor-pointer px-2">View</div>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<button class="w-8 h-8 flex items-center justify-center text-zinc-400 hover:text-zinc-100 hover:bg-zinc-900 rounded transition-colors">
+<span class="material-symbols-outlined text-[20px]">account_tree</span>
+</button>
+<button class="w-8 h-8 flex items-center justify-center text-zinc-400 hover:text-zinc-100 hover:bg-zinc-900 rounded transition-colors">
+<span class="material-symbols-outlined text-[20px]">sync</span>
+</button>
+<button class="w-8 h-8 flex items-center justify-center text-zinc-400 hover:text-zinc-100 hover:bg-zinc-900 rounded transition-colors">
+<span class="material-symbols-outlined text-[20px]">settings</span>
+</button>
+</div>
+</nav>
+<!-- SideNavBar (Left Command Center) -->
+<aside class="fixed left-0 top-12 h-[calc(100vh-3rem)] w-72 bg-[#0c0c0f] border-r border-zinc-800 flex flex-col font-geist text-sm tracking-tight z-40 overflow-hidden">
+<!-- Sidebar Header (Search/Command) -->
+<div class="p-4 border-b border-zinc-800/50 shrink-0">
+<div class="flex items-center justify-between mb-4">
+<div>
+<h2 class="text-zinc-100 font-bold text-base">Research</h2>
+<p class="text-zinc-500 text-xs">v1.0.4</p>
+</div>
+<button class="w-6 h-6 flex items-center justify-center text-zinc-400 hover:text-zinc-100 rounded bg-surface-container hover:bg-surface-container-highest transition-colors border border-outline-variant">
+<span class="material-symbols-outlined text-[16px]">add</span>
+</button>
+</div>
+<div class="relative group">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[18px] text-zinc-500 group-focus-within:text-violet-400 transition-colors">search</span>
+<input class="w-full bg-surface-container border border-outline-variant rounded pl-9 pr-3 py-2 text-sm text-zinc-200 placeholder-zinc-500 focus:outline-none focus:ring-1 focus:ring-violet-400 focus:border-violet-400 transition-all" placeholder="Command or Search..." type="text"/>
+<div class="absolute right-2 top-1/2 -translate-y-1/2 flex gap-1">
+<kbd class="px-1.5 py-0.5 text-[10px] bg-surface-container-highest text-zinc-400 border border-outline-variant rounded font-mono">⌘</kbd>
+<kbd class="px-1.5 py-0.5 text-[10px] bg-surface-container-highest text-zinc-400 border border-outline-variant rounded font-mono">K</kbd>
+</div>
+</div>
+</div>
+<!-- Main Scrollable Area -->
+<div class="flex-1 overflow-y-auto overflow-x-hidden p-2 space-y-6 scrollbar-hide">
+<!-- Global Nav (Shared Components mapped here structurally) -->
+<div class="space-y-1">
+<a class="bg-zinc-800/50 text-violet-400 border-l-2 border-violet-400 px-4 py-2 flex items-center gap-3 active:scale-[0.98] transition-transform w-full" href="#">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">folder_copy</span>
+<span class="font-medium">Explorer</span>
+</a>
+<a class="text-zinc-500 px-4 py-2 flex items-center gap-3 hover:bg-zinc-800 hover:text-zinc-200 active:scale-[0.98] transition-all w-full border-l-2 border-transparent" href="#">
+<span class="material-symbols-outlined text-[18px]">history_edu</span>
+<span>History</span>
+</a>
+<a class="text-zinc-500 px-4 py-2 flex items-center gap-3 hover:bg-zinc-800 hover:text-zinc-200 active:scale-[0.98] transition-all w-full border-l-2 border-transparent" href="#">
+<span class="material-symbols-outlined text-[18px]">travel_explore</span>
+<span>Workspace</span>
+</a>
+</div>
+<!-- Static Shortcuts -->
+<div class="px-2">
+<div class="text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-2 px-2 flex items-center justify-between">
+<span>Library</span>
+<span class="material-symbols-outlined text-[14px]">library_books</span>
+</div>
+<div class="space-y-0.5">
+<button class="w-full text-left px-2 py-1.5 text-zinc-400 hover:text-zinc-100 hover:bg-surface-container rounded flex items-center gap-2 group transition-colors">
+<span class="material-symbols-outlined text-[16px] text-zinc-500 group-hover:text-violet-400">menu_book</span>
+<span class="truncate">Quranic Corpus</span>
+</button>
+<button class="w-full text-left px-2 py-1.5 text-zinc-400 hover:text-zinc-100 hover:bg-surface-container rounded flex items-center gap-2 group transition-colors">
+<span class="material-symbols-outlined text-[16px] text-zinc-500 group-hover:text-emerald-400">library_books</span>
+<span class="truncate">Hadith Collections</span>
+</button>
+<button class="w-full text-left px-2 py-1.5 text-zinc-400 hover:text-zinc-100 hover:bg-surface-container rounded flex items-center gap-2 group transition-colors">
+<span class="material-symbols-outlined text-[16px] text-zinc-500 group-hover:text-blue-400">translate</span>
+<span class="truncate">Lexicon &amp; Roots</span>
+</button>
+</div>
+</div>
+<!-- Active Explorations (Tabs) -->
+<div class="px-2">
+<div class="text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-2 px-2 flex items-center justify-between">
+<span>Active Tabs</span>
+<span class="material-symbols-outlined text-[14px]">tab</span>
+</div>
+<div class="space-y-1">
+<div class="group flex items-center justify-between px-2 py-1.5 bg-surface-container-highest rounded text-zinc-200 cursor-pointer border border-outline-variant">
+<div class="flex items-center gap-2 overflow-hidden">
+<span class="w-2 h-2 rounded-full bg-violet-400 shrink-0"></span>
+<span class="truncate text-xs font-medium">Surah Al-Baqarah Analysis</span>
+</div>
+<button class="opacity-0 group-hover:opacity-100 text-zinc-500 hover:text-zinc-200 transition-opacity">
+<span class="material-symbols-outlined text-[14px]">close</span>
+</button>
+</div>
+<div class="group flex items-center justify-between px-2 py-1.5 hover:bg-surface-container rounded text-zinc-400 cursor-pointer transition-colors">
+<div class="flex items-center gap-2 overflow-hidden">
+<span class="w-2 h-2 rounded-full bg-emerald-400 shrink-0"></span>
+<span class="truncate text-xs">Root: R-H-M Usage</span>
+</div>
+<button class="opacity-0 group-hover:opacity-100 text-zinc-500 hover:text-zinc-200 transition-opacity">
+<span class="material-symbols-outlined text-[14px]">close</span>
+</button>
+</div>
+</div>
+</div>
+<!-- History Grouped -->
+<div class="px-2 pb-4">
+<div class="text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-2 px-2">History</div>
+<div class="mb-3">
+<div class="text-[11px] text-zinc-600 px-2 mb-1">Today</div>
+<ul class="space-y-0.5 border-l border-zinc-800 ml-3 pl-2">
+<li>
+<a class="block px-2 py-1 text-xs text-zinc-400 hover:text-zinc-100 hover:bg-surface-container rounded truncate transition-colors" href="#">
+                                Notes on Tafsir Ibn Kathir
+                            </a>
+</li>
+<li>
+<a class="block px-2 py-1 text-xs text-zinc-400 hover:text-zinc-100 hover:bg-surface-container rounded truncate transition-colors" href="#">
+                                Comparative Syntax: Ayah 255
+                            </a>
+</li>
+</ul>
+</div>
+<div>
+<div class="text-[11px] text-zinc-600 px-2 mb-1">Yesterday</div>
+<ul class="space-y-0.5 border-l border-zinc-800 ml-3 pl-2">
+<li>
+<a class="block px-2 py-1 text-xs text-zinc-400 hover:text-zinc-100 hover:bg-surface-container rounded truncate transition-colors" href="#">
+                                Translation Draft v2
+                            </a>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<!-- Sidebar Footer -->
+<div class="p-2 border-t border-zinc-800/50 shrink-0 space-y-1">
+<a class="text-zinc-500 px-4 py-2 flex items-center gap-3 hover:bg-zinc-800 hover:text-zinc-200 active:scale-[0.98] transition-transform w-full rounded" href="#">
+<span class="material-symbols-outlined text-[18px]">menu_book</span>
+<span>Docs</span>
+</a>
+<a class="text-zinc-500 px-4 py-2 flex items-center gap-3 hover:bg-zinc-800 hover:text-zinc-200 active:scale-[0.98] transition-transform w-full rounded" href="#">
+<span class="material-symbols-outlined text-[18px]">settings</span>
+<span>Settings</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Area Canvas -->
+<main class="ml-72 mt-12 flex-1 h-[calc(100vh-3rem)] overflow-y-auto bg-background p-8">
+<div class="max-w-5xl mx-auto space-y-8">
+<header class="border-b border-outline-variant pb-6 mb-8">
+<div class="flex items-center gap-3 text-zinc-500 text-sm mb-3">
+<span>Explorer</span>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<span class="text-violet-400">Surah Al-Baqarah Analysis</span>
+</div>
+<h1 class="text-3xl font-bold text-zinc-100 tracking-tight">Surah Al-Baqarah Analysis</h1>
+<p class="text-zinc-400 mt-2 max-w-2xl text-sm leading-relaxed">
+                    Comprehensive breakdown of syntax, root occurrences, and comparative tafsir notes for selected verses. Workspace auto-saves continuously.
+                </p>
+</header>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+<!-- Bento Block 1: Main Editor -->
+<div class="lg:col-span-2 bg-surface-container rounded-lg border border-outline-variant p-6 h-[500px] flex flex-col">
+<div class="flex items-center justify-between mb-4 pb-2 border-b border-zinc-800">
+<div class="flex gap-4 text-sm font-medium">
+<button class="text-violet-400 border-b-2 border-violet-400 pb-2 -mb-[9px]">Text Editor</button>
+<button class="text-zinc-500 hover:text-zinc-300 transition-colors pb-2">Grammar Tree</button>
+<button class="text-zinc-500 hover:text-zinc-300 transition-colors pb-2">Lexicon View</button>
+</div>
+<div class="flex gap-2">
+<button class="w-7 h-7 flex items-center justify-center text-zinc-400 hover:bg-surface-container-highest rounded"><span class="material-symbols-outlined text-[16px]">undo</span></button>
+<button class="w-7 h-7 flex items-center justify-center text-zinc-400 hover:bg-surface-container-highest rounded"><span class="material-symbols-outlined text-[16px]">redo</span></button>
+</div>
+</div>
+<div class="flex-1 font-mono text-sm text-zinc-300 leading-relaxed overflow-y-auto custom-scrollbar">
+<span class="text-emerald-400"># Analysis Notes: Ayah 255 (Ayat al-Kursi)</span><br/><br/>
+<span class="text-violet-400">function</span> <span class="text-blue-300">analyzeRoot</span>(rootText) {<br/>
+                          <span class="text-zinc-500">// Check occurrences in related corpus</span><br/>
+                          return db.query(<span class="text-amber-300">`SELECT * FROM roots WHERE text = '${rootText}'`</span>);<br/>
+                        }<br/><br/>
+                        The conceptual linkage here suggests a profound continuity. Note the structural symmetry in the phrasing...
+                        <div class="mt-4 p-4 bg-surface-container-lowest rounded border border-zinc-800">
+<span class="text-zinc-500">Drafting block...</span>
+<div class="h-4 w-[2px] bg-violet-400 animate-pulse inline-block align-middle ml-1"></div>
+</div>
+</div>
+</div>
+<!-- Bento Block 2: Meta Info -->
+<div class="space-y-6">
+<div class="bg-surface-container rounded-lg border border-outline-variant p-5">
+<h3 class="text-sm font-semibold text-zinc-200 mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px] text-emerald-400">analytics</span>
+                            Metrics
+                        </h3>
+<div class="space-y-3">
+<div class="flex justify-between items-center text-sm">
+<span class="text-zinc-500">Word Count</span>
+<span class="text-zinc-200 font-mono">1,204</span>
+</div>
+<div class="flex justify-between items-center text-sm">
+<span class="text-zinc-500">Root References</span>
+<span class="text-zinc-200 font-mono">42</span>
+</div>
+<div class="flex justify-between items-center text-sm">
+<span class="text-zinc-500">Last Synced</span>
+<span class="text-zinc-200 text-xs">2m ago</span>
+</div>
+</div>
+</div>
+<div class="bg-surface-container rounded-lg border border-outline-variant p-5">
+<h3 class="text-sm font-semibold text-zinc-200 mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px] text-blue-400">share</span>
+                            Collaboration
+                        </h3>
+<div class="flex -space-x-2 mb-4">
+<div class="w-8 h-8 rounded-full bg-zinc-800 border-2 border-surface-container flex items-center justify-center text-xs font-bold text-violet-400">
+                                SA
+                            </div>
+<div class="w-8 h-8 rounded-full bg-zinc-800 border-2 border-surface-container flex items-center justify-center text-xs font-bold text-emerald-400">
+                                MK
+                            </div>
+<div class="w-8 h-8 rounded-full bg-surface-container-highest border-2 border-surface-container flex items-center justify-center text-xs text-zinc-500 cursor-pointer hover:bg-zinc-800 transition-colors">
+<span class="material-symbols-outlined text-[16px]">add</span>
+</div>
+</div>
+<button class="w-full py-1.5 px-3 bg-surface-container-highest hover:bg-zinc-800 border border-outline-variant rounded text-sm text-zinc-200 transition-colors">
+                            Manage Access
+                        </button>
+</div>
+</div>
+</div>
+</div>
+</main>
+<style>
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #27272a;
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #52525b;
+        }
+    </style>
+</body></html>

@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Drafting Suite - Research Hub</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-surface": "#fafafa",
+                        "on-background": "#fafafa",
+                        "tertiary-fixed": "#bbf7d0",
+                        "outline-variant": "#27272a",
+                        "surface-variant": "#18181b",
+                        "surface-dim": "#0c0c0f",
+                        "on-secondary-fixed": "#18181b",
+                        "on-surface-variant": "#a1a1aa",
+                        "on-primary-container": "#ede9fe",
+                        "surface-container-high": "#18181b",
+                        "on-primary": "#0a0012",
+                        "error": "#ef4444",
+                        "surface-container-lowest": "#09090b",
+                        "primary-container": "#7c3aed",
+                        "primary": "#a78bfa",
+                        "surface": "#0c0c0f",
+                        "error-container": "#3b1111",
+                        "surface-bright": "#18181b",
+                        "on-primary-fixed-variant": "#5b21b6",
+                        "on-secondary-fixed-variant": "#3f3f46",
+                        "on-error": "#1a0000",
+                        "on-primary-fixed": "#2e1065",
+                        "surface-container-highest": "#1e1e22",
+                        "on-tertiary-fixed-variant": "#047857",
+                        "surface-container": "#121215",
+                        "on-secondary": "#09090b",
+                        "inverse-on-surface": "#09090b",
+                        "primary-fixed-dim": "#c4b5fd",
+                        "primary-fixed": "#ede9fe",
+                        "on-tertiary": "#001a12",
+                        "inverse-primary": "#5b21b6",
+                        "surface-container-low": "#0f0f12",
+                        "tertiary-fixed-dim": "#6ee7b7",
+                        "tertiary": "#34d399",
+                        "on-error-container": "#fca5a5",
+                        "background": "#09090b",
+                        "surface-tint": "#a78bfa",
+                        "outline": "#52525b",
+                        "on-secondary-container": "#a1a1aa",
+                        "on-tertiary-container": "#bbf7d0",
+                        "on-tertiary-fixed": "#003318",
+                        "inverse-surface": "#fafafa",
+                        "secondary": "#71717a",
+                        "secondary-container": "#27272a",
+                        "tertiary-container": "#065f46",
+                        "secondary-fixed-dim": "#71717a",
+                        "secondary-fixed": "#a1a1aa"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Geist", "sans-serif"],
+                        "body": ["Geist", "sans-serif"],
+                        "label": ["Geist", "sans-serif"],
+                        "mono": ["ui-monospace", "SFMono-Regular", "Menlo", "Monaco", "Consolas", "Liberation Mono", "Courier New", "monospace"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Geist', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined.fill {
+            font-variation-settings: 'FILL' 1;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background h-screen overflow-hidden flex font-body">
+<!-- SideNavBar -->
+<nav class="bg-[#0c0c0f] font-['Geist'] text-sm tracking-normal docked left-0 h-full w-64 border-r border-r border-[#27272a] hidden lg:flex flex-col h-full py-4 gap-2 z-40 relative">
+<div class="px-6 mb-6">
+<h1 class="text-xl font-black text-[#fafafa] mb-1">Research Hub</h1>
+<p class="text-xs text-on-surface-variant">Precision Workspace</p>
+</div>
+<div class="px-4 mb-4">
+<button class="w-full bg-primary text-on-primary py-2 px-4 rounded-lg font-semibold flex items-center justify-center gap-2 hover:bg-primary-fixed-dim transition-colors">
+<span class="material-symbols-outlined text-lg">add</span>
+                New Project
+            </button>
+</div>
+<div class="flex-1 overflow-y-auto px-3 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 rounded-md text-[#a1a1aa] hover:bg-[#18181b] hover:text-[#fafafa] transition-all duration-200 ease-in-out active:scale-95 transition-transform duration-100" href="#">
+<span class="material-symbols-outlined">edit_note</span>
+                Notes
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-md text-[#a1a1aa] hover:bg-[#18181b] hover:text-[#fafafa] transition-all duration-200 ease-in-out active:scale-95 transition-transform duration-100" href="#">
+<span class="material-symbols-outlined">library_books</span>
+                Collections
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-md text-[#a1a1aa] hover:bg-[#18181b] hover:text-[#fafafa] transition-all duration-200 ease-in-out active:scale-95 transition-transform duration-100" href="#">
+<span class="material-symbols-outlined">explore</span>
+                Discovery
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-md text-[#a78bfa] bg-[#18181b] font-semibold border-r-2 border-[#a78bfa] transition-all duration-200 ease-in-out active:scale-95 transition-transform duration-100" href="#">
+<span class="material-symbols-outlined fill">article</span>
+                Drafts
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-md text-[#a1a1aa] hover:bg-[#18181b] hover:text-[#fafafa] transition-all duration-200 ease-in-out active:scale-95 transition-transform duration-100" href="#">
+<span class="material-symbols-outlined">slideshow</span>
+                Present
+            </a>
+</div>
+<div class="mt-auto px-3 pt-4 border-t border-outline-variant space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 rounded-md text-[#a1a1aa] hover:bg-[#18181b] hover:text-[#fafafa] transition-all duration-200 ease-in-out active:scale-95 transition-transform duration-100" href="#">
+<span class="material-symbols-outlined">archive</span>
+                Archive
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-md text-[#a1a1aa] hover:bg-[#18181b] hover:text-[#fafafa] transition-all duration-200 ease-in-out active:scale-95 transition-transform duration-100" href="#">
+<span class="material-symbols-outlined">settings</span>
+                Settings
+            </a>
+</div>
+</nav>
+<!-- Main Content Area -->
+<div class="flex-1 flex flex-col min-w-0 h-full overflow-hidden">
+<!-- TopAppBar -->
+<header class="bg-[#09090b] font-['Geist'] tracking-tight text-[#fafafa] docked full-width top-0 border-b border-b border-[#27272a] transition-all duration-200 ease-in-out flex justify-between items-center w-full px-6 h-14 shrink-0 z-30">
+<div class="flex items-center gap-4">
+<span class="text-lg font-bold tracking-tighter text-[#fafafa] lg:hidden">Obsidian</span>
+<div class="hidden md:flex items-center gap-2 text-sm text-on-surface-variant">
+<span>Drafts</span>
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+<span class="text-on-surface font-medium">The Impact of Early Astronomical Instruments</span>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex items-center -space-x-2 mr-2">
+<img alt="Collaborator 1" class="w-7 h-7 rounded-full border-2 border-background z-20" data-alt="Portrait of a young woman with natural makeup looking directly at camera, soft lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAm1y508aHK0HM2n38Hpd1i9sOAdjCv5Kt7Db1jlYaV5pIOR-7TzFCrmWJKHCMP6fu9khQCRmrahb757kKKFOpBc2gAWTMvXfryewITrUGN1JKC1HAH89myJMacCW9iVxlkifgvu4EFIYNzQOQZL7CBXqXk4NXeuL0CG9UFuVwlMfX3LBvY57CpPodbyk0sh6G3pgQ7K6jyZGGISCxvOG-wqE5-QUAGC9Tggqfa9b8z12SpCg45qono92EROHy8cCIQm7_f5aU8e7em"/>
+<img alt="Collaborator 2" class="w-7 h-7 rounded-full border-2 border-background z-10" data-alt="Portrait of a young man with a short beard looking directly at camera, studio lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuABBvpQ8hovMG5ljx__6ylt3gJ0CAC-QKnMfQwR_vC6Fbx44pJRRSqlCia0uxayvmZgOGTA_Gne2zqSGakizlVjkSaaiTW5vMkSyMccTY81M-RUiGWh-d1icKjPCGyKTFUmyeEbRC6Uptw2pgbPN3Ghc2xwJ-3_MHXiSgfbMTSoHk91-fFCc57JXOLFjC4x32S7U3GJvlWm5vM3P6s4qTqr_XFI-qjRjJR73H7eQEvWEH7Ooa_-QaedOtV8hxhyPh98i9W5ABuBCshu"/>
+<button class="w-7 h-7 rounded-full border-2 border-background bg-surface-container flex items-center justify-center text-xs text-on-surface-variant hover:text-on-surface hover:bg-surface-variant transition-colors z-0">
+<span class="material-symbols-outlined text-[14px]">add</span>
+</button>
+</div>
+<button class="hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-md border border-outline-variant text-sm font-medium hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined text-[18px]">group</span>
+                    Share
+                </button>
+<button class="bg-primary text-on-primary px-4 py-1.5 rounded-md text-sm font-semibold hover:bg-primary-fixed-dim transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">publish</span>
+                    Publish
+                </button>
+<div class="flex items-center gap-2 border-l border-outline-variant pl-4 ml-2">
+<button class="text-[#a1a1aa] hover:bg-[#18181b] hover:text-[#fafafa] p-1.5 rounded-md transition-all duration-200">
+<span class="material-symbols-outlined">present_to_all</span>
+</button>
+<button class="text-[#a1a1aa] hover:bg-[#18181b] hover:text-[#fafafa] p-1.5 rounded-md transition-all duration-200">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<img alt="User profile" class="w-8 h-8 rounded-full ml-2 cursor-pointer border border-outline-variant" data-alt="Portrait of a man wearing glasses smiling slightly, outdoors daytime" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDRjOweUuLPztns5v4jehTTOeGp2XBPxSuRhFLwyqRpRWdwxzAyqGrsU1nYpvyAQmT5sH5z1qFEjCHUOVOtOks9QwKleyPbGqPvWZRzCUjYt9jLUagYMKfnR8aE2azZ2w700aLitBWLn6OZN-YExaXeJLvrqJkHR6FY_6PFT_EGoYHO-jcmDrRDjxSac7Kf4eMBonU62cdgC8OLTNbaAWH4OWojrPFxnhAJnJvuOKWx5IYpU6My8BCv8WMu1okF4Jvgj2Uyn7_OyTUC"/>
+</div>
+</div>
+</header>
+<!-- Drafting Area (Two Column) -->
+<main class="flex-1 flex flex-col md:flex-row overflow-hidden bg-background">
+<!-- Left Column: Editor -->
+<section class="flex-1 flex flex-col border-r border-outline-variant overflow-hidden bg-surface-lowest">
+<!-- Toolbar -->
+<div class="h-12 border-b border-outline-variant bg-surface-container-lowest flex items-center px-4 gap-2 shrink-0 overflow-x-auto no-scrollbar">
+<select class="bg-transparent border-none text-sm font-medium text-on-surface focus:ring-0 cursor-pointer py-1 pl-2 pr-6 appearance-none">
+<option>Normal Text</option>
+<option>Heading 1</option>
+<option>Heading 2</option>
+<option>Heading 3</option>
+</select>
+<div class="w-px h-4 bg-outline-variant mx-2"></div>
+<button class="p-1.5 rounded text-on-surface-variant hover:text-on-surface hover:bg-surface-variant transition-colors"><span class="material-symbols-outlined text-[18px]">format_bold</span></button>
+<button class="p-1.5 rounded text-on-surface-variant hover:text-on-surface hover:bg-surface-variant transition-colors"><span class="material-symbols-outlined text-[18px]">format_italic</span></button>
+<button class="p-1.5 rounded text-on-surface-variant hover:text-on-surface hover:bg-surface-variant transition-colors"><span class="material-symbols-outlined text-[18px]">format_underlined</span></button>
+<div class="w-px h-4 bg-outline-variant mx-2"></div>
+<button class="p-1.5 rounded text-on-surface-variant hover:text-on-surface hover:bg-surface-variant transition-colors"><span class="material-symbols-outlined text-[18px]">format_list_bulleted</span></button>
+<button class="p-1.5 rounded text-on-surface-variant hover:text-on-surface hover:bg-surface-variant transition-colors"><span class="material-symbols-outlined text-[18px]">format_list_numbered</span></button>
+<button class="p-1.5 rounded text-on-surface-variant hover:text-on-surface hover:bg-surface-variant transition-colors"><span class="material-symbols-outlined text-[18px]">format_quote</span></button>
+<div class="w-px h-4 bg-outline-variant mx-2"></div>
+<button class="p-1.5 rounded text-on-surface-variant hover:text-on-surface hover:bg-surface-variant transition-colors"><span class="material-symbols-outlined text-[18px]">link</span></button>
+<button class="p-1.5 rounded text-on-surface-variant hover:text-on-surface hover:bg-surface-variant transition-colors"><span class="material-symbols-outlined text-[18px]">image</span></button>
+<div class="ml-auto flex items-center gap-2">
+<span class="text-xs text-on-surface-variant mr-2">Saved just now</span>
+<button class="flex items-center gap-1 text-xs font-medium text-primary hover:text-primary-fixed transition-colors">
+<span class="material-symbols-outlined text-[16px]">visibility</span>
+                            Preview
+                        </button>
+</div>
+</div>
+<!-- Editor Canvas -->
+<div class="flex-1 overflow-y-auto p-8 lg:p-12">
+<div class="max-w-3xl mx-auto">
+<input class="w-full bg-transparent border-none text-4xl font-bold text-on-surface focus:ring-0 p-0 mb-6 font-headline tracking-tight placeholder:text-outline" placeholder="Article Title..." type="text" value="The Impact of Early Astronomical Instruments on Navigation"/>
+<div class="prose prose-invert prose-p:text-on-surface-variant prose-headings:text-on-surface prose-headings:font-headline max-w-none font-body text-base leading-relaxed">
+<p>The development of reliable navigational instruments represents a critical juncture in human history, enabling transoceanic voyages and fundamentally altering the global economic landscape. Before the widespread adoption of the astrolabe and later the sextant, maritime navigation relied heavily on coastal piloting and dead reckoning.</p>
+<h3>The Astrolabe: Translating the Heavens</h3>
+<p>Originally a Hellenistic invention, the planispheric astrolabe was significantly refined during the Islamic Golden Age. It functioned as a two-dimensional model of the celestial sphere, allowing mariners to determine local time and latitude by observing the altitude of the sun or specific stars.</p>
+<div class="my-6 p-4 bg-surface-container rounded-lg border border-outline-variant flex gap-4 items-start relative group cursor-pointer hover:border-primary transition-colors">
+<div class="absolute -left-3 -top-3 w-6 h-6 bg-surface-variant rounded-full border border-outline-variant flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-[14px] text-on-surface-variant">drag_indicator</span>
+</div>
+<span class="material-symbols-outlined text-primary mt-1">format_quote</span>
+<div>
+<p class="italic text-on-surface mb-2 font-serif text-lg">"He it is Who has made the stars for you, that you may be guided by them through the darkness of the land and the sea. We have detailed the signs for a people who know."</p>
+<p class="text-sm font-medium text-on-surface-variant">— Quran 6:97 (Al-An'am)</p>
+</div>
+</div>
+<p>The integration of astronomical observation with practical maritime needs required not just the physical instruments, but also detailed ephemerides—tables of calculated positions of celestial bodies. The creation of these tables demanded rigorous, sustained observation and mathematical calculation, often sponsored by state or royal observatories.</p>
+<textarea class="w-full bg-transparent border-none text-on-surface-variant focus:ring-0 p-0 resize-none min-h-[200px]" placeholder="Continue writing...">This intellectual infrastructure, bridging abstract mathematics with the practical challenges of traversing featureless oceans, laid the groundwork for the eventual dominance of European maritime powers in the 16th and 17th centuries.</textarea>
+</div>
+</div>
+</div>
+</section>
+<!-- Right Column: Research Dock -->
+<aside class="w-full md:w-80 lg:w-96 bg-surface flex flex-col shrink-0 h-full">
+<!-- Tabs -->
+<div class="flex border-b border-outline-variant bg-surface-dim px-2 pt-2">
+<button class="px-4 py-2 text-sm font-medium text-primary border-b-2 border-primary">Snippets</button>
+<button class="px-4 py-2 text-sm font-medium text-on-surface-variant hover:text-on-surface transition-colors">Citations</button>
+<button class="px-4 py-2 text-sm font-medium text-on-surface-variant hover:text-on-surface transition-colors">Media</button>
+</div>
+<!-- Search/Filter -->
+<div class="p-4 border-b border-outline-variant">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[18px]">search</span>
+<input class="w-full bg-surface-container border border-outline-variant rounded-md py-1.5 pl-9 pr-3 text-sm text-on-surface placeholder:text-on-surface-variant focus:border-primary focus:ring-1 focus:ring-primary transition-shadow" placeholder="Search dock..." type="text"/>
+</div>
+<div class="flex gap-2 mt-3 overflow-x-auto no-scrollbar pb-1">
+<span class="px-2 py-1 bg-surface-variant text-xs text-on-surface rounded border border-outline-variant whitespace-nowrap cursor-pointer hover:border-primary transition-colors">Astronomy</span>
+<span class="px-2 py-1 bg-surface-variant text-xs text-on-surface rounded border border-outline-variant whitespace-nowrap cursor-pointer hover:border-primary transition-colors">Navigation</span>
+<span class="px-2 py-1 bg-surface-variant text-xs text-on-surface rounded border border-outline-variant whitespace-nowrap cursor-pointer hover:border-primary transition-colors">History</span>
+</div>
+</div>
+<!-- Cards Area -->
+<div class="flex-1 overflow-y-auto p-4 space-y-4">
+<!-- Pinned Ayah Card -->
+<div class="bg-surface-container rounded-lg border border-outline-variant p-3 cursor-grab hover:border-primary transition-colors group relative shadow-sm">
+<div class="flex justify-between items-start mb-2">
+<span class="text-xs font-semibold text-tertiary px-1.5 py-0.5 bg-tertiary/10 rounded">Pinned Source</span>
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant opacity-0 group-hover:opacity-100 transition-opacity">drag_indicator</span>
+</div>
+<p class="text-sm text-on-surface mb-2 font-serif italic line-clamp-3">"He it is Who has made the stars for you, that you may be guided by them through the darkness of the land and the sea..."</p>
+<div class="flex justify-between items-center mt-2 pt-2 border-t border-outline-variant/50">
+<span class="text-xs text-on-surface-variant font-medium">Quran 6:97</span>
+<button class="text-primary hover:text-primary-fixed transition-colors"><span class="material-symbols-outlined text-[16px]">add_circle</span></button>
+</div>
+</div>
+<!-- Note Snippet -->
+<div class="bg-surface-container rounded-lg border border-outline-variant p-3 cursor-grab hover:border-primary transition-colors group relative shadow-sm">
+<div class="flex justify-between items-start mb-2">
+<span class="text-xs font-semibold text-primary px-1.5 py-0.5 bg-primary/10 rounded">Research Note</span>
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant opacity-0 group-hover:opacity-100 transition-opacity">drag_indicator</span>
+</div>
+<h4 class="text-sm font-semibold text-on-surface mb-1">Astrolabe Origins</h4>
+<p class="text-xs text-on-surface-variant line-clamp-3 mb-2">The astrolabe was likely invented in the Hellenistic world by Apollonius of Perga between 220 and 150 BC. It married the planisphere and dioptra.</p>
+<div class="flex justify-between items-center mt-2 pt-2 border-t border-outline-variant/50">
+<span class="text-[10px] text-on-surface-variant">Added 2 days ago</span>
+<button class="text-primary hover:text-primary-fixed transition-colors"><span class="material-symbols-outlined text-[16px]">add_circle</span></button>
+</div>
+</div>
+<!-- Book Reference -->
+<div class="bg-surface-container rounded-lg border border-outline-variant p-3 cursor-grab hover:border-primary transition-colors group relative shadow-sm">
+<div class="flex justify-between items-start mb-2">
+<span class="text-xs font-semibold text-secondary-fixed px-1.5 py-0.5 bg-surface-variant rounded">Citation</span>
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant opacity-0 group-hover:opacity-100 transition-opacity">drag_indicator</span>
+</div>
+<div class="flex gap-3">
+<div class="w-10 h-14 bg-surface-variant rounded border border-outline-variant flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-on-surface-variant text-[20px]">book</span>
+</div>
+<div>
+<h4 class="text-sm font-medium text-on-surface line-clamp-1">The Navigators</h4>
+<p class="text-xs text-on-surface-variant line-clamp-1">Smith, J. (2021)</p>
+<p class="text-[10px] text-on-surface-variant mt-1 line-clamp-1">Pg 45: "Early sextant designs..."</p>
+</div>
+</div>
+<div class="flex justify-end mt-2 pt-2 border-t border-outline-variant/50">
+<button class="text-primary hover:text-primary-fixed transition-colors"><span class="material-symbols-outlined text-[16px]">add_circle</span></button>
+</div>
+</div>
+</div>
+</aside>
+</main>
+</div>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="bg-[#09090b] font-['Geist'] text-[10px] font-medium fixed bottom-0 w-full z-50 border-t border-t border-[#27272a] shadow-2xl tap-highlight-transparent lg:hidden fixed bottom-0 left-0 w-full flex justify-around items-center px-4 py-3 pb-safe">
+<a class="flex flex-col items-center justify-center text-[#a1a1aa] active:bg-[#27272a] rounded-xl px-3 py-1 transition-colors" href="#">
+<span class="material-symbols-outlined mb-1">home</span>
+            Home
+        </a>
+<a class="flex flex-col items-center justify-center text-[#a1a1aa] active:bg-[#27272a] rounded-xl px-3 py-1 transition-colors" href="#">
+<span class="material-symbols-outlined mb-1">search</span>
+            Search
+        </a>
+<a class="flex flex-col items-center justify-center text-[#a78bfa] bg-[#18181b] rounded-xl px-3 py-1 transition-colors" href="#">
+<span class="material-symbols-outlined fill mb-1">history_edu</span>
+            Drafts
+        </a>
+<a class="flex flex-col items-center justify-center text-[#a1a1aa] active:bg-[#27272a] rounded-xl px-3 py-1 transition-colors" href="#">
+<span class="material-symbols-outlined mb-1">account_circle</span>
+            Profile
+        </a>
+</nav>
+</body></html>

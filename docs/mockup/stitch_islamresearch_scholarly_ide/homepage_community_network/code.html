@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>IslamResearch - Infinite Explorability</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-background": "#fafafa",
+                        "surface-bright": "#18181b",
+                        "on-tertiary": "#001a12",
+                        "on-error-container": "#fca5a5",
+                        "surface-container-high": "#18181b",
+                        "primary-container": "#7c3aed",
+                        "on-primary-container": "#ede9fe",
+                        "on-tertiary-fixed": "#003318",
+                        "tertiary-fixed": "#bbf7d0",
+                        "outline": "#52525b",
+                        "on-primary-fixed-variant": "#5b21b6",
+                        "on-primary-fixed": "#2e1065",
+                        "on-primary": "#0a0012",
+                        "error-container": "#3b1111",
+                        "background": "#09090b",
+                        "tertiary-fixed-dim": "#6ee7b7",
+                        "tertiary-container": "#065f46",
+                        "primary-fixed-dim": "#c4b5fd",
+                        "on-tertiary-fixed-variant": "#047857",
+                        "on-secondary-container": "#a1a1aa",
+                        "outline-variant": "#27272a",
+                        "on-secondary-fixed": "#18181b",
+                        "surface-container-lowest": "#09090b",
+                        "inverse-on-surface": "#09090b",
+                        "surface-variant": "#18181b",
+                        "surface-container-highest": "#1e1e22",
+                        "surface-tint": "#a78bfa",
+                        "on-tertiary-container": "#bbf7d0",
+                        "surface": "#0c0c0f",
+                        "on-error": "#1a0000",
+                        "secondary-container": "#27272a",
+                        "on-secondary": "#09090b",
+                        "secondary": "#71717a",
+                        "error": "#ef4444",
+                        "on-surface-variant": "#a1a1aa",
+                        "on-surface": "#fafafa",
+                        "inverse-surface": "#fafafa",
+                        "tertiary": "#34d399",
+                        "on-secondary-fixed-variant": "#3f3f46",
+                        "surface-container-low": "#0f0f12",
+                        "surface-container": "#121215",
+                        "surface-dim": "#0c0c0f",
+                        "secondary-fixed": "#a1a1aa",
+                        "inverse-primary": "#5b21b6",
+                        "primary-fixed": "#ede9fe",
+                        "secondary-fixed-dim": "#71717a",
+                        "primary": "#a78bfa"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Geist", "sans-serif"],
+                        "body": ["Geist", "sans-serif"],
+                        "label": ["Geist", "sans-serif"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        @import url('https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800;900&display=swap');
+        body { font-family: 'Geist', sans-serif; }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body antialiased min-h-screen flex flex-col selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopNavBar -->
+<nav class="bg-zinc-950/80 backdrop-blur-md docked full-width top-0 sticky z-50 border-b border-zinc-800 flat no shadows flex justify-between items-center px-6 py-4 w-full max-w-screen-2xl mx-auto transition-all duration-200 ease-in-out active:scale-95">
+<div class="text-xl font-black text-violet-400 tracking-tighter">
+            Obsidian Research
+        </div>
+<div class="hidden md:flex items-center gap-6 font-geist tracking-tight antialiased text-zinc-100">
+<a class="text-zinc-400 hover:text-zinc-100 transition-colors hover:bg-zinc-900/50 rounded-md px-3 py-1" href="#">Browse</a>
+<a class="text-zinc-400 hover:text-zinc-100 transition-colors hover:bg-zinc-900/50 rounded-md px-3 py-1" href="#">Journals</a>
+<a class="text-zinc-400 hover:text-zinc-100 transition-colors hover:bg-zinc-900/50 rounded-md px-3 py-1" href="#">Authors</a>
+<a class="text-violet-400 border-b-2 border-violet-400 pb-1 px-3 py-1" href="#">About</a>
+<a class="text-zinc-400 hover:text-zinc-100 transition-colors hover:bg-zinc-900/50 rounded-md px-3 py-1" href="#">Publish</a>
+</div>
+<div class="flex items-center gap-4">
+<button class="bg-primary hover:bg-primary-container text-on-primary font-medium py-2 px-4 rounded-lg transition-colors text-sm">
+                Sign In
+            </button>
+</div>
+</nav>
+<!-- Main Content -->
+<main class="flex-grow flex flex-col items-center w-full">
+<!-- Hero Section -->
+<section class="w-full max-w-screen-2xl mx-auto px-6 py-24 md:py-32 flex flex-col items-center text-center gap-8 relative overflow-hidden">
+<!-- Decorative Background Element -->
+<div class="absolute inset-0 pointer-events-none z-0 overflow-hidden flex items-center justify-center">
+<div class="w-[800px] h-[800px] bg-primary/5 rounded-full blur-3xl opacity-50 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"></div>
+</div>
+<div class="z-10 max-w-4xl space-y-6">
+<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border outline-variant bg-surface-container-lowest text-sm text-on-surface-variant font-medium mb-4">
+<span class="material-symbols-outlined text-[16px] text-tertiary">fork_right</span>
+                    Forking Collections Now Live
+                </div>
+<h1 class="text-5xl md:text-7xl font-headline font-black tracking-tighter text-on-background leading-tight">
+                    Infinite <span class="text-primary">Explorability</span> in the Scholarly Network.
+                </h1>
+<p class="text-xl text-on-surface-variant max-w-2xl mx-auto font-body leading-relaxed">
+                    Discover, fork, and curate deep community collections. Build upon the foundational texts and contemporary research shaping global discourse.
+                </p>
+<div class="flex flex-col sm:flex-row items-center justify-center gap-4 pt-8">
+<button class="w-full sm:w-auto bg-primary hover:bg-primary-container text-on-primary font-bold py-3 px-8 rounded-lg transition-colors text-lg flex items-center justify-center gap-2">
+                        Start Researching
+                        <span class="material-symbols-outlined">arrow_forward</span>
+</button>
+<button class="w-full sm:w-auto bg-transparent border border-outline hover:bg-surface-container text-on-background font-medium py-3 px-8 rounded-lg transition-colors text-lg flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">explore</span>
+                        Explore Community
+                    </button>
+</div>
+</div>
+</section>
+<!-- Bento Grid: Community Highlights -->
+<section class="w-full max-w-screen-xl mx-auto px-6 py-16">
+<div class="flex items-center justify-between mb-8">
+<h2 class="text-3xl font-headline font-bold tracking-tight">Trending Collections</h2>
+<a class="text-primary hover:text-primary-container text-sm font-medium flex items-center gap-1 transition-colors" href="#">
+                    View All <span class="material-symbols-outlined text-[16px]">chevron_right</span>
+</a>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 md:grid-rows-2 gap-4 h-auto md:h-[600px]">
+<!-- Large Feature Card -->
+<div class="md:col-span-2 md:row-span-2 bg-surface-container rounded-xl border border-outline-variant p-6 flex flex-col justify-between group hover:border-outline transition-colors relative overflow-hidden">
+<div class="absolute inset-0 bg-gradient-to-t from-background/90 via-background/20 to-transparent z-10 pointer-events-none"></div>
+<img class="absolute inset-0 w-full h-full object-cover opacity-40 group-hover:opacity-50 transition-opacity duration-500 z-0" data-alt="ancient islamic manuscript close up with warm lighting and intricate calligraphy on parchment" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBsyRhs4sdFDPpQRR50lAwXBrae3l5xmEzYzcydqlsRM4krq6Jh2ZCh1X_3NwG6Q6scO62KTbkN_U8QPgpleLhuo-cFeKzmdAgC63wh1R2SxrpnVvMSsHWh5KFJwJWKcpCw2fjW0ieie3WB1uXPocWkr6jdIR6cIFWAqJzEYBMZkrH1px8A5_YoGaEx9VfxYKXVgoKX1IzDOMc5TSOTk-C2aHX2Rlg0EVQu6PEUPGlO-5V7c5vrz_WzBPxHkbTOXoL5g6kDpl5B76_d"/>
+<div class="relative z-20 flex justify-between items-start">
+<span class="bg-surface/80 backdrop-blur border border-outline-variant px-2 py-1 rounded text-xs font-medium text-tertiary uppercase tracking-wider">Featured</span>
+<div class="flex gap-2">
+<button class="bg-surface/80 backdrop-blur border border-outline-variant p-2 rounded hover:bg-surface-container-high transition-colors text-on-surface-variant hover:text-primary">
+<span class="material-symbols-outlined text-[20px]">bookmark</span>
+</button>
+</div>
+</div>
+<div class="relative z-20 mt-auto pt-24">
+<h3 class="text-3xl font-headline font-bold text-on-background mb-2 group-hover:text-primary transition-colors">Classical Epistemology &amp; Modern Science</h3>
+<p class="text-on-surface-variant text-base mb-4 max-w-xl">A curated anthology exploring the intersection of traditional Islamic philosophical frameworks and contemporary scientific methodologies.</p>
+<div class="flex items-center justify-between border-t border-outline-variant pt-4 mt-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-surface-container-high border border-outline-variant flex items-center justify-center text-xs font-bold text-primary">DR</div>
+<div class="text-sm">
+<p class="font-medium text-on-background">Dr. Raza</p>
+<p class="text-on-surface-variant text-xs">Curator</p>
+</div>
+</div>
+<div class="flex items-center gap-4 text-xs text-on-surface-variant">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">library_books</span> 42 Texts</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">fork_right</span> 128 Forks</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Small Card 1 -->
+<div class="bg-surface-container rounded-xl border border-outline-variant p-5 flex flex-col justify-between group hover:border-outline transition-colors">
+<div>
+<div class="flex justify-between items-start mb-4">
+<span class="material-symbols-outlined text-primary text-2xl">account_balance</span>
+<button class="text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[20px]">fork_right</span>
+</button>
+</div>
+<h4 class="text-lg font-headline font-bold text-on-background mb-2">Andalusian Poetics</h4>
+<p class="text-on-surface-variant text-sm line-clamp-3">Comprehensive collection of poetry and literary criticism from 10th-century Cordoba, newly translated.</p>
+</div>
+<div class="mt-4 pt-4 border-t border-outline-variant flex justify-between items-center text-xs text-on-surface-variant">
+<span>Curated by S. Malik</span>
+<span>18 Texts</span>
+</div>
+</div>
+<!-- Small Card 2 -->
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant p-5 flex flex-col justify-between group hover:border-outline transition-colors relative overflow-hidden">
+<!-- Subtle pattern overlay -->
+<div class="absolute inset-0 opacity-[0.03] pointer-events-none" style="background-image: radial-gradient(#a78bfa 1px, transparent 1px); background-size: 16px 16px;"></div>
+<div class="relative z-10">
+<div class="flex justify-between items-start mb-4">
+<span class="material-symbols-outlined text-tertiary text-2xl">architecture</span>
+<button class="text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[20px]">fork_right</span>
+</button>
+</div>
+<h4 class="text-lg font-headline font-bold text-on-background mb-2">Geometric Proportions</h4>
+<p class="text-on-surface-variant text-sm line-clamp-3">Analysis of sacred geometry in Mamluk architecture, featuring high-res manuscript scans and modern architectural overlays.</p>
+</div>
+<div class="relative z-10 mt-4 pt-4 border-t border-outline-variant flex justify-between items-center text-xs text-on-surface-variant">
+<span>Curated by Inst. of Art</span>
+<span>56 Texts</span>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-zinc-950 full-width py-12 mt-auto border-t border-zinc-800 flat no shadows flex flex-col md:flex-row justify-between items-center px-8 max-w-7xl mx-auto w-full gap-6 font-geist text-sm text-zinc-400">
+<div class="text-lg font-bold text-violet-400">
+            Obsidian Research
+        </div>
+<div class="flex flex-wrap justify-center gap-6">
+<a class="text-zinc-500 hover:text-zinc-100 transition-colors opacity-80 hover:opacity-100" href="#">Privacy Policy</a>
+<a class="text-zinc-500 hover:text-zinc-100 transition-colors opacity-80 hover:opacity-100" href="#">Terms of Service</a>
+<a class="text-zinc-500 hover:text-zinc-100 transition-colors opacity-80 hover:opacity-100" href="#">API Documentation</a>
+<a class="text-zinc-500 hover:text-zinc-100 transition-colors opacity-80 hover:opacity-100" href="#">Support</a>
+</div>
+<div class="text-zinc-500">
+            © 2024 Obsidian Research. Precision in Discovery.
+        </div>
+</footer>
+</body></html>

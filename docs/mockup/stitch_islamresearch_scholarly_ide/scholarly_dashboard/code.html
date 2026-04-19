@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Scholarly Dashboard (Analytics)</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "secondary-fixed-dim": "#71717a",
+                        "secondary-fixed": "#a1a1aa",
+                        "error": "#ef4444",
+                        "primary": "#a78bfa",
+                        "on-primary-fixed": "#2e1065",
+                        "inverse-on-surface": "#09090b",
+                        "on-surface": "#fafafa",
+                        "on-primary": "#0a0012",
+                        "tertiary": "#34d399",
+                        "on-error-container": "#fca5a5",
+                        "surface-dim": "#0c0c0f",
+                        "secondary": "#71717a",
+                        "surface-container-low": "#0f0f12",
+                        "primary-fixed": "#ede9fe",
+                        "on-secondary-container": "#a1a1aa",
+                        "on-surface-variant": "#a1a1aa",
+                        "background": "#09090b",
+                        "outline": "#52525b",
+                        "tertiary-container": "#065f46",
+                        "surface-container": "#121215",
+                        "surface-variant": "#18181b",
+                        "on-secondary": "#09090b",
+                        "tertiary-fixed": "#bbf7d0",
+                        "primary-container": "#7c3aed",
+                        "on-primary-fixed-variant": "#5b21b6",
+                        "on-error": "#1a0000",
+                        "on-background": "#fafafa",
+                        "surface-tint": "#a78bfa",
+                        "inverse-surface": "#fafafa",
+                        "on-tertiary-fixed-variant": "#047857",
+                        "surface-bright": "#18181b",
+                        "surface-container-high": "#18181b",
+                        "outline-variant": "#27272a",
+                        "on-tertiary": "#001a12",
+                        "error-container": "#3b1111",
+                        "surface-container-lowest": "#09090b",
+                        "surface": "#0c0c0f",
+                        "inverse-primary": "#5b21b6",
+                        "surface-container-highest": "#1e1e22",
+                        "on-tertiary-fixed": "#003318",
+                        "on-tertiary-container": "#bbf7d0",
+                        "on-secondary-fixed-variant": "#3f3f46",
+                        "tertiary-fixed-dim": "#6ee7b7",
+                        "primary-fixed-dim": "#c4b5fd",
+                        "on-primary-container": "#ede9fe",
+                        "on-secondary-fixed": "#18181b",
+                        "secondary-container": "#27272a"
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    fontFamily: {
+                        headline: ["Geist", "sans-serif"],
+                        body: ["Geist", "sans-serif"],
+                        label: ["Geist", "sans-serif"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Geist', sans-serif; }
+    </style>
+</head>
+<body class="bg-background text-on-surface h-screen flex overflow-hidden selection:bg-primary-container selection:text-on-primary-container">
+<!-- SideNavBar (WEB) -->
+<nav class="hidden md:flex flex-col h-screen w-64 border-r border-outline-variant bg-[#0c0c0f] font-body text-sm flex-shrink-0 z-20">
+<div class="px-6 py-8 border-b border-outline-variant">
+<h1 class="text-lg font-black text-primary tracking-tight">Islamic IDE</h1>
+<p class="text-xs text-on-surface-variant mt-1">Scholarly Workspace</p>
+</div>
+<div class="flex-1 overflow-y-auto py-6 px-3 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-md text-on-surface-variant hover:bg-surface-variant/50 hover:text-on-surface transition-colors" href="#">
+<span class="material-symbols-outlined text-lg">menu_book</span>
+                Library
+            </a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-md text-on-surface-variant hover:bg-surface-variant/50 hover:text-on-surface transition-colors" href="#">
+<span class="material-symbols-outlined text-lg">hub</span>
+                Isnad Graph
+            </a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-md text-on-surface-variant hover:bg-surface-variant/50 hover:text-on-surface transition-colors" href="#">
+<span class="material-symbols-outlined text-lg">grid_on</span>
+                Comparison
+            </a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-md bg-surface-variant text-primary border-r-2 border-primary transition-colors" href="#">
+<span class="material-symbols-outlined text-lg" style="font-variation-settings: 'FILL' 1;">query_stats</span>
+<span class="font-medium">Analytics</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-md text-on-surface-variant hover:bg-surface-variant/50 hover:text-on-surface transition-colors mt-8" href="#">
+<span class="material-symbols-outlined text-lg">settings</span>
+                Settings
+            </a>
+</div>
+<div class="p-4 border-t border-outline-variant mt-auto space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 rounded-md text-xs text-on-surface-variant hover:text-on-surface transition-colors" href="#">
+<span class="material-symbols-outlined text-[16px]">help</span>
+                Documentation
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-md text-xs text-on-surface-variant hover:text-on-surface transition-colors" href="#">
+<span class="material-symbols-outlined text-[16px]">contact_support</span>
+                Support
+            </a>
+</div>
+</nav>
+<!-- Main Content Wrapper -->
+<div class="flex-1 flex flex-col min-w-0 overflow-hidden relative">
+<!-- TopNavBar (MOBILE Only) -->
+<header class="md:hidden flex justify-between items-center px-4 h-14 w-full bg-[#09090b] border-b border-outline-variant z-20">
+<h1 class="text-xl font-bold text-on-surface font-headline tracking-tight text-primary">Obsidian Research</h1>
+<div class="flex gap-2 text-on-surface-variant">
+<button class="p-2 hover:text-on-surface transition-colors rounded-full hover:bg-surface-variant"><span class="material-symbols-outlined">search</span></button>
+<button class="p-2 hover:text-on-surface transition-colors rounded-full hover:bg-surface-variant"><span class="material-symbols-outlined">account_circle</span></button>
+</div>
+</header>
+<!-- TopNavBar (WEB Top Actions) -->
+<header class="hidden md:flex justify-between items-center px-8 h-16 w-full bg-background/80 backdrop-blur-md sticky top-0 z-10 border-b border-outline-variant">
+<div class="flex items-center gap-4 text-on-surface-variant">
+<h2 class="text-xl font-headline font-semibold text-on-surface tracking-tight">Analytics Dashboard</h2>
+</div>
+<div class="flex gap-3">
+<button class="flex items-center gap-2 px-3 py-1.5 text-sm rounded-md text-on-surface-variant hover:text-on-surface hover:bg-surface-variant transition-colors border border-transparent">
+<span class="material-symbols-outlined text-[18px]">history_edu</span>
+                    History
+                </button>
+<button class="flex items-center gap-2 px-3 py-1.5 text-sm rounded-md text-on-surface-variant hover:text-on-surface hover:bg-surface-variant transition-colors border border-transparent">
+<span class="material-symbols-outlined text-[18px]">share</span>
+                    Share Report
+                </button>
+<button class="flex items-center justify-center w-8 h-8 rounded-full bg-surface-variant text-on-surface border border-outline-variant hover:border-primary transition-colors">
+<span class="material-symbols-outlined text-[18px]">account_circle</span>
+</button>
+</div>
+</header>
+<!-- Canvas -->
+<main class="flex-1 overflow-y-auto p-4 md:p-8 relative">
+<div class="max-w-7xl mx-auto space-y-6 md:space-y-8">
+<!-- Welcome & High-level Stats -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-4 md:gap-6">
+<div class="md:col-span-2 flex flex-col justify-center">
+<h3 class="text-3xl font-headline font-bold tracking-tight mb-2">Welcome back, Scholar</h3>
+<p class="text-on-surface-variant font-body">Your research network has grown by 12% this week. Keep uncovering the connections.</p>
+</div>
+<!-- KPI Cards -->
+<div class="bg-surface-container border border-outline-variant rounded-lg p-5 flex flex-col justify-between hover:border-outline transition-colors group">
+<div class="flex justify-between items-start mb-4">
+<span class="text-on-surface-variant text-sm font-medium">Entities Linked</span>
+<span class="material-symbols-outlined text-primary text-xl group-hover:scale-110 transition-transform">share</span>
+</div>
+<div>
+<span class="text-3xl font-bold font-headline">4,291</span>
+<div class="flex items-center mt-1 text-tertiary text-xs">
+<span class="material-symbols-outlined text-[14px]">trending_up</span>
+<span class="ml-1">+342 this month</span>
+</div>
+</div>
+</div>
+<div class="bg-surface-container border border-outline-variant rounded-lg p-5 flex flex-col justify-between hover:border-outline transition-colors group">
+<div class="flex justify-between items-start mb-4">
+<span class="text-on-surface-variant text-sm font-medium">Active Roots</span>
+<span class="material-symbols-outlined text-primary text-xl group-hover:scale-110 transition-transform">nature</span>
+</div>
+<div>
+<span class="text-3xl font-bold font-headline">128</span>
+<div class="flex items-center mt-1 text-tertiary text-xs">
+<span class="material-symbols-outlined text-[14px]">trending_up</span>
+<span class="ml-1">+12 this week</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Bento Grid Main Area -->
+<div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 auto-rows-min">
+<!-- Knowledge Garden Growth (Hero Widget) -->
+<div class="bg-surface-container border border-outline-variant rounded-xl p-6 md:col-span-2 lg:col-span-2 row-span-2 flex flex-col relative overflow-hidden group">
+<!-- Decorative gradient background -->
+<div class="absolute inset-0 bg-gradient-to-br from-primary-container/10 to-transparent pointer-events-none"></div>
+<div class="flex justify-between items-center mb-6 relative z-10">
+<div>
+<h4 class="font-headline font-semibold text-lg">Knowledge Garden Growth</h4>
+<p class="text-xs text-on-surface-variant mt-1">Cumulative network expansion</p>
+</div>
+<button class="text-on-surface-variant hover:text-on-surface transition-colors"><span class="material-symbols-outlined text-lg">more_horiz</span></button>
+</div>
+<div class="flex-1 w-full min-h-[250px] relative rounded-lg border border-outline-variant/50 bg-surface-container-lowest/50 flex items-center justify-center overflow-hidden">
+<!-- Placeholder for 3D/Complex Chart -->
+<img class="absolute inset-0 w-full h-full object-cover opacity-60 mix-blend-screen group-hover:opacity-80 transition-opacity duration-500" data-alt="abstract 3d visualization of interconnected nodes glowing in deep purple and dark blues on a black background resembling a neural network or constellation" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAC5r_qaAlPQQdVRP0fcNkUBLpDQWBPjXsNp3NmB8ZrY_UqPMBQMhWDE-YJtuaSEHxWLO7E4Wt5jh4UegFadgHwvrEwey9-z13-ds8JdpBNNa6Z7E-LrW4OtEvzxK021ilRqimQwKQ3TQhhXolZUNwEWoNZgMFk4EObIoYDk-d0ipv49VAtTt2JrT3psLj0fvLMEX8f-NfFxasRC4k24p-ipM1ezNjCClVNyg3eBiFnkv6-p0fmp8XiagaqgJwxdE7UABwuoNm6ncHQ"/>
+<!-- Chart Overlay UI -->
+<div class="absolute bottom-4 left-4 right-4 flex justify-between items-end">
+<div class="bg-surface-container-high/80 backdrop-blur border border-outline-variant rounded-md px-3 py-2">
+<span class="block text-[10px] text-on-surface-variant uppercase tracking-wider">Current Node Density</span>
+<span class="text-sm font-semibold text-primary">High (84%)</span>
+</div>
+<div class="flex gap-1">
+<div class="w-1.5 h-8 bg-surface-variant rounded-t-sm relative"><div class="absolute bottom-0 w-full h-1/3 bg-outline rounded-t-sm"></div></div>
+<div class="w-1.5 h-10 bg-surface-variant rounded-t-sm relative"><div class="absolute bottom-0 w-full h-1/2 bg-outline rounded-t-sm"></div></div>
+<div class="w-1.5 h-12 bg-surface-variant rounded-t-sm relative"><div class="absolute bottom-0 w-full h-3/4 bg-primary/50 rounded-t-sm"></div></div>
+<div class="w-1.5 h-16 bg-surface-variant rounded-t-sm relative"><div class="absolute bottom-0 w-full h-full bg-primary rounded-t-sm shadow-[0_0_8px_rgba(167,139,250,0.4)]"></div></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Most Researched Roots -->
+<div class="bg-surface-container border border-outline-variant rounded-xl p-6 md:col-span-1 lg:col-span-2 flex flex-col h-full">
+<div class="flex justify-between items-center mb-6">
+<h4 class="font-headline font-semibold text-lg">Most Researched Roots</h4>
+<span class="text-xs bg-surface-variant text-on-surface-variant px-2 py-1 rounded-full border border-outline-variant">Last 30 Days</span>
+</div>
+<div class="flex-1 flex flex-col gap-4 justify-center">
+<!-- Bar 1 -->
+<div>
+<div class="flex justify-between text-sm mb-1.5">
+<span class="font-medium text-on-surface">k-t-b (ك ت ب)</span>
+<span class="text-on-surface-variant font-mono text-xs">450 citations</span>
+</div>
+<div class="h-1.5 w-full bg-surface-variant rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full" style="width: 85%;"></div>
+</div>
+</div>
+<!-- Bar 2 -->
+<div>
+<div class="flex justify-between text-sm mb-1.5">
+<span class="font-medium text-on-surface">ʿ-l-m (ع ل م)</span>
+<span class="text-on-surface-variant font-mono text-xs">312 citations</span>
+</div>
+<div class="h-1.5 w-full bg-surface-variant rounded-full overflow-hidden">
+<div class="h-full bg-primary/80 rounded-full" style="width: 65%;"></div>
+</div>
+</div>
+<!-- Bar 3 -->
+<div>
+<div class="flex justify-between text-sm mb-1.5">
+<span class="font-medium text-on-surface">q-r-ʾ (ق ر أ)</span>
+<span class="text-on-surface-variant font-mono text-xs">280 citations</span>
+</div>
+<div class="h-1.5 w-full bg-surface-variant rounded-full overflow-hidden">
+<div class="h-full bg-primary/60 rounded-full" style="width: 50%;"></div>
+</div>
+</div>
+<!-- Bar 4 -->
+<div>
+<div class="flex justify-between text-sm mb-1.5">
+<span class="font-medium text-on-surface">r-h-m (ر ح م)</span>
+<span class="text-on-surface-variant font-mono text-xs">195 citations</span>
+</div>
+<div class="h-1.5 w-full bg-surface-variant rounded-full overflow-hidden">
+<div class="h-full bg-primary/40 rounded-full" style="width: 35%;"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Community Impact -->
+<div class="bg-surface-container border border-outline-variant rounded-xl p-6 md:col-span-1 lg:col-span-1 flex flex-col justify-between">
+<div>
+<h4 class="font-headline font-semibold text-lg mb-1">Community Impact</h4>
+<p class="text-xs text-on-surface-variant mb-6">How your public nodes perform</p>
+</div>
+<div class="space-y-5">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-surface-variant border border-outline-variant flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[20px]">visibility</span>
+</div>
+<div>
+<p class="text-sm font-medium">Views</p>
+<p class="text-xl font-bold font-mono">12.4k</p>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-surface-variant border border-outline-variant flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined text-[20px]">bookmark</span>
+</div>
+<div>
+<p class="text-sm font-medium">Bookmarks</p>
+<p class="text-xl font-bold font-mono">842</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Recent Drafts -->
+<div class="bg-surface-container border border-outline-variant rounded-xl p-6 md:col-span-2 lg:col-span-1 flex flex-col">
+<div class="flex justify-between items-center mb-6">
+<h4 class="font-headline font-semibold text-lg">Recent Drafts</h4>
+<button class="text-xs text-primary hover:text-primary-fixed transition-colors">View All</button>
+</div>
+<div class="flex-1 space-y-3 overflow-y-auto pr-2 custom-scrollbar">
+<a class="block p-3 rounded-md bg-surface-container-lowest border border-outline-variant hover:border-primary/50 transition-colors group" href="#">
+<h5 class="text-sm font-medium text-on-surface group-hover:text-primary transition-colors">Origins of Usul al-Fiqh</h5>
+<p class="text-xs text-on-surface-variant mt-1 line-clamp-1">Analysis of early development and integration of logic...</p>
+<div class="flex items-center gap-2 mt-2 text-[10px] text-on-surface-variant">
+<span class="material-symbols-outlined text-[12px]">schedule</span>
+<span>Updated 2h ago</span>
+</div>
+</a>
+<a class="block p-3 rounded-md bg-surface-container-lowest border border-outline-variant hover:border-primary/50 transition-colors group" href="#">
+<h5 class="text-sm font-medium text-on-surface group-hover:text-primary transition-colors">Lexical analysis of 'Sabr'</h5>
+<p class="text-xs text-on-surface-variant mt-1 line-clamp-1">Tracing the root variations across major classical lexicons...</p>
+<div class="flex items-center gap-2 mt-2 text-[10px] text-on-surface-variant">
+<span class="material-symbols-outlined text-[12px]">schedule</span>
+<span>Updated 1d ago</span>
+</div>
+</a>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar (MOBILE Only) -->
+<nav class="md:hidden flex justify-between items-center px-6 py-3 w-full bg-[#0c0c0f] border-t border-outline-variant z-20 sticky bottom-0 pb-safe">
+<a class="flex flex-col items-center gap-1 text-on-surface-variant hover:text-on-surface" href="#">
+<span class="material-symbols-outlined text-2xl">menu_book</span>
+<span class="text-[10px] font-medium">Library</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-on-surface-variant hover:text-on-surface" href="#">
+<span class="material-symbols-outlined text-2xl">hub</span>
+<span class="text-[10px] font-medium">Graph</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined text-2xl" style="font-variation-settings: 'FILL' 1;">query_stats</span>
+<span class="text-[10px] font-medium">Analytics</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-on-surface-variant hover:text-on-surface" href="#">
+<span class="material-symbols-outlined text-2xl">settings</span>
+<span class="text-[10px] font-medium">Settings</span>
+</a>
+</nav>
+</div>
+<style>
+        /* Custom scrollbar for webkit to match the dark theme */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #27272a;
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #52525b;
+        }
+    </style>
+</body></html>

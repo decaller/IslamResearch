@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>About - Obsidian Research</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-background": "#fafafa",
+                    "surface-bright": "#18181b",
+                    "on-tertiary": "#001a12",
+                    "on-error-container": "#fca5a5",
+                    "surface-container-high": "#18181b",
+                    "primary-container": "#7c3aed",
+                    "on-primary-container": "#ede9fe",
+                    "on-tertiary-fixed": "#003318",
+                    "tertiary-fixed": "#bbf7d0",
+                    "outline": "#52525b",
+                    "on-primary-fixed-variant": "#5b21b6",
+                    "on-primary-fixed": "#2e1065",
+                    "on-primary": "#0a0012",
+                    "error-container": "#3b1111",
+                    "background": "#09090b",
+                    "tertiary-fixed-dim": "#6ee7b7",
+                    "tertiary-container": "#065f46",
+                    "primary-fixed-dim": "#c4b5fd",
+                    "on-tertiary-fixed-variant": "#047857",
+                    "on-secondary-container": "#a1a1aa",
+                    "outline-variant": "#27272a",
+                    "on-secondary-fixed": "#18181b",
+                    "surface-container-lowest": "#09090b",
+                    "inverse-on-surface": "#09090b",
+                    "surface-variant": "#18181b",
+                    "surface-container-highest": "#1e1e22",
+                    "surface-tint": "#a78bfa",
+                    "on-tertiary-container": "#bbf7d0",
+                    "surface": "#0c0c0f",
+                    "on-error": "#1a0000",
+                    "secondary-container": "#27272a",
+                    "on-secondary": "#09090b",
+                    "secondary": "#71717a",
+                    "error": "#ef4444",
+                    "on-surface-variant": "#a1a1aa",
+                    "on-surface": "#fafafa",
+                    "inverse-surface": "#fafafa",
+                    "tertiary": "#34d399",
+                    "on-secondary-fixed-variant": "#3f3f46",
+                    "surface-container-low": "#0f0f12",
+                    "surface-container": "#121215",
+                    "surface-dim": "#0c0c0f",
+                    "secondary-fixed": "#a1a1aa",
+                    "inverse-primary": "#5b21b6",
+                    "primary-fixed": "#ede9fe",
+                    "secondary-fixed-dim": "#71717a",
+                    "primary": "#a78bfa"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Geist", "sans-serif"],
+                    "body": ["Geist", "sans-serif"],
+                    "label": ["Geist", "sans-serif"]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        body { font-family: 'Geist', sans-serif; }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex flex-col selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopNavBar -->
+<header class="bg-zinc-950/80 backdrop-blur-md font-geist tracking-tight antialiased text-zinc-100 docked full-width top-0 sticky z-50 border-b border-zinc-800 flat no shadows">
+<div class="flex justify-between items-center px-6 py-4 w-full max-w-screen-2xl mx-auto">
+<div class="flex items-center gap-8">
+<a class="text-xl font-black text-violet-400 tracking-tighter" href="#">Obsidian Research</a>
+<nav class="hidden md:flex items-center gap-6">
+<a class="text-zinc-400 hover:text-zinc-100 transition-colors" href="#">Browse</a>
+<a class="text-zinc-400 hover:text-zinc-100 transition-colors" href="#">Journals</a>
+<a class="text-zinc-400 hover:text-zinc-100 transition-colors" href="#">Authors</a>
+<a class="text-violet-400 border-b-2 border-violet-400 pb-1" href="#">About</a>
+<a class="text-zinc-400 hover:text-zinc-100 transition-colors" href="#">Publish</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative hidden md:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-sm">search</span>
+<input class="bg-surface-container border border-outline-variant rounded-md py-1.5 pl-9 pr-4 text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-on-surface w-64 placeholder-on-surface-variant transition-all" placeholder="Search..." type="text"/>
+</div>
+<button class="bg-primary hover:bg-primary/90 text-on-primary px-4 py-2 rounded-md text-sm font-medium transition-all duration-200 ease-in-out active:scale-95">Sign In</button>
+</div>
+</div>
+</header>
+<main class="flex-grow flex flex-col items-center w-full max-w-screen-xl mx-auto px-6 py-16 gap-24">
+<!-- Hero Section -->
+<section class="w-full text-center max-w-3xl flex flex-col items-center gap-6 mt-12">
+<h1 class="font-headline text-5xl md:text-6xl font-extrabold tracking-tight text-on-background leading-tight">
+                Precision in <span class="text-primary">Discovery</span>
+</h1>
+<p class="font-body text-xl text-on-surface-variant leading-relaxed">
+                Building the ultimate scholarly IDE. We are engineering a platform where deep linguistic analysis meets rigorous historical methodology.
+            </p>
+</section>
+<!-- The Vision Grid -->
+<section class="w-full flex flex-col gap-12">
+<div class="flex items-center gap-4 border-b border-outline-variant pb-4">
+<span class="material-symbols-outlined text-primary text-2xl">visibility</span>
+<h2 class="font-headline text-2xl font-bold tracking-tight">The Vision: A Scholarly IDE</h2>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+<!-- Card 1 -->
+<div class="bg-surface-container rounded-lg border border-outline-variant p-8 flex flex-col gap-4 hover:bg-surface-container-high transition-colors group">
+<div class="w-12 h-12 rounded-full bg-surface-container-highest border border-outline-variant flex items-center justify-center text-primary group-hover:bg-primary/10 transition-colors">
+<span class="material-symbols-outlined">code_blocks</span>
+</div>
+<h3 class="font-headline text-lg font-semibold text-on-surface">Developer-Grade Tools</h3>
+<p class="font-body text-sm text-on-surface-variant leading-relaxed">
+                        Treating texts as codebases. Version control for manuscripts, dependency graphing for historical chains, and semantic search built for academic rigor.
+                    </p>
+</div>
+<!-- Card 2 -->
+<div class="bg-surface-container rounded-lg border border-outline-variant p-8 flex flex-col gap-4 hover:bg-surface-container-high transition-colors group lg:col-span-2">
+<div class="w-12 h-12 rounded-full bg-surface-container-highest border border-outline-variant flex items-center justify-center text-tertiary group-hover:bg-tertiary/10 transition-colors">
+<span class="material-symbols-outlined">account_tree</span>
+</div>
+<h3 class="font-headline text-lg font-semibold text-on-surface">Ontological Mapping</h3>
+<p class="font-body text-sm text-on-surface-variant leading-relaxed">
+                        Connecting concepts across centuries. Our ontology engine links theological, philosophical, and legal terminology, creating a living web of scholarly thought rather than isolated documents.
+                    </p>
+</div>
+</div>
+</section>
+<!-- The Intelligence Panel -->
+<section class="w-full flex flex-col gap-12">
+<div class="flex items-center gap-4 border-b border-outline-variant pb-4">
+<span class="material-symbols-outlined text-primary text-2xl">group_work</span>
+<h2 class="font-headline text-2xl font-bold tracking-tight">The Intelligence Panel</h2>
+</div>
+<p class="font-body text-on-surface-variant max-w-3xl">
+                Our analysis is driven by specialized "lenses"—computational agents trained on specific methodological frameworks to provide multi-dimensional insights into classical texts.
+            </p>
+<div class="flex flex-col gap-8">
+<!-- Lens Bio 1 -->
+<div class="flex flex-col md:flex-row gap-6 bg-surface-container-lowest border border-outline-variant rounded-lg p-6">
+<div class="md:w-1/4 flex flex-col gap-2 border-r border-outline-variant pr-6">
+<span class="text-primary font-bold text-lg">The Philologist</span>
+<span class="text-xs font-mono text-on-surface-variant uppercase tracking-wider">Lens ID: LYN-01</span>
+</div>
+<div class="md:w-3/4 flex flex-col gap-4">
+<p class="font-body text-sm text-on-surface-variant leading-relaxed">
+                            Focuses entirely on linguistic morphology, etymological shifts, and syntactical anomalies. The Philologist lens detects subtle changes in term usage across different geographic regions and time periods, highlighting when a common word assumes a specialized technical meaning.
+                        </p>
+</div>
+</div>
+<!-- Lens Bio 2 -->
+<div class="flex flex-col md:flex-row gap-6 bg-surface-container-lowest border border-outline-variant rounded-lg p-6">
+<div class="md:w-1/4 flex flex-col gap-2 border-r border-outline-variant pr-6">
+<span class="text-tertiary font-bold text-lg">The Historian</span>
+<span class="text-xs font-mono text-on-surface-variant uppercase tracking-wider">Lens ID: HST-04</span>
+</div>
+<div class="md:w-3/4 flex flex-col gap-4">
+<p class="font-body text-sm text-on-surface-variant leading-relaxed">
+                            Cross-references textual claims with external historical events, biographical dictionaries, and sociopolitical contexts. It builds dependency graphs of teacher-student relationships to verify transmission chains and intellectual influences.
+                        </p>
+</div>
+</div>
+</div>
+</section>
+<!-- Linguistic Deep-Dive -->
+<section class="w-full flex flex-col gap-12 bg-surface-container border border-outline-variant rounded-xl p-8 md:p-12">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary text-3xl">translate</span>
+<h2 class="font-headline text-3xl font-bold tracking-tight">Linguistic Deep-Dive Philosophy</h2>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+<div class="flex flex-col gap-6">
+<p class="font-body text-base text-on-surface-variant leading-relaxed">
+                        Translation is inherently lossy. Our philosophy dictates that researchers must interface with the structural reality of the source language. We do not just translate; we map.
+                    </p>
+<ul class="flex flex-col gap-4 text-sm text-on-surface-variant font-body">
+<li class="flex gap-3 items-start">
+<span class="material-symbols-outlined text-primary text-sm mt-0.5">check_circle</span>
+<span><strong>Root Tri-lateral Analysis:</strong> Every significant term is traced back to its root consonants, displaying the semantic web of related derivatives.</span>
+</li>
+<li class="flex gap-3 items-start">
+<span class="material-symbols-outlined text-primary text-sm mt-0.5">check_circle</span>
+<span><strong>Contextual Valence:</strong> Tracking how the emotional or technical weight of a term shifts depending on the author's primary discipline.</span>
+</li>
+</ul>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant rounded-md p-6 font-mono text-sm text-on-surface-variant overflow-x-auto">
+<div class="flex flex-col gap-2">
+<span class="text-tertiary">// Example Output: Semantic Mapping</span>
+<span class="text-primary">analyze_root</span>("k-t-b") {
+                        <span class="pl-4">derivatives: [</span>
+<span class="pl-8 text-on-surface">"kitab" -&gt; book / decree,</span>
+<span class="pl-8 text-on-surface">"maktab" -&gt; desk / school,</span>
+<span class="pl-8 text-on-surface">"katib" -&gt; writer / scribe</span>
+<span class="pl-4">]</span>
+<span class="pl-4">historical_drift: <span class="text-tertiary">true</span></span>
+                        }
+                    </div>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-zinc-950 font-geist text-sm text-zinc-400 full-width py-12 mt-auto border-t border-zinc-800 flat no shadows">
+<div class="flex flex-col md:flex-row justify-between items-center px-8 max-w-7xl mx-auto w-full gap-6">
+<div class="text-lg font-bold text-violet-400">Obsidian Research</div>
+<div class="flex gap-6">
+<a class="text-zinc-500 hover:text-zinc-100 transition-colors opacity-80 hover:opacity-100" href="#">Privacy Policy</a>
+<a class="text-zinc-500 hover:text-zinc-100 transition-colors opacity-80 hover:opacity-100" href="#">Terms of Service</a>
+<a class="text-zinc-500 hover:text-zinc-100 transition-colors opacity-80 hover:opacity-100" href="#">API Documentation</a>
+<a class="text-zinc-500 hover:text-zinc-100 transition-colors opacity-80 hover:opacity-100" href="#">Support</a>
+</div>
+<div>© 2024 Obsidian Research. Precision in Discovery.</div>
+</div>
+</footer>
+</body></html>

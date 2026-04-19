@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Linguistic Analysis - IslamResearch</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "surface-dim": "#0c0c0f",
+                        "tertiary": "#34d399",
+                        "on-tertiary-fixed-variant": "#047857",
+                        "on-primary-container": "#ede9fe",
+                        "on-error": "#1a0000",
+                        "on-background": "#fafafa",
+                        "surface": "#0c0c0f",
+                        "primary": "#a78bfa",
+                        "secondary-fixed-dim": "#71717a",
+                        "inverse-surface": "#fafafa",
+                        "on-surface-variant": "#a1a1aa",
+                        "secondary": "#71717a",
+                        "on-primary-fixed": "#2e1065",
+                        "surface-container-lowest": "#09090b",
+                        "on-tertiary": "#001a12",
+                        "surface-container-high": "#18181b",
+                        "on-tertiary-fixed": "#003318",
+                        "surface-container-highest": "#1e1e22",
+                        "on-surface": "#fafafa",
+                        "surface-variant": "#18181b",
+                        "on-primary-fixed-variant": "#5b21b6",
+                        "outline": "#52525b",
+                        "inverse-primary": "#5b21b6",
+                        "surface-bright": "#18181b",
+                        "background": "#09090b",
+                        "on-tertiary-container": "#bbf7d0",
+                        "surface-container-low": "#0f0f12",
+                        "surface-container": "#121215",
+                        "on-primary": "#0a0012",
+                        "on-secondary-fixed-variant": "#3f3f46",
+                        "on-secondary-container": "#a1a1aa",
+                        "surface-tint": "#a78bfa",
+                        "primary-fixed": "#ede9fe",
+                        "outline-variant": "#27272a",
+                        "on-secondary": "#09090b",
+                        "tertiary-container": "#065f46",
+                        "on-secondary-fixed": "#18181b",
+                        "secondary-fixed": "#a1a1aa",
+                        "tertiary-fixed-dim": "#6ee7b7",
+                        "on-error-container": "#fca5a5",
+                        "inverse-on-surface": "#09090b",
+                        "error": "#ef4444",
+                        "primary-fixed-dim": "#c4b5fd",
+                        "error-container": "#3b1111",
+                        "tertiary-fixed": "#bbf7d0",
+                        "secondary-container": "#27272a",
+                        "primary-container": "#7c3aed"
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    fontFamily: {
+                        "headline": ["Geist", "sans-serif"],
+                        "body": ["Geist", "sans-serif"],
+                        "label": ["Geist", "sans-serif"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Geist', sans-serif; }
+        .arabic-text { font-family: 'Amiri', 'Scheherazade New', serif; line-height: 1.8; }
+        /* Hide scrollbar for clean UI */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #27272a; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #52525b; }
+    </style>
+</head>
+<body class="bg-background text-on-background h-screen overflow-hidden flex">
+<!-- JSON Anchor: SideNavBar -->
+<!-- active rule: History matches the likely context of a deep dive from past search -->
+<aside class="hidden md:flex flex-col w-64 h-screen p-4 gap-2 bg-[#0c0c0f] border-r border-[#27272a] transition-all duration-150 flex-shrink-0 z-20">
+<div class="flex items-center gap-3 px-2 mb-6 mt-2">
+<img class="w-8 h-8 rounded-full object-cover ring-1 ring-outline-variant" data-alt="close up profile portrait of an academic looking thoughtfully off camera in dark moody lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBQBN3w1umWFgiKZv0wYYx_Nv2WGvIL4UEqUmGYqbU9vPyOpiqDzmaHifLqdgBxdf5QDuP93-fAOB2wBnubyQyXdW1OfuuGQwP0SO_31Wox6iU2ixeAIF2Gn-LcwqoXlSmpsadTQkbN3xz2oYgWLTkH0svor1WcvUb5542cJrYTf2GKEnhkb11QJZCa1WhZ22lQONSPEACSQ6ljJ_mwzrSz7M8Ou4kqddh4nS--LIIxdmpj1fl5WG9f7jIfYrKLjUD6boE4Ld0VY37K"/>
+<div class="flex flex-col">
+<span class="font-bold text-[#fafafa] font-headline text-sm tracking-tight">Research Desk</span>
+<span class="text-[#a1a1aa] text-xs">v1.0.4</span>
+</div>
+</div>
+<nav class="flex flex-col gap-1 w-full font-geist text-sm">
+<a class="flex items-center gap-3 px-3 py-2 bg-[#27272a] text-[#a78bfa] rounded-lg w-full group" href="#">
+<span class="material-symbols-outlined text-[20px] transition-transform group-hover:scale-110">history</span>
+                History
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#a1a1aa] hover:bg-[#18181b] hover:text-[#fafafa] rounded-lg transition-colors w-full group" href="#">
+<span class="material-symbols-outlined text-[20px] transition-transform group-hover:scale-110">bookmark</span>
+                Bookmarks
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#a1a1aa] hover:bg-[#18181b] hover:text-[#fafafa] rounded-lg transition-colors w-full group" href="#">
+<span class="material-symbols-outlined text-[20px] transition-transform group-hover:scale-110">edit_note</span>
+                Drafts
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#a1a1aa] hover:bg-[#18181b] hover:text-[#fafafa] rounded-lg transition-colors w-full group" href="#">
+<span class="material-symbols-outlined text-[20px] transition-transform group-hover:scale-110">folder_open</span>
+                Collections
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#a1a1aa] hover:bg-[#18181b] hover:text-[#fafafa] rounded-lg transition-colors w-full group mt-auto" href="#">
+<span class="material-symbols-outlined text-[20px] transition-transform group-hover:scale-110">settings</span>
+                Settings
+            </a>
+</nav>
+</aside>
+<!-- Main Content Wrapper -->
+<div class="flex-1 flex flex-col min-w-0 h-screen overflow-hidden relative">
+<!-- JSON Anchor: TopAppBar -->
+<!-- active rule: Lexicon matches "Linguistic Deep-Dive" -->
+<header class="flex justify-between items-center px-4 h-14 w-full bg-[#09090b] border-b border-[#27272a] z-10 flex-shrink-0">
+<div class="flex items-center gap-8 h-full">
+<div class="text-xl font-bold tracking-tighter text-[#fafafa] font-headline flex items-center gap-2">
+<div class="w-6 h-6 rounded bg-primary/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-sm" style="font-variation-settings: 'FILL' 1;">book_4</span>
+</div>
+                    IslamResearch
+                </div>
+<nav class="hidden md:flex gap-6 h-full items-center font-geist tracking-tight text-[#fafafa] text-sm pt-1">
+<a class="text-[#a1a1aa] hover:bg-[#18181b] hover:text-[#fafafa] transition-colors duration-200 ease-in-out px-2 py-1 rounded" href="#">Quran</a>
+<a class="text-[#a78bfa] border-b-2 border-[#a78bfa] pb-1 h-full flex items-center font-medium" href="#">Lexicon</a>
+<a class="text-[#a1a1aa] hover:bg-[#18181b] hover:text-[#fafafa] transition-colors duration-200 ease-in-out px-2 py-1 rounded" href="#">Exegesis</a>
+<a class="text-[#a1a1aa] hover:bg-[#18181b] hover:text-[#fafafa] transition-colors duration-200 ease-in-out px-2 py-1 rounded" href="#">Habits</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative hidden sm:block w-64">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[18px]">search</span>
+<input class="w-full bg-surface-container-high border border-outline-variant rounded-full pl-9 pr-4 py-1.5 text-sm text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary placeholder-on-surface-variant transition-all bg-transparent" placeholder="Search root or word..." type="text"/>
+<div class="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1">
+<kbd class="hidden lg:inline-flex items-center justify-center px-1.5 py-0.5 text-[10px] font-medium text-on-surface-variant bg-surface-container border border-outline-variant rounded">⌘</kbd>
+<kbd class="hidden lg:inline-flex items-center justify-center px-1.5 py-0.5 text-[10px] font-medium text-on-surface-variant bg-surface-container border border-outline-variant rounded">K</kbd>
+</div>
+</div>
+<button class="text-[#a1a1aa] hover:text-[#fafafa] transition-colors w-8 h-8 flex items-center justify-center rounded-full hover:bg-surface-variant">
+<span class="material-symbols-outlined text-[20px]">settings</span>
+</button>
+<button class="text-[#a1a1aa] hover:text-[#fafafa] transition-colors w-8 h-8 flex items-center justify-center rounded-full hover:bg-surface-variant">
+<span class="material-symbols-outlined text-[20px]">account_circle</span>
+</button>
+</div>
+</header>
+<!-- Main Scrollable Canvas -->
+<main class="flex-1 overflow-y-auto bg-background p-6 lg:p-8">
+<div class="max-w-7xl mx-auto flex flex-col gap-6">
+<!-- Page Header -->
+<div class="flex items-end justify-between border-b border-outline-variant pb-4 mb-2">
+<div>
+<div class="flex items-center gap-2 text-sm text-on-surface-variant mb-1">
+<span class="hover:text-primary cursor-pointer transition-colors">Lexicon</span>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<span>Root Analysis</span>
+</div>
+<h1 class="text-3xl font-headline font-bold text-on-surface tracking-tight">Linguistic Analysis</h1>
+</div>
+<div class="flex gap-2">
+<button class="flex items-center gap-2 px-3 py-1.5 text-sm text-on-surface-variant hover:text-on-surface bg-surface-container border border-outline-variant rounded hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined text-[18px]">bookmark_add</span>
+                            Save
+                        </button>
+<button class="flex items-center gap-2 px-3 py-1.5 text-sm text-on-surface-variant hover:text-on-surface bg-surface-container border border-outline-variant rounded hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined text-[18px]">ios_share</span>
+                            Export
+                        </button>
+</div>
+</div>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-12 gap-6">
+<!-- Morphology Card (Span 8) -->
+<div class="col-span-12 lg:col-span-8 bg-surface-container border border-outline-variant rounded-xl p-6 flex flex-col relative overflow-hidden group">
+<div class="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/4 pointer-events-none"></div>
+<div class="flex justify-between items-start mb-8 relative z-10">
+<h2 class="text-sm font-semibold text-on-surface-variant tracking-wide uppercase">Morphology &amp; Root</h2>
+<span class="px-2 py-1 bg-surface-variant text-on-surface-variant text-xs rounded border border-outline-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">verified</span>
+                                Verified Entry
+                            </span>
+</div>
+<div class="flex-1 flex flex-col items-center justify-center gap-6 relative z-10 py-4">
+<!-- The Target Word -->
+<div class="text-6xl lg:text-7xl font-bold text-primary arabic-text drop-shadow-sm mb-4">
+                                رَحْمَة
+                            </div>
+<!-- Breakdown Structure -->
+<div class="flex items-center gap-8 px-8 py-6 bg-surface-container-low border border-outline-variant rounded-lg w-full justify-center relative">
+<!-- Connecting lines -->
+<div class="absolute top-0 left-1/2 w-[1px] h-4 bg-outline-variant -translate-x-1/2 -mt-4"></div>
+<div class="absolute top-[-16px] left-[25%] right-[25%] h-[1px] bg-outline-variant"></div>
+<div class="absolute top-[-16px] left-[25%] w-[1px] h-4 bg-outline-variant"></div>
+<div class="absolute top-[-16px] right-[25%] w-[1px] h-4 bg-outline-variant"></div>
+<div class="flex flex-col items-center gap-2">
+<span class="text-3xl text-on-surface arabic-text">ر</span>
+<span class="text-xs text-on-surface-variant">Ra</span>
+</div>
+<div class="text-outline-variant pb-6">-</div>
+<div class="flex flex-col items-center gap-2">
+<span class="text-3xl text-on-surface arabic-text">ح</span>
+<span class="text-xs text-on-surface-variant">Ha</span>
+</div>
+<div class="text-outline-variant pb-6">-</div>
+<div class="flex flex-col items-center gap-2">
+<span class="text-3xl text-on-surface arabic-text">م</span>
+<span class="text-xs text-on-surface-variant">Mim</span>
+</div>
+</div>
+</div>
+<div class="flex flex-wrap gap-2 mt-auto pt-6 border-t border-outline-variant/50 relative z-10">
+<span class="px-3 py-1 bg-surface-container-high border border-outline-variant text-on-surface text-sm rounded-full">Noun (اسم)</span>
+<span class="px-3 py-1 bg-surface-container-high border border-outline-variant text-on-surface text-sm rounded-full">Feminine (مؤنث)</span>
+<span class="px-3 py-1 bg-surface-container-high border border-outline-variant text-on-surface text-sm rounded-full">Accusative (منصوب)</span>
+<div class="ml-auto flex items-center text-sm text-on-surface-variant cursor-pointer hover:text-primary transition-colors">
+                                Detailed grammar <span class="material-symbols-outlined text-[16px] ml-1">arrow_forward</span>
+</div>
+</div>
+</div>
+<!-- Summary Stats Card (Span 4) -->
+<div class="col-span-12 lg:col-span-4 bg-surface-container border border-outline-variant rounded-xl p-6 flex flex-col justify-between">
+<div>
+<h2 class="text-sm font-semibold text-on-surface-variant tracking-wide uppercase mb-6">Corpus Density</h2>
+<div class="flex items-baseline gap-2 mb-1">
+<span class="text-4xl font-headline font-bold text-on-surface">339</span>
+<span class="text-sm text-on-surface-variant">total occurrences</span>
+</div>
+<p class="text-xs text-on-surface-variant mb-6 border-b border-outline-variant pb-4">
+                                Root occurs in 59 distinct Surahs. Primary form is nominal.
+                            </p>
+</div>
+<div class="flex flex-col gap-4">
+<div class="flex flex-col gap-1.5">
+<div class="flex justify-between text-xs">
+<span class="text-on-surface">Meccan Revelation</span>
+<span class="text-on-surface-variant">120 (35%)</span>
+</div>
+<div class="h-1.5 w-full bg-surface-variant rounded-full overflow-hidden">
+<div class="h-full bg-secondary w-[35%]"></div>
+</div>
+</div>
+<div class="flex flex-col gap-1.5">
+<div class="flex justify-between text-xs">
+<span class="text-on-surface">Medinan Revelation</span>
+<span class="text-on-surface-variant">219 (65%)</span>
+</div>
+<div class="h-1.5 w-full bg-surface-variant rounded-full overflow-hidden">
+<div class="h-full bg-primary w-[65%]"></div>
+</div>
+</div>
+</div>
+<div class="mt-8 pt-4 border-t border-outline-variant flex justify-between items-center text-sm">
+<span class="text-on-surface-variant">First appearance:</span>
+<span class="text-on-surface font-medium border border-outline-variant px-2 py-0.5 rounded bg-surface-container-high">Surah Al-Fatihah</span>
+</div>
+</div>
+<!-- Chart Card (Span 12) -->
+<div class="col-span-12 bg-surface-container border border-outline-variant rounded-xl p-6">
+<div class="flex justify-between items-center mb-6">
+<h2 class="text-sm font-semibold text-on-surface-variant tracking-wide uppercase">Frequency Distribution</h2>
+<div class="flex items-center gap-2">
+<select class="bg-surface-container-high border border-outline-variant text-on-surface text-xs rounded px-2 py-1 focus:ring-primary focus:border-primary cursor-pointer outline-none">
+<option>By Surah Number</option>
+<option>By Revelation Order</option>
+</select>
+</div>
+</div>
+<!-- Mock Chart Area -->
+<div class="h-48 w-full flex items-end justify-between gap-1 mt-4 px-2 relative">
+<!-- Grid lines -->
+<div class="absolute inset-0 flex flex-col justify-between pointer-events-none border-b border-outline-variant pb-6">
+<div class="w-full h-[1px] bg-outline-variant/30"></div>
+<div class="w-full h-[1px] bg-outline-variant/30"></div>
+<div class="w-full h-[1px] bg-outline-variant/30"></div>
+<div class="w-full h-[1px] bg-outline-variant/30"></div>
+</div>
+<!-- Bars -->
+<div class="w-full flex justify-between items-end h-full z-10 pb-6 group">
+<div class="w-[2%] bg-primary hover:bg-primary-fixed transition-colors h-[10%] rounded-t-sm cursor-pointer relative"><div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-surface-container-highest px-2 py-1 rounded text-xs opacity-0 group-hover:opacity-100 transition-opacity border border-outline-variant pointer-events-none">3</div></div>
+<div class="w-[2%] bg-primary/70 hover:bg-primary-fixed transition-colors h-[45%] rounded-t-sm cursor-pointer"></div>
+<div class="w-[2%] bg-primary hover:bg-primary-fixed transition-colors h-[80%] rounded-t-sm cursor-pointer"></div>
+<div class="w-[2%] bg-primary/40 hover:bg-primary-fixed transition-colors h-[20%] rounded-t-sm cursor-pointer"></div>
+<div class="w-[2%] bg-primary hover:bg-primary-fixed transition-colors h-[60%] rounded-t-sm cursor-pointer"></div>
+<div class="w-[2%] bg-primary/80 hover:bg-primary-fixed transition-colors h-[95%] rounded-t-sm cursor-pointer relative"><div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-surface-container-highest px-2 py-1 rounded text-xs opacity-0 group-hover:opacity-100 transition-opacity border border-outline-variant pointer-events-none text-primary font-bold z-20 whitespace-nowrap">Surah 6: 24</div></div>
+<div class="w-[2%] bg-primary/60 hover:bg-primary-fixed transition-colors h-[30%] rounded-t-sm cursor-pointer"></div>
+<div class="w-[2%] bg-primary/50 hover:bg-primary-fixed transition-colors h-[15%] rounded-t-sm cursor-pointer"></div>
+<div class="w-[2%] bg-primary hover:bg-primary-fixed transition-colors h-[40%] rounded-t-sm cursor-pointer"></div>
+<div class="w-[2%] bg-primary/90 hover:bg-primary-fixed transition-colors h-[75%] rounded-t-sm cursor-pointer"></div>
+<div class="w-[2%] bg-primary/30 hover:bg-primary-fixed transition-colors h-[5%] rounded-t-sm cursor-pointer"></div>
+<div class="w-[2%] bg-primary hover:bg-primary-fixed transition-colors h-[25%] rounded-t-sm cursor-pointer"></div>
+<div class="w-[2%] bg-primary/60 hover:bg-primary-fixed transition-colors h-[55%] rounded-t-sm cursor-pointer"></div>
+<div class="w-[2%] bg-primary/80 hover:bg-primary-fixed transition-colors h-[85%] rounded-t-sm cursor-pointer"></div>
+<div class="w-[2%] bg-primary/40 hover:bg-primary-fixed transition-colors h-[35%] rounded-t-sm cursor-pointer"></div>
+<div class="w-[2%] bg-primary hover:bg-primary-fixed transition-colors h-[65%] rounded-t-sm cursor-pointer"></div>
+<div class="w-[2%] bg-primary/70 hover:bg-primary-fixed transition-colors h-[45%] rounded-t-sm cursor-pointer"></div>
+<div class="w-[2%] bg-primary/50 hover:bg-primary-fixed transition-colors h-[10%] rounded-t-sm cursor-pointer"></div>
+</div>
+<!-- X Axis Labels -->
+<div class="absolute bottom-0 left-0 w-full flex justify-between text-[10px] text-on-surface-variant px-2">
+<span>Al-Fatihah</span>
+<span>Al-Ma'idah</span>
+<span>Yunus</span>
+<span>Al-Kahf</span>
+<span>An-Naml</span>
+<span>Ya-Sin</span>
+<span>An-Nas</span>
+</div>
+</div>
+</div>
+<!-- Comparison Table (Span 8) -->
+<div class="col-span-12 lg:col-span-8 bg-surface-container border border-outline-variant rounded-xl overflow-hidden flex flex-col">
+<div class="p-6 border-b border-outline-variant flex justify-between items-center bg-surface-container-low">
+<h2 class="text-sm font-semibold text-on-surface-variant tracking-wide uppercase">Contextual Occurrences</h2>
+<div class="flex gap-2">
+<button class="p-1 hover:bg-surface-variant rounded text-on-surface-variant hover:text-on-surface transition-colors"><span class="material-symbols-outlined text-[18px]">filter_list</span></button>
+<button class="p-1 hover:bg-surface-variant rounded text-on-surface-variant hover:text-on-surface transition-colors"><span class="material-symbols-outlined text-[18px]">sort</span></button>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="border-b border-outline-variant text-xs text-on-surface-variant bg-surface-container-highest">
+<th class="px-6 py-3 font-medium w-24">Location</th>
+<th class="px-6 py-3 font-medium text-right w-1/2">Arabic Context</th>
+<th class="px-6 py-3 font-medium">Translation Snippet</th>
+</tr>
+</thead>
+<tbody class="text-sm divide-y divide-outline-variant">
+<tr class="hover:bg-surface-variant/50 transition-colors group cursor-pointer">
+<td class="px-6 py-4 align-top whitespace-nowrap">
+<div class="text-on-surface font-medium">1:3</div>
+<div class="text-xs text-on-surface-variant mt-1">Al-Fatihah</div>
+</td>
+<td class="px-6 py-4 align-top text-right arabic-text text-lg text-on-surface leading-loose" dir="rtl">
+                                            الرَّحْمَٰنِ <span class="text-primary font-bold border-b border-primary/30">الرَّحِيمِ</span>
+</td>
+<td class="px-6 py-4 align-top text-on-surface-variant">
+                                            The Entirely Merciful, the Especially Merciful.
+                                        </td>
+</tr>
+<tr class="hover:bg-surface-variant/50 transition-colors group cursor-pointer">
+<td class="px-6 py-4 align-top whitespace-nowrap">
+<div class="text-on-surface font-medium">2:105</div>
+<div class="text-xs text-on-surface-variant mt-1">Al-Baqarah</div>
+</td>
+<td class="px-6 py-4 align-top text-right arabic-text text-lg text-on-surface leading-loose" dir="rtl">
+                                            وَاللَّهُ يَخْتَصُّ <span class="text-primary font-bold border-b border-primary/30">بِرَحْمَتِهِ</span> مَن يَشَاءُ
+                                        </td>
+<td class="px-6 py-4 align-top text-on-surface-variant">
+                                            And Allah selects for His mercy whom He wills.
+                                        </td>
+</tr>
+<tr class="hover:bg-surface-variant/50 transition-colors group cursor-pointer">
+<td class="px-6 py-4 align-top whitespace-nowrap">
+<div class="text-on-surface font-medium">3:8</div>
+<div class="text-xs text-on-surface-variant mt-1">Ali 'Imran</div>
+</td>
+<td class="px-6 py-4 align-top text-right arabic-text text-lg text-on-surface leading-loose" dir="rtl">
+                                            وَهَبْ لَنَا مِن لَّدُنكَ <span class="text-primary font-bold border-b border-primary/30">رَحْمَةً</span>
+</td>
+<td class="px-6 py-4 align-top text-on-surface-variant">
+                                            ...and grant us from Yourself mercy.
+                                        </td>
+</tr>
+<tr class="hover:bg-surface-variant/50 transition-colors group cursor-pointer">
+<td class="px-6 py-4 align-top whitespace-nowrap">
+<div class="text-on-surface font-medium">4:175</div>
+<div class="text-xs text-on-surface-variant mt-1">An-Nisa</div>
+</td>
+<td class="px-6 py-4 align-top text-right arabic-text text-lg text-on-surface leading-loose" dir="rtl">
+                                            فَسَيُدْخِلُهُمْ فِي <span class="text-primary font-bold border-b border-primary/30">رَحْمَةٍ</span> مِّنْهُ
+                                        </td>
+<td class="px-6 py-4 align-top text-on-surface-variant">
+                                            He will admit them to mercy from Himself...
+                                        </td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="p-3 border-t border-outline-variant bg-surface-container-low flex justify-center">
+<button class="text-xs text-on-surface-variant hover:text-primary transition-colors flex items-center gap-1">
+                                View all 339 occurrences <span class="material-symbols-outlined text-[14px]">expand_more</span>
+</button>
+</div>
+</div>
+<!-- Related Roots Sidebar (Span 4) -->
+<div class="col-span-12 lg:col-span-4 bg-surface-container border border-outline-variant rounded-xl flex flex-col overflow-hidden">
+<div class="p-6 border-b border-outline-variant bg-surface-container-low">
+<h2 class="text-sm font-semibold text-on-surface-variant tracking-wide uppercase">Related Roots</h2>
+</div>
+<div class="flex-1 overflow-y-auto p-2">
+<div class="flex flex-col gap-1">
+<!-- Self -->
+<div class="flex justify-between items-center p-3 rounded-lg bg-surface-variant border border-primary/20 group">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded bg-primary/10 flex items-center justify-center text-primary arabic-text text-xl border border-primary/30">
+                                            رحم
+                                        </div>
+<div class="flex flex-col">
+<span class="text-sm font-medium text-on-surface">r-ḥ-m</span>
+<span class="text-xs text-primary">Current Focus</span>
+</div>
+</div>
+<span class="text-xs text-on-surface-variant">339</span>
+</div>
+<!-- Related 1 -->
+<a class="flex justify-between items-center p-3 rounded-lg hover:bg-surface-variant/50 border border-transparent hover:border-outline-variant transition-all group cursor-pointer" href="#">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded bg-surface-container-high flex items-center justify-center text-on-surface arabic-text text-xl border border-outline-variant group-hover:border-on-surface-variant transition-colors">
+                                            رحن
+                                        </div>
+<div class="flex flex-col">
+<span class="text-sm font-medium text-on-surface">r-ḥ-n</span>
+<span class="text-xs text-on-surface-variant truncate w-24">To pledge</span>
+</div>
+</div>
+<span class="text-xs text-on-surface-variant bg-surface-container px-2 py-0.5 rounded border border-outline-variant">2</span>
+</a>
+<!-- Related 2 -->
+<a class="flex justify-between items-center p-3 rounded-lg hover:bg-surface-variant/50 border border-transparent hover:border-outline-variant transition-all group cursor-pointer" href="#">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded bg-surface-container-high flex items-center justify-center text-on-surface arabic-text text-xl border border-outline-variant group-hover:border-on-surface-variant transition-colors">
+                                            رحل
+                                        </div>
+<div class="flex flex-col">
+<span class="text-sm font-medium text-on-surface">r-ḥ-l</span>
+<span class="text-xs text-on-surface-variant truncate w-24">To journey</span>
+</div>
+</div>
+<span class="text-xs text-on-surface-variant bg-surface-container px-2 py-0.5 rounded border border-outline-variant">4</span>
+</a>
+<!-- Related 3 -->
+<a class="flex justify-between items-center p-3 rounded-lg hover:bg-surface-variant/50 border border-transparent hover:border-outline-variant transition-all group cursor-pointer" href="#">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded bg-surface-container-high flex items-center justify-center text-on-surface arabic-text text-xl border border-outline-variant group-hover:border-on-surface-variant transition-colors">
+                                            رحب
+                                        </div>
+<div class="flex flex-col">
+<span class="text-sm font-medium text-on-surface">r-ḥ-b</span>
+<span class="text-xs text-on-surface-variant truncate w-24">To welcome</span>
+</div>
+</div>
+<span class="text-xs text-on-surface-variant bg-surface-container px-2 py-0.5 rounded border border-outline-variant">3</span>
+</a>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom spacing -->
+<div class="h-12 w-full"></div>
+</main>
+</div>
+</body></html>

@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>About - IslamResearch</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-background": "#fafafa",
+                        "surface-bright": "#18181b",
+                        "on-tertiary": "#001a12",
+                        "on-error-container": "#fca5a5",
+                        "surface-container-high": "#18181b",
+                        "primary-container": "#7c3aed",
+                        "on-primary-container": "#ede9fe",
+                        "on-tertiary-fixed": "#003318",
+                        "tertiary-fixed": "#bbf7d0",
+                        "outline": "#52525b",
+                        "on-primary-fixed-variant": "#5b21b6",
+                        "on-primary-fixed": "#2e1065",
+                        "on-primary": "#0a0012",
+                        "error-container": "#3b1111",
+                        "background": "#09090b",
+                        "tertiary-fixed-dim": "#6ee7b7",
+                        "tertiary-container": "#065f46",
+                        "primary-fixed-dim": "#c4b5fd",
+                        "on-tertiary-fixed-variant": "#047857",
+                        "on-secondary-container": "#a1a1aa",
+                        "outline-variant": "#27272a",
+                        "on-secondary-fixed": "#18181b",
+                        "surface-container-lowest": "#09090b",
+                        "inverse-on-surface": "#09090b",
+                        "surface-variant": "#18181b",
+                        "surface-container-highest": "#1e1e22",
+                        "surface-tint": "#a78bfa",
+                        "on-tertiary-container": "#bbf7d0",
+                        "surface": "#0c0c0f",
+                        "on-error": "#1a0000",
+                        "secondary-container": "#27272a",
+                        "on-secondary": "#09090b",
+                        "secondary": "#71717a",
+                        "error": "#ef4444",
+                        "on-surface-variant": "#a1a1aa",
+                        "on-surface": "#fafafa",
+                        "inverse-surface": "#fafafa",
+                        "tertiary": "#34d399",
+                        "on-secondary-fixed-variant": "#3f3f46",
+                        "surface-container-low": "#0f0f12",
+                        "surface-container": "#121215",
+                        "surface-dim": "#0c0c0f",
+                        "secondary-fixed": "#a1a1aa",
+                        "inverse-primary": "#5b21b6",
+                        "primary-fixed": "#ede9fe",
+                        "secondary-fixed-dim": "#71717a",
+                        "primary": "#a78bfa"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Geist", "sans-serif"],
+                        "body": ["Geist", "sans-serif"],
+                        "label": ["Geist", "sans-serif"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Geist', sans-serif; }
+    </style>
+</head>
+<body class="bg-background text-on-background antialiased selection:bg-primary-container selection:text-on-primary-container flex flex-col min-h-screen">
+<!-- TopNavBar (Shared Component) -->
+<nav class="bg-zinc-950/80 backdrop-blur-md docked full-width top-0 sticky z-50 border-b border-zinc-800 transition-all duration-200 ease-in-out">
+<div class="flex justify-between items-center px-6 py-4 w-full max-w-screen-2xl mx-auto">
+<div class="flex items-center gap-8">
+<a class="text-xl font-black text-violet-400 tracking-tighter" href="#">Obsidian Research</a>
+<div class="hidden md:flex gap-6 items-center">
+<a class="text-zinc-400 hover:text-zinc-100 transition-colors hover:bg-zinc-900/50 rounded-md px-3 py-2 font-geist tracking-tight text-sm" href="#">Browse</a>
+<a class="text-zinc-400 hover:text-zinc-100 transition-colors hover:bg-zinc-900/50 rounded-md px-3 py-2 font-geist tracking-tight text-sm" href="#">Journals</a>
+<a class="text-zinc-400 hover:text-zinc-100 transition-colors hover:bg-zinc-900/50 rounded-md px-3 py-2 font-geist tracking-tight text-sm" href="#">Authors</a>
+<a class="text-violet-400 border-b-2 border-violet-400 pb-1 font-geist tracking-tight text-sm px-3 py-2" href="#">About</a>
+<a class="text-zinc-400 hover:text-zinc-100 transition-colors hover:bg-zinc-900/50 rounded-md px-3 py-2 font-geist tracking-tight text-sm" href="#">Publish</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-zinc-400 hover:text-zinc-100 transition-colors">
+<span class="material-symbols-outlined text-xl">search</span>
+</button>
+<button class="bg-primary text-on-primary font-medium px-4 py-2 rounded-md hover:bg-primary/90 transition-colors text-sm">Sign In</button>
+</div>
+</div>
+</nav>
+<main class="flex-grow">
+<!-- Hero Section -->
+<section class="py-24 px-6 relative overflow-hidden border-b border-outline-variant">
+<div class="absolute inset-0 z-0 opacity-20 pointer-events-none">
+<div class="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-primary/10 to-transparent"></div>
+</div>
+<div class="max-w-4xl mx-auto relative z-10 text-center">
+<h1 class="font-headline text-5xl md:text-7xl font-bold tracking-tight mb-6 text-on-background">
+                    Precision in <span class="text-primary">Discovery</span>
+</h1>
+<p class="font-body text-xl text-on-surface-variant leading-relaxed max-w-2xl mx-auto mb-10">
+                    Obsidian Research is an academic portal designed for high-signal, low-noise scholarly exploration. We prioritize rigor, interconnected disciplines, and developer-grade utility.
+                </p>
+<div class="flex justify-center gap-4">
+<button class="bg-surface-container border border-outline-variant text-on-background font-medium px-6 py-3 rounded-md hover:bg-surface-container-high hover:border-primary transition-all flex items-center gap-2">
+<span>Read Manifesto</span>
+<span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+</div>
+</section>
+<!-- Portals Philosophy Section (Bento Grid) -->
+<section class="py-24 px-6 max-w-7xl mx-auto">
+<div class="mb-16">
+<h2 class="font-headline text-sm uppercase tracking-widest text-primary font-semibold mb-2">The Philosophy</h2>
+<h3 class="font-headline text-3xl font-bold tracking-tight text-on-background">Navigating Scholarly Portals</h3>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[minmax(250px,auto)]">
+<!-- Academic Rigor -->
+<div class="md:col-span-2 bg-surface-container border border-outline-variant rounded-lg p-8 relative overflow-hidden group hover:border-primary/50 transition-colors">
+<div class="absolute -right-10 -bottom-10 opacity-5 group-hover:opacity-10 transition-opacity">
+<span class="material-symbols-outlined text-[200px]">architecture</span>
+</div>
+<div class="relative z-10">
+<div class="w-12 h-12 bg-surface-container-highest rounded-md border border-outline-variant flex items-center justify-center mb-6">
+<span class="material-symbols-outlined text-primary">gavel</span>
+</div>
+<h4 class="font-headline text-2xl font-bold text-on-background mb-4">Academic Rigor</h4>
+<p class="font-body text-on-surface-variant leading-relaxed max-w-md">
+                            Our peer-review process is computationally assisted but human-verified. We index only sources that meet stringent criteria for methodology, reproducibility, and citation integrity.
+                        </p>
+</div>
+</div>
+<!-- Cross-Disciplinary -->
+<div class="bg-surface-container border border-outline-variant rounded-lg p-8 relative overflow-hidden group hover:border-primary/50 transition-colors">
+<div class="relative z-10">
+<div class="w-12 h-12 bg-surface-container-highest rounded-md border border-outline-variant flex items-center justify-center mb-6">
+<span class="material-symbols-outlined text-tertiary">hub</span>
+</div>
+<h4 class="font-headline text-xl font-bold text-on-background mb-4">Cross-Disciplinary Connections</h4>
+<p class="font-body text-sm text-on-surface-variant leading-relaxed">
+                            Knowledge is not siloed. Our graph database maps semantic relationships between Islamic jurisprudence, modern sociology, history, and ethics, revealing unseen intellectual vectors.
+                        </p>
+</div>
+</div>
+<!-- The Future -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-8 flex flex-col justify-between group hover:border-primary/50 transition-colors">
+<div>
+<h4 class="font-headline text-xl font-bold text-on-background mb-2">The Future of Research</h4>
+<p class="font-body text-sm text-on-surface-variant">Building infrastructure for the next century of scholarship.</p>
+</div>
+<div class="mt-8">
+<div class="h-2 w-full bg-surface-container-high rounded-full overflow-hidden">
+<div class="h-full bg-primary w-2/3"></div>
+</div>
+<div class="flex justify-between mt-2 text-xs text-on-surface-variant font-mono">
+<span>V 2.0 Beta</span>
+<span>Indexing</span>
+</div>
+</div>
+</div>
+<!-- Metrics -->
+<div class="md:col-span-2 grid grid-cols-2 gap-6">
+<div class="bg-surface-container border border-outline-variant rounded-lg p-6 flex flex-col justify-center text-center">
+<span class="font-headline text-4xl font-bold text-on-background mb-1">14.2M</span>
+<span class="font-label text-sm text-on-surface-variant uppercase tracking-wider">Nodes Indexed</span>
+</div>
+<div class="bg-surface-container border border-outline-variant rounded-lg p-6 flex flex-col justify-center text-center">
+<span class="font-headline text-4xl font-bold text-on-background mb-1">2,400+</span>
+<span class="font-label text-sm text-on-surface-variant uppercase tracking-wider">Verified Curators</span>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer (Shared Component) -->
+<footer class="bg-zinc-950 py-12 mt-auto border-t border-zinc-800 w-full">
+<div class="flex flex-col md:flex-row justify-between items-center px-8 max-w-7xl mx-auto w-full gap-6">
+<div class="flex flex-col gap-2 text-center md:text-left">
+<span class="text-lg font-bold text-violet-400">Obsidian Research</span>
+<span class="font-geist text-sm text-zinc-400">© 2024 Obsidian Research. Precision in Discovery.</span>
+</div>
+<div class="flex flex-wrap justify-center gap-6">
+<a class="font-geist text-sm text-zinc-500 hover:text-zinc-100 transition-colors opacity-80 hover:opacity-100" href="#">Privacy Policy</a>
+<a class="font-geist text-sm text-zinc-500 hover:text-zinc-100 transition-colors opacity-80 hover:opacity-100" href="#">Terms of Service</a>
+<a class="font-geist text-sm text-zinc-500 hover:text-zinc-100 transition-colors opacity-80 hover:opacity-100" href="#">API Documentation</a>
+<a class="font-geist text-sm text-zinc-500 hover:text-zinc-100 transition-colors opacity-80 hover:opacity-100" href="#">Support</a>
+</div>
+</div>
+</footer>
+</body></html>

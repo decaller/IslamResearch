@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Islamic IDE - Knowledge Tree</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-tertiary-fixed": "#003318",
+                      "on-surface": "#fafafa",
+                      "on-tertiary-fixed-variant": "#047857",
+                      "surface-container-low": "#0f0f12",
+                      "on-background": "#fafafa",
+                      "tertiary-fixed": "#bbf7d0",
+                      "on-primary-fixed": "#2e1065",
+                      "surface-variant": "#18181b",
+                      "inverse-primary": "#5b21b6",
+                      "secondary-fixed": "#a1a1aa",
+                      "on-secondary-container": "#a1a1aa",
+                      "surface-bright": "#18181b",
+                      "primary-fixed-dim": "#c4b5fd",
+                      "outline": "#52525b",
+                      "on-secondary": "#09090b",
+                      "on-secondary-fixed-variant": "#3f3f46",
+                      "tertiary": "#34d399",
+                      "surface-tint": "#a78bfa",
+                      "on-primary-fixed-variant": "#5b21b6",
+                      "secondary-fixed-dim": "#71717a",
+                      "primary-container": "#7c3aed",
+                      "surface-container-high": "#18181b",
+                      "error-container": "#3b1111",
+                      "primary-fixed": "#ede9fe",
+                      "on-error-container": "#fca5a5",
+                      "tertiary-container": "#065f46",
+                      "secondary": "#71717a",
+                      "on-primary-container": "#ede9fe",
+                      "on-tertiary": "#001a12",
+                      "surface": "#0c0c0f",
+                      "inverse-on-surface": "#09090b",
+                      "on-surface-variant": "#a1a1aa",
+                      "primary": "#a78bfa",
+                      "outline-variant": "#27272a",
+                      "background": "#09090b",
+                      "on-secondary-fixed": "#18181b",
+                      "error": "#ef4444",
+                      "tertiary-fixed-dim": "#6ee7b7",
+                      "on-primary": "#0a0012",
+                      "on-error": "#1a0000",
+                      "surface-dim": "#0c0c0f",
+                      "surface-container-lowest": "#09090b",
+                      "on-tertiary-container": "#bbf7d0",
+                      "inverse-surface": "#fafafa",
+                      "surface-container-highest": "#1e1e22",
+                      "secondary-container": "#27272a",
+                      "surface-container": "#121215"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {},
+              "fontFamily": {
+                      "headline": [
+                              "Geist"
+                      ],
+                      "body": [
+                              "Geist"
+                      ],
+                      "label": [
+                              "Geist"
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+</head>
+<body class="bg-background text-on-surface font-body h-screen flex overflow-hidden selection:bg-primary-container selection:text-on-primary-container">
+<!-- SideNavBar (Shared Component) -->
+<nav class="bg-zinc-950 text-violet-400 font-geist text-sm antialiased h-screen w-64 border-r border-zinc-800 flex flex-col h-full py-4 hidden md:flex shrink-0">
+<div class="px-6 mb-8">
+<h1 class="text-lg font-black text-violet-400 tracking-tight">Islamic IDE</h1>
+<p class="text-zinc-500 text-xs mt-1">Scholarly Search</p>
+</div>
+<div class="px-4 mb-6">
+<button class="w-full bg-primary text-on-primary font-semibold py-2 px-4 rounded-lg flex items-center justify-center gap-2 hover:bg-primary-fixed transition-colors">
+<span class="material-symbols-outlined text-sm">add</span>
+                New Search
+            </button>
+</div>
+<ul class="flex-1 px-3 space-y-1 overflow-y-auto">
+<li>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-zinc-500 hover:text-zinc-300 hover:bg-zinc-900/50 active:scale-95 transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]">menu_book</span>
+                    Library
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg bg-zinc-900 text-violet-400 font-semibold border-r-2 border-violet-400 active:scale-95 transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">auto_stories</span>
+                    Qur'an
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-zinc-500 hover:text-zinc-300 hover:bg-zinc-900/50 active:scale-95 transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]">account_tree</span>
+                    Hadith
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-zinc-500 hover:text-zinc-300 hover:bg-zinc-900/50 active:scale-95 transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]">history_edu</span>
+                    History
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-zinc-500 hover:text-zinc-300 hover:bg-zinc-900/50 active:scale-95 transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]">edit_note</span>
+                    Drafts
+                </a>
+</li>
+</ul>
+<div class="mt-auto px-3 pt-4 border-t border-zinc-800 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-zinc-500 hover:text-zinc-300 hover:bg-zinc-900/50 transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]">folder_open</span>
+                Resources
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-zinc-500 hover:text-zinc-300 hover:bg-zinc-900/50 transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]">help_outline</span>
+                Support
+            </a>
+</div>
+</nav>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col min-w-0">
+<!-- TopNavBar (Shared Component - Mobile/Top Nav) -->
+<header class="bg-zinc-950/50 backdrop-blur-md text-violet-400 font-geist tracking-tight border-b border-zinc-800 flex justify-between items-center w-full px-4 h-14 md:hidden shrink-0 z-10">
+<div class="flex items-center gap-4">
+<button class="text-zinc-400 hover:text-zinc-50 transition-colors">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<span class="text-xl font-bold tracking-tighter text-zinc-50">Obsidian Research</span>
+</div>
+<div class="flex items-center gap-2">
+<button class="text-zinc-400 hover:text-zinc-50 transition-colors p-2 rounded-full hover:bg-zinc-900">
+<span class="material-symbols-outlined">history</span>
+</button>
+<button class="text-zinc-400 hover:text-zinc-50 transition-colors p-2 rounded-full hover:bg-zinc-900">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<button class="text-zinc-400 hover:text-zinc-50 transition-colors p-2 rounded-full hover:bg-zinc-900">
+<span class="material-symbols-outlined">account_circle</span>
+</button>
+</div>
+</header>
+<!-- Search Header -->
+<div class="shrink-0 border-b border-outline-variant bg-surface-container-lowest pt-6 pb-4 px-6 md:px-10 z-0">
+<div class="max-w-4xl mx-auto">
+<!-- Main Search Bar -->
+<div class="relative group">
+<div class="absolute inset-y-0 left-4 flex items-center pointer-events-none text-secondary">
+<span class="material-symbols-outlined">search</span>
+</div>
+<input class="w-full bg-surface-container border border-outline-variant rounded-xl py-4 pl-12 pr-16 text-on-surface focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-shadow text-lg font-medium" placeholder="Search concept, root, or verse..." type="text" value="r-h-m (Root)"/>
+<div class="absolute inset-y-0 right-4 flex items-center gap-2">
+<button class="text-secondary hover:text-on-surface p-1 rounded-md transition-colors">
+<span class="material-symbols-outlined text-xl">keyboard</span>
+</button>
+</div>
+</div>
+<!-- Source Filters -->
+<div class="flex flex-wrap gap-2 mt-4">
+<button class="px-4 py-1.5 rounded-full border border-primary text-primary bg-primary/10 text-sm font-medium flex items-center gap-1.5 transition-colors">
+<span class="material-symbols-outlined text-[16px]">check</span>
+                        Qur'an
+                    </button>
+<button class="px-4 py-1.5 rounded-full border border-outline-variant text-secondary-fixed hover:text-on-surface hover:border-outline text-sm font-medium transition-colors">
+                        Hadith
+                    </button>
+<button class="px-4 py-1.5 rounded-full border border-outline-variant text-secondary-fixed hover:text-on-surface hover:border-outline text-sm font-medium transition-colors">
+                        Lexicons
+                    </button>
+<button class="px-4 py-1.5 rounded-full border border-outline-variant text-secondary-fixed hover:text-on-surface hover:border-outline text-sm font-medium transition-colors">
+                        Tafsir
+                    </button>
+</div>
+</div>
+</div>
+<!-- Layout Wrapper for Filters + Results -->
+<div class="flex-1 flex overflow-hidden">
+<!-- Side Filter Panel -->
+<aside class="w-72 border-r border-outline-variant bg-surface-container-lowest hidden lg:flex flex-col overflow-y-auto shrink-0">
+<div class="p-6 space-y-8">
+<!-- Filter Section -->
+<div>
+<h3 class="text-xs font-bold text-secondary uppercase tracking-wider mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px]">tune</span>
+                            Refine Results
+                        </h3>
+<div class="space-y-5">
+<!-- Category Filter -->
+<div class="space-y-2">
+<label class="text-sm font-medium text-on-surface">Era</label>
+<select class="w-full bg-surface-container border border-outline-variant rounded-lg text-sm text-secondary-fixed py-2 px-3 focus:ring-1 focus:ring-primary focus:border-primary outline-none">
+<option>Classical (Pre-1100 CE)</option>
+<option>Post-Classical (1100-1800 CE)</option>
+<option>Modern (1800+ CE)</option>
+</select>
+</div>
+<!-- Scholar Checkboxes -->
+<div class="space-y-3">
+<label class="text-sm font-medium text-on-surface block">Prominent Scholars</label>
+<label class="flex items-center gap-3 group cursor-pointer">
+<div class="relative flex items-center justify-center">
+<input checked="" class="peer sr-only" type="checkbox"/>
+<div class="w-4 h-4 rounded border border-outline-variant bg-surface-container peer-checked:bg-primary peer-checked:border-primary transition-colors"></div>
+<span class="material-symbols-outlined text-[12px] text-background absolute opacity-0 peer-checked:opacity-100 transition-opacity font-bold">check</span>
+</div>
+<span class="text-sm text-secondary-fixed group-hover:text-on-surface transition-colors">Ibn Kathir</span>
+</label>
+<label class="flex items-center gap-3 group cursor-pointer">
+<div class="relative flex items-center justify-center">
+<input checked="" class="peer sr-only" type="checkbox"/>
+<div class="w-4 h-4 rounded border border-outline-variant bg-surface-container peer-checked:bg-primary peer-checked:border-primary transition-colors"></div>
+<span class="material-symbols-outlined text-[12px] text-background absolute opacity-0 peer-checked:opacity-100 transition-opacity font-bold">check</span>
+</div>
+<span class="text-sm text-secondary-fixed group-hover:text-on-surface transition-colors">Al-Qurtubi</span>
+</label>
+<label class="flex items-center gap-3 group cursor-pointer">
+<div class="relative flex items-center justify-center">
+<input class="peer sr-only" type="checkbox"/>
+<div class="w-4 h-4 rounded border border-outline-variant bg-surface-container peer-checked:bg-primary peer-checked:border-primary transition-colors"></div>
+<span class="material-symbols-outlined text-[12px] text-background absolute opacity-0 peer-checked:opacity-100 transition-opacity font-bold">check</span>
+</div>
+<span class="text-sm text-secondary-fixed group-hover:text-on-surface transition-colors">Al-Tabari</span>
+</label>
+</div>
+</div>
+</div>
+<!-- Knowledge Graph Minimap (Conceptual) -->
+<div>
+<h3 class="text-xs font-bold text-secondary uppercase tracking-wider mb-4">Graph Overview</h3>
+<div class="aspect-square bg-surface-container border border-outline-variant rounded-xl flex items-center justify-center relative overflow-hidden">
+<!-- Abstract representation of a node graph -->
+<div class="absolute inset-0 opacity-20" style="background-image: radial-gradient(circle at 50% 50%, #a78bfa 1px, transparent 1px); background-size: 20px 20px;"></div>
+<div class="w-3 h-3 bg-primary rounded-full absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 shadow-[0_0_15px_#a78bfa]"></div>
+<div class="w-2 h-2 bg-tertiary rounded-full absolute top-1/4 left-1/3"></div>
+<div class="w-2 h-2 bg-zinc-500 rounded-full absolute top-2/3 left-2/3"></div>
+<!-- Connecting lines (svg conceptual) -->
+<svg class="absolute inset-0 w-full h-full opacity-30" pointer-events="none">
+<line stroke="#a78bfa" stroke-width="1" x1="50%" x2="33%" y1="50%" y2="25%"></line>
+<line stroke="#a78bfa" stroke-width="1" x1="50%" x2="66%" y1="50%" y2="66%"></line>
+</svg>
+</div>
+</div>
+</div>
+</aside>
+<!-- Results Canvas (The Tree) -->
+<div class="flex-1 overflow-y-auto p-6 md:p-10 bg-background relative">
+<div class="max-w-4xl mx-auto">
+<div class="mb-8 flex justify-between items-end border-b border-outline-variant pb-4">
+<div>
+<h2 class="text-2xl font-semibold text-on-surface tracking-tight">Root Analysis: R-H-M (ر-ح-م)</h2>
+<p class="text-secondary mt-1">42 occurrences found across selected sources.</p>
+</div>
+<div class="flex gap-2">
+<button class="p-2 text-secondary hover:text-primary transition-colors rounded-md hover:bg-surface-container" title="Expand All">
+<span class="material-symbols-outlined">unfold_more</span>
+</button>
+</div>
+</div>
+<!-- Tree Structure -->
+<div class="space-y-6">
+<!-- Branch 1: Linguistic Roots -->
+<div class="border border-outline-variant bg-surface-container rounded-xl overflow-hidden shadow-sm">
+<!-- Branch Header -->
+<button class="w-full flex items-center justify-between p-4 hover:bg-surface-bright transition-colors text-left group">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary group-hover:text-primary-fixed transition-colors">psychology</span>
+<span class="font-semibold text-on-surface text-lg tracking-tight">Linguistic Roots &amp; Lexicon</span>
+</div>
+<div class="flex items-center gap-4">
+<span class="text-xs bg-surface-variant text-secondary-fixed px-2 py-1 rounded-md font-mono">3 Entries</span>
+<span class="material-symbols-outlined text-secondary group-hover:text-on-surface transition-colors transform rotate-180">expand_more</span>
+</div>
+</button>
+<!-- Branch Content (Expanded) -->
+<div class="border-t border-outline-variant bg-surface-container-lowest p-4 pl-12 space-y-4">
+<!-- Node -->
+<div class="relative pl-6 before:content-[''] before:absolute before:left-0 before:top-4 before:bottom-0 before:w-px before:bg-outline-variant border border-outline-variant rounded-lg p-4 bg-surface hover:border-primary/50 transition-colors">
+<div class="absolute left-[-5px] top-5 w-2.5 h-2.5 rounded-full bg-surface border-2 border-primary z-10"></div>
+<div class="flex justify-between items-start mb-2">
+<h4 class="font-medium text-on-surface">Lane's Lexicon</h4>
+<a class="text-xs text-primary hover:text-primary-fixed flex items-center gap-1" href="#">
+                                            Open Portal <span class="material-symbols-outlined text-[14px]">open_in_new</span>
+</a>
+</div>
+<p class="text-sm text-secondary leading-relaxed font-body">
+                                        The root <span class="text-primary font-mono bg-primary/10 px-1 rounded">ر-ح-م</span> denotes the womb, kinship, and by extension, mercy, compassion, and tenderness. It implies a protective and nurturing care.
+                                    </p>
+</div>
+<!-- Node -->
+<div class="relative pl-6 before:content-[''] before:absolute before:left-0 before:top-4 before:bottom-0 before:w-px before:bg-outline-variant border border-outline-variant rounded-lg p-4 bg-surface hover:border-primary/50 transition-colors">
+<div class="absolute left-[-5px] top-5 w-2.5 h-2.5 rounded-full bg-surface border-2 border-outline z-10"></div>
+<div class="flex justify-between items-start mb-2">
+<h4 class="font-medium text-on-surface">Mufradat al-Qur'an (Al-Raghib)</h4>
+<a class="text-xs text-secondary-fixed hover:text-primary flex items-center gap-1 transition-colors" href="#">
+                                            Open Portal <span class="material-symbols-outlined text-[14px]">open_in_new</span>
+</a>
+</div>
+<p class="text-sm text-secondary leading-relaxed font-body">
+                                        Mercy (Rahmah) is a tenderness of the heart requiring the exercise of beneficence towards the object of mercy.
+                                    </p>
+</div>
+</div>
+</div>
+<!-- Branch 2: Thematic Clusters (Collapsed Example) -->
+<div class="border border-outline-variant bg-surface-container rounded-xl overflow-hidden shadow-sm">
+<button class="w-full flex items-center justify-between p-4 hover:bg-surface-bright transition-colors text-left group">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-tertiary group-hover:text-tertiary-fixed transition-colors">scatter_plot</span>
+<span class="font-semibold text-on-surface text-lg tracking-tight">Thematic Clusters in Qur'an</span>
+</div>
+<div class="flex items-center gap-4">
+<span class="text-xs bg-surface-variant text-secondary-fixed px-2 py-1 rounded-md font-mono">12 Verses</span>
+<span class="material-symbols-outlined text-secondary group-hover:text-on-surface transition-colors">expand_more</span>
+</div>
+</button>
+</div>
+<!-- Branch 3: Classical Commentaries -->
+<div class="border border-outline-variant bg-surface-container rounded-xl overflow-hidden shadow-sm">
+<button class="w-full flex items-center justify-between p-4 hover:bg-surface-bright transition-colors text-left group">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary-fixed group-hover:text-on-surface transition-colors">menu_book</span>
+<span class="font-semibold text-on-surface text-lg tracking-tight">Classical Commentaries (Tafsir)</span>
+</div>
+<div class="flex items-center gap-4">
+<span class="text-xs bg-surface-variant text-secondary-fixed px-2 py-1 rounded-md font-mono">5 Sources</span>
+<span class="material-symbols-outlined text-secondary group-hover:text-on-surface transition-colors transform rotate-180">expand_more</span>
+</div>
+</button>
+<!-- Branch Content (Expanded) -->
+<div class="border-t border-outline-variant bg-surface-container-lowest p-4 pl-12 space-y-4">
+<!-- Node with Arabic text and highlights -->
+<div class="relative pl-6 before:content-[''] before:absolute before:left-0 before:top-4 before:bottom-0 before:w-px before:bg-outline-variant border border-outline-variant rounded-lg p-5 bg-surface hover:border-primary/50 transition-colors">
+<div class="absolute left-[-5px] top-6 w-2.5 h-2.5 rounded-full bg-surface border-2 border-primary z-10"></div>
+<div class="flex justify-between items-start mb-4 border-b border-outline-variant pb-3">
+<div>
+<h4 class="font-medium text-on-surface text-base">Tafsir Ibn Kathir</h4>
+<p class="text-xs text-secondary mt-1">Surah Al-Fatihah, Verse 1</p>
+</div>
+<a class="text-xs text-primary hover:text-primary-fixed flex items-center gap-1 border border-primary/30 rounded px-2 py-1 bg-primary/5" href="#">
+                                            Deep Read <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+</a>
+</div>
+<div class="space-y-4">
+<div class="text-right font-serif text-xl leading-loose text-on-surface" dir="rtl">
+                                            الرَّحْمَنِ الرَّحِيمِ اسْمَانِ مُشْتَقَّانِ مِنَ <span class="text-primary font-bold">الرَّحْمَةِ</span> عَلَى وَجْهِ الْمُبَالَغَةِ...
+                                        </div>
+<p class="text-sm text-secondary leading-relaxed font-body">
+                                            "Ar-Rahman and Ar-Rahim are two names derived from <span class="text-on-surface font-medium bg-surface-variant px-1 rounded">Ar-Rahmah</span> (mercy), but Ar-Rahman has more meanings that pertain to mercy than Ar-Rahim."
+                                        </p>
+<div class="flex gap-2 pt-2">
+<span class="text-[10px] uppercase tracking-widest text-tertiary border border-tertiary/30 px-2 py-0.5 rounded bg-tertiary/5">Theology</span>
+<span class="text-[10px] uppercase tracking-widest text-secondary-fixed border border-outline-variant px-2 py-0.5 rounded">Linguistics</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- End of Results Indicator -->
+<div class="mt-12 text-center flex flex-col items-center justify-center opacity-50 pb-10">
+<div class="w-px h-8 bg-outline-variant mb-4"></div>
+<span class="material-symbols-outlined text-secondary">park</span>
+<p class="text-xs text-secondary-fixed mt-2 uppercase tracking-widest">End of Branch</p>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>

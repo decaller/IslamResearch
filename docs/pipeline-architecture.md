@@ -77,7 +77,8 @@ ai-scripts/
 │   ├── quran_translation.py       # Quran translations via API
 │   ├── quran_irob.py              # I'rab (grammatical analysis) books
 │   ├── tafsir_amal.py             # Custom: Amali Tafseer TXT parser
-│   └── standard_txt.py            # Generic .txt books (SpaCy + Ollama)
+│   ├── standard_txt.py            # Generic .txt books (SpaCy + Ollama)
+│   └── knowledge_graph.py         # Autonomous entity enrichment & recursive building
 ├── tasks/                         # SHARED WORKERS — never duplicated
 │   ├── api_fetchers.py            # NEW: Quran API fetch (alquran.cloud)
 │   ├── text_prep.py               # SpaCy segmentation + CAMeL morphology
@@ -269,6 +270,7 @@ Every searchable dimension (sentences, taxonomies, tags) has **both** Arabic and
 - [ ] Create `flows/quran_translation.py`
 - [ ] Create `flows/quran_irob.py`
 - [ ] Create `flows/tafsir_amal.py`
+- [x] Create `flows/knowledge_graph.py` (Autonomous building & Guardrails)
 - [ ] Update `serve_pipeline.py` to register all flows
 - [ ] Update `database.py`: `save_to_db()` → write tags to `tags` + `sentence_tag` instead of JSONB
 - [ ] Update `database.py`: add `save_quran_verse()`, `save_tag_with_embeddings()`

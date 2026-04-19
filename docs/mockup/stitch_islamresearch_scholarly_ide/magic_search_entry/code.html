@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Magic Search - IslamResearch</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-dim": "#0c0c0f",
+                        "tertiary": "#34d399",
+                        "on-tertiary-fixed-variant": "#047857",
+                        "on-primary-container": "#ede9fe",
+                        "on-error": "#1a0000",
+                        "on-background": "#fafafa",
+                        "surface": "#0c0c0f",
+                        "primary": "#a78bfa",
+                        "secondary-fixed-dim": "#71717a",
+                        "inverse-surface": "#fafafa",
+                        "on-surface-variant": "#a1a1aa",
+                        "secondary": "#71717a",
+                        "on-primary-fixed": "#2e1065",
+                        "surface-container-lowest": "#09090b",
+                        "on-tertiary": "#001a12",
+                        "surface-container-high": "#18181b",
+                        "on-tertiary-fixed": "#003318",
+                        "surface-container-highest": "#1e1e22",
+                        "on-surface": "#fafafa",
+                        "surface-variant": "#18181b",
+                        "on-primary-fixed-variant": "#5b21b6",
+                        "outline": "#52525b",
+                        "inverse-primary": "#5b21b6",
+                        "surface-bright": "#18181b",
+                        "background": "#09090b",
+                        "on-tertiary-container": "#bbf7d0",
+                        "surface-container-low": "#0f0f12",
+                        "surface-container": "#121215",
+                        "on-primary": "#0a0012",
+                        "on-secondary-fixed-variant": "#3f3f46",
+                        "on-secondary-container": "#a1a1aa",
+                        "surface-tint": "#a78bfa",
+                        "primary-fixed": "#ede9fe",
+                        "outline-variant": "#27272a",
+                        "on-secondary": "#09090b",
+                        "tertiary-container": "#065f46",
+                        "on-secondary-fixed": "#18181b",
+                        "secondary-fixed": "#a1a1aa",
+                        "tertiary-fixed-dim": "#6ee7b7",
+                        "on-error-container": "#fca5a5",
+                        "inverse-on-surface": "#09090b",
+                        "error": "#ef4444",
+                        "primary-fixed-dim": "#c4b5fd",
+                        "error-container": "#3b1111",
+                        "tertiary-fixed": "#bbf7d0",
+                        "secondary-container": "#27272a",
+                        "primary-container": "#7c3aed"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {},
+                    "fontFamily": {
+                        "headline": ["Geist", "sans-serif"],
+                        "body": ["Geist", "sans-serif"],
+                        "label": ["Geist", "sans-serif"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .icon-fill {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body h-screen w-full flex overflow-hidden">
+<!-- SideNavBar (JSON Execution) -->
+<nav class="bg-[#0c0c0f] text-[#a78bfa] font-geist text-sm h-full left-0 border-r border-[#27272a] transition-all duration-150 flex flex-col w-64 h-screen p-4 gap-2 hidden md:flex shrink-0">
+<!-- Header -->
+<div class="flex items-center gap-3 px-3 py-4 mb-4">
+<div class="w-8 h-8 rounded-full bg-surface-variant flex items-center justify-center shrink-0 border border-outline-variant overflow-hidden">
+<span class="material-symbols-outlined text-on-surface text-lg">person</span>
+</div>
+<div class="flex flex-col">
+<span class="font-bold text-[#fafafa] tracking-tight">Research Desk</span>
+<span class="text-[#a1a1aa] text-xs">v1.0.4</span>
+</div>
+</div>
+<!-- Navigation Links -->
+<div class="flex flex-col gap-1 flex-1">
+<a class="flex items-center gap-3 px-3 py-2.5 text-[#a1a1aa] hover:bg-[#18181b] hover:text-[#fafafa] rounded-lg transition-colors duration-150 group" href="#">
+<span class="material-symbols-outlined text-lg group-hover:text-[#fafafa]">history</span>
+<span>History</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 text-[#a1a1aa] hover:bg-[#18181b] hover:text-[#fafafa] rounded-lg transition-colors duration-150 group" href="#">
+<span class="material-symbols-outlined text-lg group-hover:text-[#fafafa]">bookmark</span>
+<span>Bookmarks</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 text-[#a1a1aa] hover:bg-[#18181b] hover:text-[#fafafa] rounded-lg transition-colors duration-150 group" href="#">
+<span class="material-symbols-outlined text-lg group-hover:text-[#fafafa]">edit_note</span>
+<span>Drafts</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 text-[#a1a1aa] hover:bg-[#18181b] hover:text-[#fafafa] rounded-lg transition-colors duration-150 group" href="#">
+<span class="material-symbols-outlined text-lg group-hover:text-[#fafafa]">folder_open</span>
+<span>Collections</span>
+</a>
+</div>
+<!-- Footer Link -->
+<div class="mt-auto">
+<a class="flex items-center gap-3 px-3 py-2.5 text-[#a1a1aa] hover:bg-[#18181b] hover:text-[#fafafa] rounded-lg transition-colors duration-150 group" href="#">
+<span class="material-symbols-outlined text-lg group-hover:text-[#fafafa]">settings</span>
+<span>Settings</span>
+</a>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="flex-1 flex flex-col min-w-0 bg-background relative">
+<!-- TopAppBar (JSON Execution) -->
+<header class="bg-[#09090b] text-[#a78bfa] font-geist tracking-tight text-[#fafafa] full-width top-0 border-b border-[#27272a] transition-colors duration-200 ease-in-out flex justify-between items-center px-4 h-14 w-full shrink-0 z-10">
+<!-- Brand -->
+<div class="flex items-center gap-6">
+<span class="text-xl font-bold tracking-tighter text-[#fafafa]">IslamResearch</span>
+<!-- Navigation Links -->
+<nav class="hidden md:flex items-center gap-6 h-full pt-1">
+<a class="text-[#a1a1aa] hover:bg-[#18181b] hover:text-[#fafafa] text-sm font-medium h-full flex items-center px-2 transition-colors" href="#">Quran</a>
+<a class="text-[#a1a1aa] hover:bg-[#18181b] hover:text-[#fafafa] text-sm font-medium h-full flex items-center px-2 transition-colors" href="#">Lexicon</a>
+<a class="text-[#a1a1aa] hover:bg-[#18181b] hover:text-[#fafafa] text-sm font-medium h-full flex items-center px-2 transition-colors" href="#">Exegesis</a>
+<a class="text-[#a1a1aa] hover:bg-[#18181b] hover:text-[#fafafa] text-sm font-medium h-full flex items-center px-2 transition-colors" href="#">Habits</a>
+</nav>
+</div>
+<!-- Trailing Actions -->
+<div class="flex items-center gap-2 text-[#a1a1aa]">
+<button class="p-2 hover:bg-[#18181b] hover:text-[#fafafa] rounded-md transition-colors flex items-center justify-center">
+<span class="material-symbols-outlined text-xl">settings</span>
+</button>
+<button class="p-2 hover:bg-[#18181b] hover:text-[#fafafa] rounded-md transition-colors flex items-center justify-center">
+<span class="material-symbols-outlined text-xl">account_circle</span>
+</button>
+</div>
+</header>
+<!-- Entry Point: Magic Search Centered Layout -->
+<div class="flex-1 flex flex-col items-center justify-center p-6 md:p-12 overflow-y-auto relative z-0">
+<!-- Ambient Background Glow (Subtle) -->
+<div class="absolute inset-0 pointer-events-none flex items-center justify-center opacity-20">
+<div class="w-[600px] h-[600px] bg-primary rounded-full blur-[120px] mix-blend-screen"></div>
+</div>
+<div class="w-full max-w-3xl flex flex-col items-center relative z-10 -mt-20">
+<!-- Title -->
+<h1 class="text-4xl md:text-5xl font-headline font-bold text-on-background tracking-tighter mb-8 text-center drop-shadow-sm">
+                    Magic Search
+                </h1>
+<!-- Search Input Container -->
+<div class="w-full relative group mb-6">
+<div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-on-surface-variant group-focus-within:text-primary transition-colors">search</span>
+</div>
+<input class="w-full bg-surface-container-high border border-outline-variant text-on-surface placeholder:text-on-surface-variant rounded-xl py-4 pl-12 pr-4 text-lg focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary shadow-sm transition-all duration-200" placeholder="Ask a question, enter a root word, or search a verse..." type="text"/>
+<div class="absolute inset-y-0 right-0 pr-3 flex items-center">
+<button aria-label="Voice search" class="p-1.5 bg-surface-variant text-on-surface-variant hover:text-on-surface rounded-md border border-outline-variant transition-colors flex items-center justify-center">
+<span class="material-symbols-outlined text-sm">mic</span>
+</button>
+</div>
+</div>
+<!-- Search Toggles / Filters -->
+<div class="flex flex-wrap items-center justify-center gap-3 w-full">
+<!-- Active Toggle -->
+<button class="flex items-center gap-2 px-4 py-2 bg-[#18181b] border border-[#a78bfa] text-[#a78bfa] rounded-full text-sm font-medium transition-colors hover:bg-surface-container-highest">
+<span class="material-symbols-outlined text-[18px]">auto_awesome</span>
+                        AI Semantic
+                    </button>
+<!-- Inactive Toggles -->
+<button class="flex items-center gap-2 px-4 py-2 bg-transparent border border-outline-variant text-on-surface-variant rounded-full text-sm font-medium hover:border-outline hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined text-[18px]">match_case</span>
+                        Exact Word
+                    </button>
+<button class="flex items-center gap-2 px-4 py-2 bg-transparent border border-outline-variant text-on-surface-variant rounded-full text-sm font-medium hover:border-outline hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined text-[18px]">account_tree</span>
+                        Root Explorer
+                    </button>
+</div>
+</div>
+</div>
+</main>
+</body></html>

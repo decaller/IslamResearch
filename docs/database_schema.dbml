@@ -145,6 +145,7 @@ Table entities [headercolor: #047857, note: 'Unified Knowledge Graph nodes (Peop
   wikipedia_url varchar
   metadata jsonb [note: 'Birth/death, coordinates, attributes']
   embedding "vector(1024)" [note: 'Semantic embedding for entity search']
+  last_enriched_at timestamp [note: 'Guardrail: timestamp of last AI/Wikipedia enrichment']
   created_at timestamp
   updated_at timestamp
 

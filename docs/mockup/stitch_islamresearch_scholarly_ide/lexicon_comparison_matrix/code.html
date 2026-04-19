@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Lexicon Comparison Matrix - Obsidian Research</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary-fixed-dim": "#71717a",
+                        "secondary-fixed": "#a1a1aa",
+                        "error": "#ef4444",
+                        "primary": "#a78bfa",
+                        "on-primary-fixed": "#2e1065",
+                        "inverse-on-surface": "#09090b",
+                        "on-surface": "#fafafa",
+                        "on-primary": "#0a0012",
+                        "tertiary": "#34d399",
+                        "on-error-container": "#fca5a5",
+                        "surface-dim": "#0c0c0f",
+                        "secondary": "#71717a",
+                        "surface-container-low": "#0f0f12",
+                        "primary-fixed": "#ede9fe",
+                        "on-secondary-container": "#a1a1aa",
+                        "on-surface-variant": "#a1a1aa",
+                        "background": "#09090b",
+                        "outline": "#52525b",
+                        "tertiary-container": "#065f46",
+                        "surface-container": "#121215",
+                        "surface-variant": "#18181b",
+                        "on-secondary": "#09090b",
+                        "tertiary-fixed": "#bbf7d0",
+                        "primary-container": "#7c3aed",
+                        "on-primary-fixed-variant": "#5b21b6",
+                        "on-error": "#1a0000",
+                        "on-background": "#fafafa",
+                        "surface-tint": "#a78bfa",
+                        "inverse-surface": "#fafafa",
+                        "on-tertiary-fixed-variant": "#047857",
+                        "surface-bright": "#18181b",
+                        "surface-container-high": "#18181b",
+                        "outline-variant": "#27272a",
+                        "on-tertiary": "#001a12",
+                        "error-container": "#3b1111",
+                        "surface-container-lowest": "#09090b",
+                        "surface": "#0c0c0f",
+                        "inverse-primary": "#5b21b6",
+                        "surface-container-highest": "#1e1e22",
+                        "on-tertiary-fixed": "#003318",
+                        "on-tertiary-container": "#bbf7d0",
+                        "on-secondary-fixed-variant": "#3f3f46",
+                        "tertiary-fixed-dim": "#6ee7b7",
+                        "primary-fixed-dim": "#c4b5fd",
+                        "on-primary-container": "#ede9fe",
+                        "on-secondary-fixed": "#18181b",
+                        "secondary-container": "#27272a"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Geist", "sans-serif"],
+                        "body": ["Geist", "sans-serif"],
+                        "label": ["Geist", "sans-serif"],
+                        "mono": ["ui-monospace", "SFMono-Regular", "Menlo", "Monaco", "Consolas", "Liberation Mono", "Courier New", "monospace"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Geist', sans-serif; }
+    </style>
+</head>
+<body class="bg-background text-on-surface h-screen w-screen overflow-hidden flex selection:bg-primary/30 selection:text-white">
+<!-- SideNavBar -->
+<aside class="bg-[#0c0c0f] font-geist text-sm h-screen w-64 border-r border-zinc-800 flex flex-col py-4 gap-2 flex-shrink-0 z-20">
+<div class="px-4 mb-4">
+<h1 class="text-lg font-black text-violet-400 tracking-tight">Islamic IDE</h1>
+<p class="text-xs text-zinc-500 mt-0.5">Scholarly Workspace</p>
+</div>
+<nav class="flex-1 flex flex-col gap-1 mt-2">
+<a class="flex items-center gap-3 px-4 py-2 text-zinc-500 hover:text-zinc-300 hover:bg-zinc-800/50 cursor-pointer transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 0;">menu_book</span>
+                Library
+            </a>
+<a class="flex items-center gap-3 px-4 py-2 text-zinc-500 hover:text-zinc-300 hover:bg-zinc-800/50 cursor-pointer transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 0;">hub</span>
+                Isnad Graph
+            </a>
+<!-- Active Tab -->
+<a class="flex items-center gap-3 px-4 py-2 bg-zinc-900 text-violet-400 border-r-2 border-violet-400 cursor-pointer transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">grid_on</span>
+                Comparison
+            </a>
+<a class="flex items-center gap-3 px-4 py-2 text-zinc-500 hover:text-zinc-300 hover:bg-zinc-800/50 cursor-pointer transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 0;">query_stats</span>
+                Analytics
+            </a>
+<a class="flex items-center gap-3 px-4 py-2 text-zinc-500 hover:text-zinc-300 hover:bg-zinc-800/50 cursor-pointer transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 0;">settings</span>
+                Settings
+            </a>
+</nav>
+<div class="mt-auto flex flex-col gap-1 border-t border-zinc-800 pt-4">
+<a class="flex items-center gap-3 px-4 py-2 text-zinc-500 hover:text-zinc-300 hover:bg-zinc-800/50 cursor-pointer transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 0;">help</span>
+                Documentation
+            </a>
+<a class="flex items-center gap-3 px-4 py-2 text-zinc-500 hover:text-zinc-300 hover:bg-zinc-800/50 cursor-pointer transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 0;">contact_support</span>
+                Support
+            </a>
+</div>
+</aside>
+<!-- Main Content Area -->
+<div class="flex-1 flex flex-col h-full overflow-hidden bg-background relative">
+<!-- TopNavBar -->
+<header class="bg-[#09090b] text-violet-400 font-geist tracking-tight full-width top-0 border-b border-zinc-800 flex justify-between items-center px-4 h-14 z-10 flex-shrink-0">
+<div class="flex items-center gap-8 w-1/2">
+<div class="text-xl font-bold text-[#fafafa]">Obsidian Research</div>
+<div class="relative w-full max-w-sm">
+<span class="material-symbols-outlined absolute left-2.5 top-1/2 -translate-y-1/2 text-zinc-500 text-[18px]">search</span>
+<input class="w-full bg-[#121215] border border-zinc-800 rounded text-sm text-[#fafafa] pl-9 pr-3 py-1.5 focus:outline-none focus:border-violet-400 focus:ring-1 focus:ring-violet-400 transition-colors placeholder:text-zinc-600 h-8" placeholder="Search roots, lemmas..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-1">
+<button class="w-8 h-8 flex items-center justify-center text-zinc-400 hover:bg-zinc-900 hover:text-white transition-colors duration-150 ease-in-out rounded">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 0;">history_edu</span>
+</button>
+<button class="w-8 h-8 flex items-center justify-center text-zinc-400 hover:bg-zinc-900 hover:text-white transition-colors duration-150 ease-in-out rounded">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 0;">share</span>
+</button>
+<button class="w-8 h-8 flex items-center justify-center text-zinc-400 hover:bg-zinc-900 hover:text-white transition-colors duration-150 ease-in-out rounded">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 0;">account_circle</span>
+</button>
+</div>
+</header>
+<!-- Canvas -->
+<main class="flex-1 overflow-auto p-6 flex flex-col gap-6">
+<!-- Page Header -->
+<div class="flex justify-between items-end pb-4 border-b border-outline-variant">
+<div>
+<div class="flex items-center gap-3 mb-1">
+<h2 class="text-3xl font-headline font-semibold tracking-tight text-on-surface">R-H-M</h2>
+<span class="bg-surface-container-high border border-outline px-2 py-0.5 rounded text-xs font-mono text-primary font-bold">ر ح م</span>
+</div>
+<p class="text-sm text-secondary font-body">Matrix view: Comparing root semantics across 4 classical authorities.</p>
+</div>
+<div class="flex gap-3">
+<button class="px-3 py-1.5 border border-outline-variant rounded text-sm font-label text-on-surface hover:bg-surface-container transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px]">filter_list</span>
+                        Filter View
+                    </button>
+<button class="px-3 py-1.5 bg-primary text-on-primary rounded text-sm font-label font-medium hover:bg-primary/90 transition-colors flex items-center gap-2 shadow-[0_0_8px_rgba(167,139,250,0.15)]">
+<span class="material-symbols-outlined text-[16px]">download</span>
+                        Export Data
+                    </button>
+</div>
+</div>
+<!-- High-Density Data Grid -->
+<div class="flex flex-col border border-outline-variant rounded-lg overflow-hidden bg-surface-container-lowest shadow-sm flex-1">
+<!-- Grid Header -->
+<div class="grid grid-cols-12 border-b border-outline-variant bg-surface-container py-3 px-4 text-[11px] font-bold text-secondary uppercase tracking-widest sticky top-0 z-10">
+<div class="col-span-2">Authority</div>
+<div class="col-span-3">Core Semantic Meaning</div>
+<div class="col-span-4">Textual Usage Examples</div>
+<div class="col-span-3">Morphological Notes</div>
+</div>
+<!-- Grid Body (Scrollable if needed, but flex-1 handles it) -->
+<div class="flex flex-col divide-y divide-outline-variant overflow-y-auto">
+<!-- Row 1: Lane -->
+<div class="grid grid-cols-12 hover:bg-surface-container-low transition-colors duration-150">
+<div class="col-span-2 p-4 border-r border-outline-variant/30 flex flex-col gap-1">
+<span class="font-semibold text-sm text-on-surface">Lane's Lexicon</span>
+<span class="text-xs text-secondary">Vol 3, Pg. 1055</span>
+</div>
+<div class="col-span-3 p-4 border-r border-outline-variant/30">
+<p class="text-sm text-on-surface leading-relaxed">Mercy, pity, or compassion; tenderness of heart. Inclination requiring the exercise of favor and beneficence.</p>
+</div>
+<div class="col-span-4 p-4 border-r border-outline-variant/30 flex flex-col gap-3">
+<div class="bg-surface-container-lowest p-2 rounded border border-outline-variant/50 font-mono text-xs">
+<span class="text-tertiary">رَحِمَهُ</span> <span class="text-secondary-fixed ml-2">// He had mercy on him</span>
+</div>
+<div class="bg-surface-container-lowest p-2 rounded border border-outline-variant/50 font-mono text-xs">
+<span class="text-tertiary">الرَّحْمَان</span> <span class="text-secondary-fixed ml-2">// The Compassionate (denoting extensive mercy)</span>
+</div>
+</div>
+<div class="col-span-3 p-4">
+<p class="text-xs text-on-surface-variant leading-relaxed">
+                                Form I verbal noun: <span class="text-primary font-mono">رَحْمَةٌ</span> or <span class="text-primary font-mono">مَرْحَمَةٌ</span>. When applied to God, it signifies the conferring of favor, abstracting the physical sense of 'tenderness' which is impossible for the Divine.
+                            </p>
+</div>
+</div>
+<!-- Row 2: Lisan -->
+<div class="grid grid-cols-12 hover:bg-surface-container-low transition-colors duration-150">
+<div class="col-span-2 p-4 border-r border-outline-variant/30 flex flex-col gap-1">
+<span class="font-semibold text-sm text-on-surface">Lisan al-Arab</span>
+<span class="text-xs text-secondary">Ibn Manzur</span>
+</div>
+<div class="col-span-3 p-4 border-r border-outline-variant/30">
+<p class="text-sm text-on-surface leading-relaxed">Softness (الرقة) and compassion (التعطف). Also refers fundamentally to the womb (الرحم) due to the innate connection and care it necessitates.</p>
+</div>
+<div class="col-span-4 p-4 border-r border-outline-variant/30 flex flex-col gap-3">
+<div class="bg-surface-container-lowest p-2 rounded border border-outline-variant/50 font-mono text-xs">
+<span class="text-tertiary">وَصَلَ رَحِمَهُ</span> <span class="text-secondary-fixed ml-2">// He maintained ties of kinship</span>
+</div>
+</div>
+<div class="col-span-3 p-4">
+<p class="text-xs text-on-surface-variant leading-relaxed">
+                                Highlights the etymological link between "mercy" (<span class="text-primary font-mono">رحمة</span>) and the "womb" (<span class="text-primary font-mono">رحم</span>), suggesting that mercy is a structural binding force among kin before being a generalized virtue.
+                            </p>
+</div>
+</div>
+<!-- Row 3: Mufradat -->
+<div class="grid grid-cols-12 hover:bg-surface-container-low transition-colors duration-150">
+<div class="col-span-2 p-4 border-r border-outline-variant/30 flex flex-col gap-1">
+<span class="font-semibold text-sm text-on-surface">Al-Mufradat</span>
+<span class="text-xs text-secondary">al-Raghib</span>
+</div>
+<div class="col-span-3 p-4 border-r border-outline-variant/30">
+<p class="text-sm text-on-surface leading-relaxed">A gentleness requiring the exercise of beneficence toward the one shown mercy. It can be used for the feeling alone, or the resultant action alone.</p>
+</div>
+<div class="col-span-4 p-4 border-r border-outline-variant/30 flex flex-col gap-3">
+<div class="bg-surface-container-lowest p-2 rounded border border-outline-variant/50 font-mono text-xs flex justify-between">
+<span>Qur'an 7:156</span>
+<span class="text-secondary-fixed">وَرَحْمَتِي وَسِعَتْ كُلَّ شَيْءٍ</span>
+</div>
+</div>
+<div class="col-span-3 p-4">
+<p class="text-xs text-on-surface-variant leading-relaxed">
+                                Differentiates usage: When humans show it, it entails emotional gentleness (رقة). When God shows it, it implies pure beneficence (إحسان) devoid of emotional vulnerability.
+                            </p>
+</div>
+</div>
+<!-- Row 4: Taj -->
+<div class="grid grid-cols-12 hover:bg-surface-container-low transition-colors duration-150">
+<div class="col-span-2 p-4 border-r border-outline-variant/30 flex flex-col gap-1">
+<span class="font-semibold text-sm text-on-surface">Taj al-Arus</span>
+<span class="text-xs text-secondary">al-Zabidi</span>
+</div>
+<div class="col-span-3 p-4 border-r border-outline-variant/30">
+<p class="text-sm text-on-surface leading-relaxed">Synthesizes prior definitions. Focuses heavily on the derivational nouns and their exact metrical implications in poetry and theology.</p>
+</div>
+<div class="col-span-4 p-4 border-r border-outline-variant/30 flex flex-col gap-3">
+<div class="bg-surface-container-lowest p-2 rounded border border-outline-variant/50 font-mono text-xs">
+<span class="text-tertiary">مَرْحُوم</span> <span class="text-secondary-fixed ml-2">// The object of mercy</span>
+</div>
+</div>
+<div class="col-span-3 p-4">
+<p class="text-xs text-on-surface-variant leading-relaxed">
+                                Notes the intensive hyperbolic forms <span class="text-primary font-mono">فَعْلان</span> (Rahman) vs <span class="text-primary font-mono">فَعِيل</span> (Rahim) extensively, quoting early grammarians on the temporal vs permanent nature of the attributes.
+                            </p>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

@@ -2,8 +2,8 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
@@ -21,6 +21,7 @@ return new class extends Migration
             $table->text('description')->nullable()->comment('Enriched description from AI or Wikipedia');
             $table->string('wikipedia_url')->nullable();
             $table->jsonb('metadata')->nullable()->comment('Rich metadata (e.g. birth/death, coordinates)');
+            $table->timestamp('last_enriched_at')->nullable();
             $table->timestamps();
         });
 
@@ -47,7 +48,7 @@ return new class extends Migration
             $table->foreignUuid('entity_id')->constrained('entities')->cascadeOnDelete();
             $table->float('confidence')->default(1.0);
             $table->jsonb('context_metadata')->nullable()->comment('Specific context about this hit');
-            
+
             $table->primary(['sentence_id', 'entity_id']);
         });
 

@@ -218,7 +218,7 @@ def find_entity_by_name(name: str):
             # Search canonical name or inside aliases array
             cur.execute(
                 """
-                SELECT id, canonical_name, entity_type FROM entities
+                SELECT id, canonical_name, entity_type, last_enriched_at FROM entities
                 WHERE canonical_name = %s OR aliases @> %s
                 """,
                 (name, psycopg2.extras.Json([name]))
@@ -237,8 +237,8 @@ def create_entity(data: dict) -> str:
             cur.execute(
                 """
                 INSERT INTO entities (
-                    id, canonical_name, entity_type, aliases, description, wikipedia_url, metadata, created_at, updated_at
-                ) VALUES (%s, %s, %s, %s, %s, %s, %s, NOW(), NOW())
+                    id, canonical_name, entity_type, aliases, description, wikipedia_url, metadata, last_enriched_at, created_at, updated_at
+                ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, NOW(), NOW())
                 RETURNING id
                 """,
                 (
@@ -248,7 +248,8 @@ def create_entity(data: dict) -> str:
                     psycopg2.extras.Json(data.get('aliases', [])),
                     data.get('description'),
                     data.get('wikipedia_url'),
-                    psycopg2.extras.Json(data.get('metadata', {}))
+                    psycopg2.extras.Json(data.get('metadata', {})),
+                    data.get('last_enriched_at')
                 )
             )
             return cur.fetchone()[0]
@@ -311,6 +312,18 @@ def add_to_ambiguity_queue(sentence_id: str, surface_name: str, candidates: list
                 ) VALUES (%s, %s, %s, %s, %s, 'pending', NOW(), NOW())
                 """,
                 (str(uuid.uuid4()), sentence_id, surface_name, psycopg2.extras.Json(candidates), context_block)
+            )
+    finally:
+        conn.close()
+@task
+def update_entity_enrichment_time(entity_id: str):
+    """Update the last_enriched_at timestamp for an entity."""
+    conn = get_db_connection()
+    try:
+        with conn, conn.cursor() as cur:
+            cur.execute(
+                "UPDATE entities SET last_enriched_at = NOW(), updated_at = NOW() WHERE id = %s",
+                (entity_id,)
             )
     finally:
         conn.close()

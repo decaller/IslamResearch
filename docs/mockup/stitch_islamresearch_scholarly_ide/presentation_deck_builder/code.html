@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Obsidian Presentation Deck</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "on-surface": "#fafafa",
+                        "on-background": "#fafafa",
+                        "tertiary-fixed": "#bbf7d0",
+                        "outline-variant": "#27272a",
+                        "surface-variant": "#18181b",
+                        "surface-dim": "#0c0c0f",
+                        "on-secondary-fixed": "#18181b",
+                        "on-surface-variant": "#a1a1aa",
+                        "on-primary-container": "#ede9fe",
+                        "surface-container-high": "#18181b",
+                        "on-primary": "#0a0012",
+                        "error": "#ef4444",
+                        "surface-container-lowest": "#09090b",
+                        "primary-container": "#7c3aed",
+                        "primary": "#a78bfa",
+                        "surface": "#0c0c0f",
+                        "error-container": "#3b1111",
+                        "surface-bright": "#18181b",
+                        "on-primary-fixed-variant": "#5b21b6",
+                        "on-secondary-fixed-variant": "#3f3f46",
+                        "on-error": "#1a0000",
+                        "on-primary-fixed": "#2e1065",
+                        "surface-container-highest": "#1e1e22",
+                        "on-tertiary-fixed-variant": "#047857",
+                        "surface-container": "#121215",
+                        "on-secondary": "#09090b",
+                        "inverse-on-surface": "#09090b",
+                        "primary-fixed-dim": "#c4b5fd",
+                        "primary-fixed": "#ede9fe",
+                        "on-tertiary": "#001a12",
+                        "inverse-primary": "#5b21b6",
+                        "surface-container-low": "#0f0f12",
+                        "tertiary-fixed-dim": "#6ee7b7",
+                        "tertiary": "#34d399",
+                        "on-error-container": "#fca5a5",
+                        "background": "#09090b",
+                        "surface-tint": "#a78bfa",
+                        "outline": "#52525b",
+                        "on-secondary-container": "#a1a1aa",
+                        "on-tertiary-container": "#bbf7d0",
+                        "on-tertiary-fixed": "#003318",
+                        "inverse-surface": "#fafafa",
+                        "secondary": "#71717a",
+                        "secondary-container": "#27272a",
+                        "tertiary-container": "#065f46",
+                        "secondary-fixed-dim": "#71717a",
+                        "secondary-fixed": "#a1a1aa"
+                    },
+                    borderRadius: {
+                        DEFAULT: "0.25rem",
+                        lg: "0.5rem",
+                        xl: "0.75rem",
+                        full: "9999px"
+                    },
+                    fontFamily: {
+                        headline: ["Geist"],
+                        body: ["Geist"],
+                        label: ["Geist"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Geist', sans-serif; }
+    </style>
+</head>
+<body class="bg-background text-on-background h-screen flex overflow-hidden">
+<!-- SideNavBar -->
+<nav class="bg-[#0c0c0f] font-['Geist'] text-sm tracking-normal docked left-0 h-full w-64 border-r border-[#27272a] hidden lg:flex flex-col h-full py-4 gap-2">
+<div class="px-6 pb-4">
+<span class="text-xl font-black text-[#fafafa]">Research Hub</span>
+<p class="text-on-surface-variant text-xs mt-1">Precision Workspace</p>
+</div>
+<div class="px-4 pb-4">
+<button class="w-full bg-primary text-on-primary font-medium py-2 px-4 rounded flex items-center justify-center gap-2 hover:bg-primary-fixed transition-colors">
+<span class="material-symbols-outlined text-sm">add</span>
+                New Project
+            </button>
+</div>
+<div class="flex-1 overflow-y-auto px-2 space-y-1">
+<a class="flex items-center gap-3 px-4 py-2 rounded-lg text-[#a1a1aa] hover:bg-[#18181b] hover:text-[#fafafa] transition-transform duration-100 active:scale-95" href="#">
+<span class="material-symbols-outlined">edit_note</span>
+                Notes
+            </a>
+<a class="flex items-center gap-3 px-4 py-2 rounded-lg text-[#a1a1aa] hover:bg-[#18181b] hover:text-[#fafafa] transition-transform duration-100 active:scale-95" href="#">
+<span class="material-symbols-outlined">library_books</span>
+                Collections
+            </a>
+<a class="flex items-center gap-3 px-4 py-2 rounded-lg text-[#a1a1aa] hover:bg-[#18181b] hover:text-[#fafafa] transition-transform duration-100 active:scale-95" href="#">
+<span class="material-symbols-outlined">explore</span>
+                Discovery
+            </a>
+<a class="flex items-center gap-3 px-4 py-2 rounded-lg text-[#a1a1aa] hover:bg-[#18181b] hover:text-[#fafafa] transition-transform duration-100 active:scale-95" href="#">
+<span class="material-symbols-outlined">article</span>
+                Drafts
+            </a>
+<a class="flex items-center gap-3 px-4 py-2 rounded-lg text-[#a78bfa] bg-[#18181b] font-semibold border-r-2 border-[#a78bfa] transition-transform duration-100 active:scale-95" href="#">
+<span class="material-symbols-outlined">slideshow</span>
+                Present
+            </a>
+</div>
+<div class="px-2 pt-4 border-t border-[#27272a] space-y-1 mt-auto">
+<a class="flex items-center gap-3 px-4 py-2 rounded-lg text-[#a1a1aa] hover:bg-[#18181b] hover:text-[#fafafa] transition-transform duration-100 active:scale-95" href="#">
+<span class="material-symbols-outlined">archive</span>
+                Archive
+            </a>
+<a class="flex items-center gap-3 px-4 py-2 rounded-lg text-[#a1a1aa] hover:bg-[#18181b] hover:text-[#fafafa] transition-transform duration-100 active:scale-95" href="#">
+<span class="material-symbols-outlined">settings</span>
+                Settings
+            </a>
+</div>
+</nav>
+<div class="flex-1 flex flex-col h-full overflow-hidden">
+<!-- TopAppBar -->
+<header class="bg-[#09090b] font-['Geist'] tracking-tight text-[#fafafa] docked full-width top-0 border-b border-[#27272a] transition-all duration-200 ease-in-out flex justify-between items-center w-full px-6 h-14">
+<div class="flex items-center gap-4">
+<span class="text-lg font-bold tracking-tighter text-[#fafafa]">Obsidian</span>
+</div>
+<div class="flex items-center gap-2">
+<button class="p-2 text-[#a1a1aa] hover:bg-[#18181b] hover:text-[#fafafa] rounded-lg transition-colors">
+<span class="material-symbols-outlined">present_to_all</span>
+</button>
+<button class="p-2 text-[#a1a1aa] hover:bg-[#18181b] hover:text-[#fafafa] rounded-lg transition-colors">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<div class="w-8 h-8 rounded-full bg-surface-variant overflow-hidden ml-2 border border-outline-variant">
+<img alt="User profile" class="w-full h-full object-cover" data-alt="Close up portrait of a user profile picture, neutral expression, subtle lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCICWnAmvDdwmwWexkK9eO2mn743c_ckfjJ_stqEN9f47545ubdm03TeJgJuZUj_rEpdUSGiXftycXaf1sSxb4Tk6uTDEGVvap4zj_jtW7i3X9kXTjOivBSGZRSMYrkgIGtlyzmt-B1DO-iCsMdFEG1ydb45OdgyKS0e90r1iMsbxGQ_7lld1VAI1lH-LeAVQhY0Kyv3uN3kQxnJUhPVvk_O3xS1TYLxq5NbDc1QxN8hzLWlAcsA_nLHJxP3grhhR4IHoTmBaAz0P_b"/>
+</div>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="flex-1 flex overflow-hidden">
+<!-- Left Sidebar: Visual Assets -->
+<aside class="w-72 bg-surface-dim border-r border-outline-variant flex flex-col hidden md:flex">
+<div class="p-4 border-b border-outline-variant">
+<h2 class="text-sm font-semibold text-on-surface">Visual Assets</h2>
+<p class="text-xs text-on-surface-variant mt-1">Drag and drop to slide</p>
+</div>
+<div class="p-4 overflow-y-auto space-y-4">
+<!-- Asset 1 -->
+<div class="bg-surface-container rounded-lg border border-outline-variant p-3 cursor-pointer hover:bg-surface-variant transition-colors group">
+<div class="h-24 bg-surface-container-highest rounded border border-outline-variant mb-2 flex items-center justify-center relative overflow-hidden">
+<div class="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent"></div>
+<span class="material-symbols-outlined text-primary text-3xl opacity-50 group-hover:opacity-100 transition-opacity">bar_chart</span>
+</div>
+<h3 class="text-xs font-medium text-on-surface">Root Occurrence Chart</h3>
+<p class="text-[10px] text-on-surface-variant mt-1">Bar Graph</p>
+</div>
+<!-- Asset 2 -->
+<div class="bg-surface-container rounded-lg border border-outline-variant p-3 cursor-pointer hover:bg-surface-variant transition-colors group">
+<div class="h-24 bg-surface-container-highest rounded border border-outline-variant mb-2 flex items-center justify-center relative overflow-hidden">
+<div class="absolute inset-0 bg-gradient-to-tr from-tertiary/10 to-transparent"></div>
+<span class="material-symbols-outlined text-tertiary text-3xl opacity-50 group-hover:opacity-100 transition-opacity">hub</span>
+</div>
+<h3 class="text-xs font-medium text-on-surface">Semantic Connections</h3>
+<p class="text-[10px] text-on-surface-variant mt-1">3D Map</p>
+</div>
+<!-- Asset 3 -->
+<div class="bg-surface-container rounded-lg border border-outline-variant p-3 cursor-pointer hover:bg-surface-variant transition-colors group">
+<div class="h-24 bg-surface-container-highest rounded border border-outline-variant mb-2 flex items-center justify-center relative overflow-hidden">
+<div class="absolute inset-0 bg-gradient-to-b from-primary/5 to-primary/15"></div>
+<span class="material-symbols-outlined text-on-surface-variant text-3xl group-hover:text-primary transition-colors">pie_chart</span>
+</div>
+<h3 class="text-xs font-medium text-on-surface">Lexical Distribution</h3>
+<p class="text-[10px] text-on-surface-variant mt-1">Pie Chart</p>
+</div>
+</div>
+</aside>
+<!-- Slide Editor & Thumbnails -->
+<div class="flex-1 flex flex-col bg-background">
+<!-- Active Slide Canvas -->
+<div class="flex-1 p-6 md:p-8 flex items-center justify-center overflow-auto relative">
+<div class="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-surface-variant/20 via-background to-background"></div>
+<div class="w-full max-w-5xl aspect-video bg-surface-container border border-outline-variant rounded-xl shadow-2xl flex flex-col p-8 relative z-10">
+<div class="flex justify-between items-start mb-8">
+<h1 class="text-3xl font-bold tracking-tight text-on-surface">Quranic Root Analysis</h1>
+<span class="text-sm font-mono text-on-surface-variant">Slide 4</span>
+</div>
+<div class="flex-1 grid grid-cols-2 gap-8">
+<!-- Data Viz 1: Bar Graph -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-6 flex flex-col relative overflow-hidden">
+<h3 class="text-sm font-semibold text-on-surface mb-4">Frequency of Primary Roots</h3>
+<div class="flex-1 flex items-end justify-between gap-2 pb-2 border-b border-outline-variant px-2 relative z-10">
+<div class="w-full bg-primary/20 hover:bg-primary/40 rounded-t transition-colors relative group cursor-pointer" style="height: 80%">
+<div class="absolute -top-6 left-1/2 -translate-x-1/2 text-xs font-mono text-primary opacity-0 group-hover:opacity-100 transition-opacity">842</div>
+</div>
+<div class="w-full bg-primary/20 hover:bg-primary/40 rounded-t transition-colors relative group cursor-pointer" style="height: 65%">
+<div class="absolute -top-6 left-1/2 -translate-x-1/2 text-xs font-mono text-primary opacity-0 group-hover:opacity-100 transition-opacity">631</div>
+</div>
+<div class="w-full bg-primary hover:bg-primary-fixed rounded-t transition-colors relative group cursor-pointer" style="height: 95%">
+<div class="absolute -top-6 left-1/2 -translate-x-1/2 text-xs font-mono text-primary-fixed opacity-0 group-hover:opacity-100 transition-opacity">980</div>
+</div>
+<div class="w-full bg-primary/20 hover:bg-primary/40 rounded-t transition-colors relative group cursor-pointer" style="height: 45%">
+<div class="absolute -top-6 left-1/2 -translate-x-1/2 text-xs font-mono text-primary opacity-0 group-hover:opacity-100 transition-opacity">412</div>
+</div>
+<div class="w-full bg-primary/20 hover:bg-primary/40 rounded-t transition-colors relative group cursor-pointer" style="height: 30%">
+<div class="absolute -top-6 left-1/2 -translate-x-1/2 text-xs font-mono text-primary opacity-0 group-hover:opacity-100 transition-opacity">285</div>
+</div>
+</div>
+<div class="flex justify-between px-2 mt-2 text-[10px] text-on-surface-variant font-mono">
+<span>R1</span>
+<span>R2</span>
+<span class="text-primary font-bold">R3</span>
+<span>R4</span>
+<span>R5</span>
+</div>
+</div>
+<!-- Data Viz 2: 3D Network Map Mock -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-6 relative overflow-hidden flex flex-col">
+<h3 class="text-sm font-semibold text-on-surface mb-4 z-10">Semantic Cluster Map</h3>
+<div class="flex-1 relative flex items-center justify-center">
+<!-- Network Nodes Mock -->
+<div class="absolute w-full h-full inset-0 opacity-40 mix-blend-screen" style="background-image: radial-gradient(circle at 50% 50%, rgba(167, 139, 250, 0.1) 0%, transparent 70%);"></div>
+<div class="relative w-full h-full">
+<!-- Central Node -->
+<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-4 h-4 bg-primary rounded-full shadow-[0_0_15px_rgba(167,139,250,0.8)] z-20"></div>
+<!-- Connected Nodes -->
+<div class="absolute top-1/4 left-1/4 w-2 h-2 bg-tertiary rounded-full shadow-[0_0_10px_rgba(52,211,153,0.5)] z-20"></div>
+<div class="absolute top-3/4 left-1/3 w-3 h-3 bg-on-surface rounded-full shadow-[0_0_10px_rgba(250,250,250,0.5)] z-20"></div>
+<div class="absolute top-1/3 left-3/4 w-2 h-2 bg-on-surface-variant rounded-full z-20"></div>
+<div class="absolute top-2/3 left-2/3 w-2 h-2 bg-primary/50 rounded-full z-20"></div>
+<!-- Connection Lines (SVG) -->
+<svg class="absolute inset-0 w-full h-full pointer-events-none z-10" preserveaspectratio="none">
+<line stroke="#34d399" stroke-opacity="0.3" stroke-width="1" x1="50%" x2="25%" y1="50%" y2="25%"></line>
+<line stroke="#fafafa" stroke-opacity="0.2" stroke-width="1" x1="50%" x2="33%" y1="50%" y2="75%"></line>
+<line stroke="#a1a1aa" stroke-opacity="0.2" stroke-width="1" x1="50%" x2="75%" y1="50%" y2="33%"></line>
+<line stroke="#a78bfa" stroke-opacity="0.4" stroke-width="1" x1="50%" x2="66%" y1="50%" y2="66%"></line>
+</svg>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Slide Thumbnails Toolbar -->
+<div class="h-32 bg-surface-dim border-t border-outline-variant p-4 flex items-center gap-4 overflow-x-auto">
+<!-- Add Slide -->
+<button class="min-w-[80px] h-20 bg-surface-container border border-dashed border-outline-variant rounded flex flex-col items-center justify-center text-on-surface-variant hover:border-primary hover:text-primary transition-colors flex-shrink-0">
+<span class="material-symbols-outlined mb-1">add</span>
+<span class="text-[10px]">Add Slide</span>
+</button>
+<!-- Thumbnail 1 -->
+<div class="min-w-[120px] h-20 bg-surface-container border border-outline-variant rounded relative flex-shrink-0 cursor-pointer hover:border-on-surface-variant transition-colors group">
+<div class="absolute top-1 left-1 text-[8px] font-mono bg-surface/80 px-1 rounded text-on-surface-variant">1</div>
+<div class="w-full h-full p-2 opacity-50 flex flex-col gap-1">
+<div class="h-2 w-3/4 bg-on-surface-variant/30 rounded"></div>
+<div class="flex-1 bg-primary/10 rounded"></div>
+</div>
+</div>
+<!-- Thumbnail 2 -->
+<div class="min-w-[120px] h-20 bg-surface-container border border-outline-variant rounded relative flex-shrink-0 cursor-pointer hover:border-on-surface-variant transition-colors group">
+<div class="absolute top-1 left-1 text-[8px] font-mono bg-surface/80 px-1 rounded text-on-surface-variant">2</div>
+<div class="w-full h-full p-2 opacity-50 flex flex-col gap-1">
+<div class="h-2 w-1/2 bg-on-surface-variant/30 rounded"></div>
+<div class="flex-1 flex gap-1">
+<div class="flex-1 bg-tertiary/10 rounded"></div>
+<div class="flex-1 bg-on-surface-variant/10 rounded"></div>
+</div>
+</div>
+</div>
+<!-- Thumbnail 3 -->
+<div class="min-w-[120px] h-20 bg-surface-container border border-outline-variant rounded relative flex-shrink-0 cursor-pointer hover:border-on-surface-variant transition-colors group">
+<div class="absolute top-1 left-1 text-[8px] font-mono bg-surface/80 px-1 rounded text-on-surface-variant">3</div>
+<div class="w-full h-full p-2 opacity-50 flex flex-col gap-1 items-center justify-center">
+<div class="w-8 h-8 rounded-full bg-primary/20"></div>
+</div>
+</div>
+<!-- Active Thumbnail 4 -->
+<div class="min-w-[120px] h-20 bg-surface-container border-2 border-primary rounded relative flex-shrink-0 cursor-pointer">
+<div class="absolute top-1 left-1 text-[8px] font-mono bg-primary text-on-primary px-1 rounded">4</div>
+<div class="w-full h-full p-2 flex flex-col gap-1">
+<div class="h-2 w-2/3 bg-on-surface/50 rounded"></div>
+<div class="flex-1 flex gap-1">
+<div class="flex-1 bg-primary/30 rounded flex items-end justify-between px-1 pb-1">
+<div class="w-1/4 h-1/2 bg-primary/50"></div>
+<div class="w-1/4 h-full bg-primary"></div>
+<div class="w-1/4 h-3/4 bg-primary/50"></div>
+</div>
+<div class="flex-1 bg-surface-variant rounded flex items-center justify-center">
+<div class="w-2 h-2 rounded-full bg-tertiary/50"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Thumbnail 5 -->
+<div class="min-w-[120px] h-20 bg-surface-container border border-outline-variant rounded relative flex-shrink-0 cursor-pointer hover:border-on-surface-variant transition-colors group">
+<div class="absolute top-1 left-1 text-[8px] font-mono bg-surface/80 px-1 rounded text-on-surface-variant">5</div>
+<div class="w-full h-full p-2 opacity-50 flex flex-col gap-1 items-center justify-center">
+<span class="text-xs text-on-surface-variant">Conclusion</span>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="bg-[#09090b] text-[#a78bfa] font-['Geist'] text-[10px] font-medium fixed bottom-0 w-full z-50 border-t border-[#27272a] shadow-2xl lg:hidden fixed bottom-0 left-0 w-full flex justify-around items-center px-4 py-3 pb-safe">
+<button class="flex flex-col items-center justify-center text-[#a1a1aa] active:bg-[#27272a] tap-highlight-transparent rounded-xl px-3 py-1">
+<span class="material-symbols-outlined mb-1">home</span>
+            Home
+        </button>
+<button class="flex flex-col items-center justify-center text-[#a1a1aa] active:bg-[#27272a] tap-highlight-transparent rounded-xl px-3 py-1">
+<span class="material-symbols-outlined mb-1">search</span>
+            Search
+        </button>
+<button class="flex flex-col items-center justify-center text-[#a1a1aa] active:bg-[#27272a] tap-highlight-transparent rounded-xl px-3 py-1">
+<span class="material-symbols-outlined mb-1">history_edu</span>
+            Drafts
+        </button>
+<button class="flex flex-col items-center justify-center text-[#a78bfa] bg-[#18181b] rounded-xl px-3 py-1 active:bg-[#27272a] tap-highlight-transparent">
+<span class="material-symbols-outlined mb-1">account_circle</span>
+            Profile
+        </button>
+</nav>
+</body></html>

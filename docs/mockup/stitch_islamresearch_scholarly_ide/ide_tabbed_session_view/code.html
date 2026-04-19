@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>IslamResearch - Exegesis Workspace</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-secondary-fixed": "#18181b",
+                      "tertiary-container": "#065f46",
+                      "on-secondary": "#09090b",
+                      "primary-fixed": "#ede9fe",
+                      "outline-variant": "#27272a",
+                      "surface-tint": "#a78bfa",
+                      "on-secondary-container": "#a1a1aa",
+                      "on-secondary-fixed-variant": "#3f3f46",
+                      "surface-container-low": "#0f0f12",
+                      "surface-container": "#121215",
+                      "on-primary": "#0a0012",
+                      "on-tertiary-container": "#bbf7d0",
+                      "primary-container": "#7c3aed",
+                      "secondary-container": "#27272a",
+                      "tertiary-fixed": "#bbf7d0",
+                      "primary-fixed-dim": "#c4b5fd",
+                      "error-container": "#3b1111",
+                      "error": "#ef4444",
+                      "inverse-on-surface": "#09090b",
+                      "tertiary-fixed-dim": "#6ee7b7",
+                      "on-error-container": "#fca5a5",
+                      "secondary-fixed": "#a1a1aa",
+                      "inverse-surface": "#fafafa",
+                      "secondary-fixed-dim": "#71717a",
+                      "primary": "#a78bfa",
+                      "surface": "#0c0c0f",
+                      "on-primary-container": "#ede9fe",
+                      "on-error": "#1a0000",
+                      "on-background": "#fafafa",
+                      "tertiary": "#34d399",
+                      "on-tertiary-fixed-variant": "#047857",
+                      "surface-dim": "#0c0c0f",
+                      "surface-bright": "#18181b",
+                      "background": "#09090b",
+                      "outline": "#52525b",
+                      "inverse-primary": "#5b21b6",
+                      "surface-variant": "#18181b",
+                      "on-primary-fixed-variant": "#5b21b6",
+                      "surface-container-highest": "#1e1e22",
+                      "on-surface": "#fafafa",
+                      "surface-container-high": "#18181b",
+                      "on-tertiary-fixed": "#003318",
+                      "surface-container-lowest": "#09090b",
+                      "on-tertiary": "#001a12",
+                      "secondary": "#71717a",
+                      "on-primary-fixed": "#2e1065",
+                      "on-surface-variant": "#a1a1aa"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {},
+              "fontFamily": {
+                      "headline": [
+                              "Geist", "sans-serif"
+                      ],
+                      "body": [
+                              "Geist", "sans-serif"
+                      ],
+                      "label": [
+                              "Geist", "sans-serif"
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+</head>
+<body class="bg-background text-on-background font-body h-screen flex flex-col overflow-hidden antialiased">
+<!-- TopAppBar -->
+<header class="bg-[#09090b] text-[#fafafa] font-geist tracking-tight docked full-width top-0 border-b border-[#27272a] flat no shadows flex justify-between items-center px-4 h-14 w-full z-50 shrink-0">
+<div class="flex items-center gap-6">
+<span class="text-xl font-bold tracking-tighter text-[#fafafa]">IslamResearch</span>
+<nav class="hidden md:flex items-center gap-1 h-full">
+<a class="text-[#a1a1aa] hover:bg-[#18181b] hover:text-[#fafafa] transition-colors duration-200 ease-in-out px-3 py-1 rounded-md text-sm font-medium" href="#">Quran</a>
+<a class="text-[#a1a1aa] hover:bg-[#18181b] hover:text-[#fafafa] transition-colors duration-200 ease-in-out px-3 py-1 rounded-md text-sm font-medium" href="#">Lexicon</a>
+<a class="text-[#a78bfa] border-b-2 border-[#a78bfa] pb-1 hover:bg-[#18181b] hover:text-[#fafafa] transition-colors duration-200 ease-in-out px-3 py-1 rounded-t-md text-sm font-medium mt-1" href="#">Exegesis</a>
+<a class="text-[#a1a1aa] hover:bg-[#18181b] hover:text-[#fafafa] transition-colors duration-200 ease-in-out px-3 py-1 rounded-md text-sm font-medium" href="#">Habits</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative hidden sm:block w-64">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-sm" data-icon="search">search</span>
+<input class="w-full bg-surface-container text-sm text-on-surface placeholder:text-on-surface-variant rounded-md border border-outline-variant py-1.5 pl-9 pr-3 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background transition-all" placeholder="Search across all contexts..." type="text"/>
+<div class="absolute right-2 top-1/2 -translate-y-1/2 flex gap-1">
+<kbd class="hidden lg:inline-flex items-center justify-center px-1.5 text-[10px] font-medium text-on-surface-variant bg-surface-variant border border-outline-variant rounded">⌘</kbd>
+<kbd class="hidden lg:inline-flex items-center justify-center px-1.5 text-[10px] font-medium text-on-surface-variant bg-surface-variant border border-outline-variant rounded">K</kbd>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<button class="p-1.5 rounded-md text-[#a1a1aa] hover:bg-[#18181b] hover:text-[#fafafa] transition-colors duration-200 ease-in-out flex items-center justify-center">
+<span class="material-symbols-outlined text-xl" data-icon="settings">settings</span>
+</button>
+<button class="p-1.5 rounded-md text-[#a1a1aa] hover:bg-[#18181b] hover:text-[#fafafa] transition-colors duration-200 ease-in-out flex items-center justify-center">
+<span class="material-symbols-outlined text-xl" data-icon="account_circle">account_circle</span>
+</button>
+</div>
+</div>
+</header>
+<div class="flex flex-1 overflow-hidden">
+<!-- SideNavBar -->
+<aside class="bg-[#0c0c0f] font-geist text-sm docked h-full left-0 border-r border-[#27272a] flat no shadows flex flex-col w-64 h-screen p-4 gap-2 shrink-0 z-40">
+<div class="mb-4 px-2">
+<div class="flex items-center gap-3 mb-1">
+<div class="w-8 h-8 rounded bg-surface-container-high border border-outline-variant flex items-center justify-center overflow-hidden">
+<img alt="User profile" class="w-full h-full object-cover" data-alt="professional portrait of user with dark background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuArO2Ae2U1CH33-eVB1Vgb5IwEQdhUVhaMeZ0fTDM5onuAMz4v6ZdUyS8pGgLDyFSw3hFgDyh3qIiy8b7eMJmBLD2ocOxUdvamxnExYDEZUvXohzB-v4GPGV7t3fHfoV4lkvX669iWAZS35AV2rA8fNtay9Nc24_7XTBYG3grSu62AfjqzSF__7c8hWf5r-nW6bjzLNJ9v538XZoXGmbkpa-uxMA3JjUlt5vNnhhqNtt8PBMjDjgkJTsdiyrGUVQvJQxrmoBmJXH8s9"/>
+</div>
+<div>
+<h2 class="font-bold text-[#fafafa] leading-tight">Research Desk</h2>
+<p class="text-xs text-on-surface-variant">v1.0.4</p>
+</div>
+</div>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 text-[#a1a1aa] hover:bg-[#18181b] hover:text-[#fafafa] transition-all duration-150 rounded-lg group" href="#">
+<span class="material-symbols-outlined text-lg text-on-surface-variant group-hover:text-on-surface transition-colors" data-icon="history">history</span>
+<span class="font-medium">History</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#a1a1aa] hover:bg-[#18181b] hover:text-[#fafafa] transition-all duration-150 rounded-lg group" href="#">
+<span class="material-symbols-outlined text-lg text-on-surface-variant group-hover:text-on-surface transition-colors" data-icon="bookmark">bookmark</span>
+<span class="font-medium">Bookmarks</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 bg-[#27272a] text-[#a78bfa] rounded-lg transition-all duration-150 group" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="edit_note" data-weight="fill" style="font-variation-settings: 'FILL' 1;">edit_note</span>
+<span class="font-medium">Drafts</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#a1a1aa] hover:bg-[#18181b] hover:text-[#fafafa] transition-all duration-150 rounded-lg group" href="#">
+<span class="material-symbols-outlined text-lg text-on-surface-variant group-hover:text-on-surface transition-colors" data-icon="folder_open">folder_open</span>
+<span class="font-medium">Collections</span>
+</a>
+</nav>
+<div class="mt-auto pt-4 border-t border-[#27272a]">
+<a class="flex items-center gap-3 px-3 py-2 text-[#a1a1aa] hover:bg-[#18181b] hover:text-[#fafafa] transition-all duration-150 rounded-lg group" href="#">
+<span class="material-symbols-outlined text-lg text-on-surface-variant group-hover:text-on-surface transition-colors" data-icon="settings">settings</span>
+<span class="font-medium">Settings</span>
+</a>
+</div>
+</aside>
+<!-- Main Workspace Area -->
+<main class="flex-1 flex flex-col min-w-0 bg-background overflow-hidden relative">
+<!-- Tabbed Browsing Bar -->
+<div class="flex items-center px-2 bg-surface-dim border-b border-outline-variant h-10 shrink-0 overflow-x-auto no-scrollbar">
+<div class="flex gap-1 h-full pt-1">
+<!-- Tab 1 (Inactive) -->
+<button class="group flex items-center gap-2 px-3 min-w-[140px] max-w-[200px] bg-surface-container-low border-t border-l border-r border-outline-variant rounded-t-md hover:bg-surface-container transition-colors relative h-full mb-[-1px]">
+<span class="material-symbols-outlined text-sm text-on-surface-variant" data-icon="book">book</span>
+<span class="text-xs text-on-surface-variant font-medium truncate group-hover:text-on-surface transition-colors">Surah Al-Kahf Analysis</span>
+<span class="material-symbols-outlined text-[14px] text-on-surface-variant ml-auto opacity-0 group-hover:opacity-100 hover:text-on-surface hover:bg-surface-variant rounded-sm p-0.5" data-icon="close">close</span>
+</button>
+<!-- Tab 2 (Active) -->
+<button class="group flex items-center gap-2 px-3 min-w-[140px] max-w-[200px] bg-background border-t-2 border-t-primary border-l border-r border-outline-variant rounded-t-md relative h-full z-10 mb-[-1px]">
+<span class="material-symbols-outlined text-sm text-primary" data-icon="account_tree">account_tree</span>
+<span class="text-xs text-on-surface font-medium truncate">Root Word: R-H-M</span>
+<span class="material-symbols-outlined text-[14px] text-on-surface-variant ml-auto hover:text-on-surface hover:bg-surface-variant rounded-sm p-0.5 transition-colors" data-icon="close">close</span>
+</button>
+<!-- Tab 3 (Inactive) -->
+<button class="group flex items-center gap-2 px-3 min-w-[140px] max-w-[200px] bg-surface-container-low border-t border-l border-r border-outline-variant rounded-t-md hover:bg-surface-container transition-colors relative h-full mb-[-1px]">
+<span class="material-symbols-outlined text-sm text-on-surface-variant" data-icon="edit_document">edit_document</span>
+<span class="text-xs text-on-surface-variant font-medium truncate group-hover:text-on-surface transition-colors">Draft: Mercy Concepts</span>
+<span class="w-2 h-2 rounded-full bg-tertiary ml-1"></span>
+<span class="material-symbols-outlined text-[14px] text-on-surface-variant ml-auto opacity-0 group-hover:opacity-100 hover:text-on-surface hover:bg-surface-variant rounded-sm p-0.5" data-icon="close">close</span>
+</button>
+<button class="h-full px-2 flex items-center justify-center text-on-surface-variant hover:text-on-surface hover:bg-surface-container rounded-md mb-[-1px] transition-colors mx-1">
+<span class="material-symbols-outlined text-sm" data-icon="add">add</span>
+</button>
+</div>
+</div>
+<!-- Workspace Layout (Bento Grid Style Split Pane) -->
+<div class="flex-1 overflow-hidden flex flex-col lg:flex-row gap-4 p-4">
+<!-- Left Pane: Knowledge Graph Focus -->
+<section class="flex-1 flex flex-col bg-surface-container border border-outline-variant rounded-lg overflow-hidden min-w-[300px]">
+<header class="flex items-center justify-between p-3 border-b border-outline-variant bg-surface-container-high shrink-0">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-sm" data-icon="hub">hub</span>
+<h3 class="text-sm font-semibold tracking-tight text-on-surface">Semantic Network</h3>
+</div>
+<div class="flex items-center gap-1">
+<button class="p-1 rounded text-on-surface-variant hover:text-on-surface hover:bg-surface-variant transition-colors" title="Zoom In">
+<span class="material-symbols-outlined text-[16px]" data-icon="zoom_in">zoom_in</span>
+</button>
+<button class="p-1 rounded text-on-surface-variant hover:text-on-surface hover:bg-surface-variant transition-colors" title="Filter Nodes">
+<span class="material-symbols-outlined text-[16px]" data-icon="filter_list">filter_list</span>
+</button>
+</div>
+</header>
+<div class="flex-1 relative bg-surface-container-lowest p-4 overflow-hidden group">
+<!-- Abstract Knowledge Graph Visual Representation (CSS/HTML based) -->
+<div class="absolute inset-0 opacity-20" style="background-image: radial-gradient(circle at 1px 1px, #27272a 1px, transparent 0); background-size: 20px 20px;"></div>
+<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full flex items-center justify-center pointer-events-none">
+<!-- Central Node -->
+<div class="absolute z-20 pointer-events-auto">
+<div class="w-16 h-16 rounded-full bg-primary-container border-2 border-primary flex items-center justify-center shadow-[0_0_15px_rgba(167,139,250,0.2)] cursor-pointer hover:scale-105 transition-transform">
+<span class="font-bold text-on-primary-container text-lg">ر ح م</span>
+</div>
+</div>
+<!-- Connected Nodes (Simulated) -->
+<div class="absolute top-1/4 left-1/4 z-10 pointer-events-auto">
+<div class="px-3 py-1.5 rounded bg-surface border border-outline-variant text-sm text-on-surface hover:border-primary transition-colors cursor-pointer flex items-center gap-2">
+<span>Rahmah (Mercy)</span>
+</div>
+</div>
+<svg class="absolute top-0 left-0 w-full h-full pointer-events-none z-0">
+<line stroke="#27272a" stroke-dasharray="4 4" stroke-width="2" x1="50%" x2="25%" y1="50%" y2="25%"></line>
+</svg>
+<div class="absolute bottom-1/3 right-1/4 z-10 pointer-events-auto">
+<div class="px-3 py-1.5 rounded bg-surface border border-outline-variant text-sm text-on-surface hover:border-primary transition-colors cursor-pointer flex items-center gap-2">
+<span>Rahim (Womb)</span>
+</div>
+</div>
+<svg class="absolute top-0 left-0 w-full h-full pointer-events-none z-0">
+<line stroke="#27272a" stroke-width="2" x1="50%" x2="75%" y1="50%" y2="66%"></line>
+</svg>
+<div class="absolute top-1/3 right-1/3 z-10 pointer-events-auto">
+<div class="px-3 py-1.5 rounded bg-surface border border-primary/50 text-sm text-primary shadow-[0_0_10px_rgba(167,139,250,0.1)] cursor-pointer flex items-center gap-2">
+<span>Ar-Rahman</span>
+</div>
+</div>
+<svg class="absolute top-0 left-0 w-full h-full pointer-events-none z-0">
+<line stroke="#a78bfa" stroke-width="1.5" x1="50%" x2="66%" y1="50%" y2="33%"></line>
+</svg>
+</div>
+<!-- Mini map / Context indicator -->
+<div class="absolute bottom-4 right-4 w-24 h-24 bg-surface/80 backdrop-blur-sm border border-outline-variant rounded p-1 flex items-center justify-center">
+<div class="w-full h-full border border-outline-variant/50 relative">
+<div class="absolute top-1/2 left-1/2 w-2 h-2 bg-primary rounded-full -translate-x-1/2 -translate-y-1/2"></div>
+</div>
+</div>
+</div>
+</section>
+<!-- Right Pane: Multi-view Content Area -->
+<section class="flex-[1.5] flex flex-col gap-4 min-w-[300px]">
+<!-- Top Sub-pane: Text/Exegesis View -->
+<div class="flex-1 flex flex-col bg-surface-container border border-outline-variant rounded-lg overflow-hidden relative">
+<header class="flex items-center justify-between p-3 border-b border-outline-variant bg-surface-container-high shrink-0">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-on-surface-variant text-sm" data-icon="menu_book">menu_book</span>
+<h3 class="text-sm font-semibold tracking-tight text-on-surface">Tafsir Ibn Kathir</h3>
+</div>
+<span class="text-xs text-on-surface-variant px-2 py-0.5 bg-surface-variant rounded border border-outline-variant">Al-Fatihah 1:3</span>
+</header>
+<div class="flex-1 p-6 overflow-y-auto font-body text-on-surface-variant leading-relaxed custom-scrollbar relative">
+<!-- Scroll Position Indicator -->
+<div class="absolute right-1 top-2 bottom-2 w-1 bg-surface-variant rounded-full overflow-hidden">
+<div class="w-full h-1/4 bg-primary rounded-full absolute top-[10%]"></div>
+</div>
+<h4 class="text-lg font-headline font-bold text-on-surface mb-4">The Meaning of Ar-Rahman Ar-Rahim</h4>
+<p class="mb-4">
+                                These are two names derived from Ar-Rahmah (the mercy), but <span class="text-primary bg-primary/10 px-1 rounded cursor-pointer hover:bg-primary/20 transition-colors">Ar-Rahman</span> has more meanings that pertain to mercy than <span class="text-on-surface font-medium border-b border-dashed border-outline-variant cursor-help">Ar-Rahim</span>. There is a statement by Ibn Jarir that indicates that there is a consensus on this meaning.
+                            </p>
+<p class="mb-4">
+                                In the Tafsir of Ibn Jarir, it is recorded that `Isa (Jesus) said, "Ar-Rahman is He Who shows mercy in this life and the Hereafter, while Ar-Rahim is He Who shows mercy in the Hereafter."
+                            </p>
+<div class="p-4 bg-surface border-l-2 border-primary rounded-r text-sm italic text-on-surface mb-4 relative group">
+<button class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 p-1 bg-surface-variant rounded text-on-surface-variant hover:text-on-surface transition-all">
+<span class="material-symbols-outlined text-[14px]" data-icon="content_copy">content_copy</span>
+</button>
+                                "The Most Gracious (Ar-Rahman) is the One Whose mercy encompasses all creatures in this world, and the Most Merciful (Ar-Rahim) is the One Whose mercy is specific for the believers in the Hereafter."
+                            </div>
+<p>
+                                Allah said, <span class="font-arabic text-xl block text-right my-2" dir="rtl">الرَّحْمَـنِ الرَّحِيمِ</span> (The Most Gracious, the Most Merciful).
+                            </p>
+</div>
+</div>
+<!-- Bottom Sub-pane: Scratchpad / Notes -->
+<div class="h-1/3 flex flex-col bg-surface-container border border-outline-variant rounded-lg overflow-hidden shrink-0">
+<header class="flex items-center justify-between p-2 px-3 border-b border-outline-variant bg-surface-container-high shrink-0">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-tertiary text-sm" data-icon="edit_note">edit_note</span>
+<h3 class="text-sm font-semibold tracking-tight text-on-surface">Quick Notes</h3>
+</div>
+<button class="text-xs text-primary hover:underline font-medium">Save Draft</button>
+</header>
+<div class="flex-1 p-0 relative">
+<textarea class="w-full h-full bg-transparent border-none resize-none p-4 text-sm text-on-surface focus:ring-0 placeholder:text-on-surface-variant/50 font-body leading-relaxed" placeholder="Jot down connections, thoughts, or tag related concepts..."></textarea>
+<!-- Floating action in scratchpad -->
+<div class="absolute bottom-3 right-3 flex gap-2">
+<button class="w-8 h-8 rounded-full bg-surface-variant border border-outline-variant flex items-center justify-center text-on-surface-variant hover:text-on-surface hover:border-primary transition-all shadow-sm" title="Insert Tag">
+<span class="material-symbols-outlined text-sm" data-icon="sell">sell</span>
+</button>
+<button class="w-8 h-8 rounded-full bg-primary-container border border-primary text-on-primary-container flex items-center justify-center hover:bg-primary transition-colors shadow-sm" title="Expand Editor">
+<span class="material-symbols-outlined text-sm" data-icon="open_in_full">open_in_full</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+</div>
+<!-- Status Bar -->
+<footer class="h-7 border-t border-outline-variant bg-surface flex items-center justify-between px-3 shrink-0 text-[10px] font-mono text-on-surface-variant uppercase tracking-wider">
+<div class="flex items-center gap-4">
+<span class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span> Sync Active</span>
+<span>Last Saved: 2m ago</span>
+</div>
+<div class="flex items-center gap-4">
+<span>Layout: Split-Pane</span>
+<span>Nodes: 142</span>
+</div>
+</footer>
+</main>
+</div>
+<style>
+        /* Hide scrollbar for Chrome, Safari and Opera */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        /* Hide scrollbar for IE, Edge and Firefox */
+        .no-scrollbar {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
+        
+        /* Custom scrollbar for content areas */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background-color: #27272a;
+            border-radius: 20px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background-color: #3f3f46;
+        }
+    </style>
+</body></html>

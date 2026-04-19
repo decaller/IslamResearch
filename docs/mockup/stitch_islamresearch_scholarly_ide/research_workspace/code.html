@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Research Workspace - IslamResearch</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-dim": "#0c0c0f",
+                        "tertiary": "#34d399",
+                        "on-tertiary-fixed-variant": "#047857",
+                        "on-primary-container": "#ede9fe",
+                        "on-error": "#1a0000",
+                        "on-background": "#fafafa",
+                        "surface": "#0c0c0f",
+                        "primary": "#a78bfa",
+                        "secondary-fixed-dim": "#71717a",
+                        "inverse-surface": "#fafafa",
+                        "on-surface-variant": "#a1a1aa",
+                        "secondary": "#71717a",
+                        "on-primary-fixed": "#2e1065",
+                        "surface-container-lowest": "#09090b",
+                        "on-tertiary": "#001a12",
+                        "surface-container-high": "#18181b",
+                        "on-tertiary-fixed": "#003318",
+                        "surface-container-highest": "#1e1e22",
+                        "on-surface": "#fafafa",
+                        "surface-variant": "#18181b",
+                        "on-primary-fixed-variant": "#5b21b6",
+                        "outline": "#52525b",
+                        "inverse-primary": "#5b21b6",
+                        "surface-bright": "#18181b",
+                        "background": "#09090b",
+                        "on-tertiary-container": "#bbf7d0",
+                        "surface-container-low": "#0f0f12",
+                        "surface-container": "#121215",
+                        "on-primary": "#0a0012",
+                        "on-secondary-fixed-variant": "#3f3f46",
+                        "on-secondary-container": "#a1a1aa",
+                        "surface-tint": "#a78bfa",
+                        "primary-fixed": "#ede9fe",
+                        "outline-variant": "#27272a",
+                        "on-secondary": "#09090b",
+                        "tertiary-container": "#065f46",
+                        "on-secondary-fixed": "#18181b",
+                        "secondary-fixed": "#a1a1aa",
+                        "tertiary-fixed-dim": "#6ee7b7",
+                        "on-error-container": "#fca5a5",
+                        "inverse-on-surface": "#09090b",
+                        "error": "#ef4444",
+                        "primary-fixed-dim": "#c4b5fd",
+                        "error-container": "#3b1111",
+                        "tertiary-fixed": "#bbf7d0",
+                        "secondary-container": "#27272a",
+                        "primary-container": "#7c3aed"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Geist", "sans-serif"],
+                        "body": ["Geist", "sans-serif"],
+                        "label": ["Geist", "sans-serif"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Geist', sans-serif; }
+    </style>
+</head>
+<body class="bg-background text-on-background h-screen flex overflow-hidden">
+<!-- SideNavBar -->
+<nav class="hidden md:flex flex-col w-64 h-screen p-4 gap-2 bg-[#0c0c0f] border-r border-[#27272a] font-geist text-sm transition-all duration-150">
+<div class="mb-6 px-2">
+<h1 class="font-bold text-[#fafafa] text-lg tracking-tight">Research Desk</h1>
+<p class="text-[#a1a1aa] text-xs">v1.0.4</p>
+</div>
+<div class="flex-1 flex flex-col gap-1">
+<a class="flex items-center gap-3 px-3 py-2 text-[#a1a1aa] hover:bg-[#18181b] hover:text-[#fafafa] rounded-md transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">history</span>
+                History
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#a1a1aa] hover:bg-[#18181b] hover:text-[#fafafa] rounded-md transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">bookmark</span>
+                Bookmarks
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 bg-[#27272a] text-[#a78bfa] rounded-lg transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">edit_note</span>
+                Drafts
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#a1a1aa] hover:bg-[#18181b] hover:text-[#fafafa] rounded-md transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">folder_open</span>
+                Collections
+            </a>
+</div>
+<div class="mt-auto">
+<a class="flex items-center gap-3 px-3 py-2 text-[#a1a1aa] hover:bg-[#18181b] hover:text-[#fafafa] rounded-md transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">settings</span>
+                Settings
+            </a>
+<div class="mt-4 pt-4 border-t border-outline-variant flex items-center gap-3 px-2">
+<div class="w-8 h-8 rounded-full bg-surface-variant overflow-hidden">
+<img alt="User profile" class="w-full h-full object-cover" data-alt="professional headshot of a person looking forward against a neutral background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA6Gkr0_4mYPXUVSllaSdEXyUHtDMiC_L_A8Phdl_LiL817nyqn5gWJ59OBeAbBWXQXG_GLe7QWdEjwoUNIc5BzFOboU-UV9XaibOv8P1LsLbJKebPRgvy7aivOJrjI1t3au506HAueVbZDHkqHAmtidwQzb5pJSFwdoGnswdTOfbhLEQlOi9ZKSkTbC7OSjYW7U2tW5j_OsXQIAWbSZvdpWdEBVnamN_fOWAxnlSVwVtSo5GQV2xCeW6QOK3pzwMXm6WyVJnjphn1O"/>
+</div>
+<div class="flex flex-col">
+<span class="text-sm font-medium text-on-surface">Scholar</span>
+<span class="text-xs text-on-surface-variant">Pro Plan</span>
+</div>
+</div>
+</div>
+</nav>
+<!-- Main Content Area -->
+<div class="flex-1 flex flex-col h-screen overflow-hidden">
+<!-- TopAppBar -->
+<header class="flex justify-between items-center px-4 h-14 w-full bg-[#09090b] border-b border-[#27272a] font-geist tracking-tight text-[#fafafa] transition-colors duration-200 ease-in-out shrink-0">
+<div class="flex items-center gap-6">
+<div class="md:hidden text-xl font-bold tracking-tighter text-[#fafafa]">IslamResearch</div>
+<nav class="hidden md:flex items-center gap-6 h-full">
+<a class="text-[#a78bfa] border-b-2 border-[#a78bfa] pb-1 h-full flex items-center pt-1 font-medium" href="#">Quran</a>
+<a class="text-[#a1a1aa] hover:text-[#fafafa] transition-colors h-full flex items-center font-medium" href="#">Lexicon</a>
+<a class="text-[#a1a1aa] hover:text-[#fafafa] transition-colors h-full flex items-center font-medium" href="#">Exegesis</a>
+<a class="text-[#a1a1aa] hover:text-[#fafafa] transition-colors h-full flex items-center font-medium" href="#">Habits</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative hidden sm:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[#a1a1aa] text-sm">search</span>
+<input class="bg-[#18181b] border border-[#27272a] text-sm rounded-md pl-9 pr-4 py-1.5 focus:outline-none focus:border-[#a78bfa] focus:ring-1 focus:ring-[#a78bfa] text-[#fafafa] placeholder-[#a1a1aa] w-64 transition-all" placeholder="Search roots, verses, tags..." type="text"/>
+</div>
+<button class="text-[#a1a1aa] hover:text-[#fafafa] transition-colors flex items-center justify-center">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<button class="text-[#a1a1aa] hover:text-[#fafafa] transition-colors flex items-center justify-center">
+<span class="material-symbols-outlined">account_circle</span>
+</button>
+</div>
+</header>
+<!-- IDE Workspace -->
+<main class="flex-1 flex flex-col overflow-hidden bg-surface-container-lowest">
+<!-- Breadcrumbs & Workspace Controls -->
+<div class="h-10 border-b border-outline-variant flex items-center justify-between px-4 bg-surface-dim shrink-0">
+<div class="flex items-center text-xs text-on-surface-variant font-mono">
+<a class="hover:text-primary transition-colors" href="#">Al-Baqarah</a>
+<span class="material-symbols-outlined text-[14px] mx-1">chevron_right</span>
+<a class="hover:text-primary transition-colors" href="#">Verse 2</a>
+<span class="material-symbols-outlined text-[14px] mx-1">chevron_right</span>
+<span class="text-primary font-medium">Root: r-y-b</span>
+</div>
+<div class="flex items-center gap-2">
+<button class="p-1 rounded text-on-surface-variant hover:bg-surface-variant hover:text-on-surface transition-colors" title="Split Screen">
+<span class="material-symbols-outlined text-[18px]">vertical_split</span>
+</button>
+<button class="p-1 rounded text-on-surface-variant hover:bg-surface-variant hover:text-on-surface transition-colors" title="Focus Mode">
+<span class="material-symbols-outlined text-[18px]">fullscreen</span>
+</button>
+</div>
+</div>
+<!-- Tabbed Interface (Open Files/Views) -->
+<div class="flex h-9 bg-surface-dim border-b border-outline-variant overflow-x-auto shrink-0 no-scrollbar">
+<div class="flex items-center px-4 py-1.5 border-r border-outline-variant bg-surface-container-lowest text-primary min-w-max cursor-pointer group">
+<span class="material-symbols-outlined text-[16px] mr-2">menu_book</span>
+<span class="text-xs font-medium mr-3">Al-Baqarah 2:2</span>
+<button class="text-on-surface-variant opacity-0 group-hover:opacity-100 hover:text-on-surface transition-all">
+<span class="material-symbols-outlined text-[14px]">close</span>
+</button>
+</div>
+<div class="flex items-center px-4 py-1.5 border-r border-outline-variant text-on-surface-variant hover:bg-surface-variant transition-colors min-w-max cursor-pointer group">
+<span class="material-symbols-outlined text-[16px] mr-2">library_books</span>
+<span class="text-xs mr-3">Tafsir Ibn Kathir</span>
+<button class="opacity-0 group-hover:opacity-100 hover:text-on-surface transition-all">
+<span class="material-symbols-outlined text-[14px]">close</span>
+</button>
+</div>
+<div class="flex items-center px-4 py-1.5 border-r border-outline-variant text-on-surface-variant hover:bg-surface-variant transition-colors min-w-max cursor-pointer group">
+<span class="material-symbols-outlined text-[16px] mr-2">sort_by_alpha</span>
+<span class="text-xs mr-3">Root: q-w-m</span>
+<button class="opacity-0 group-hover:opacity-100 hover:text-on-surface transition-all">
+<span class="material-symbols-outlined text-[14px]">close</span>
+</button>
+</div>
+<button class="px-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-variant transition-colors flex items-center justify-center">
+<span class="material-symbols-outlined text-[18px]">add</span>
+</button>
+</div>
+<!-- Split Pane Container -->
+<div class="flex-1 flex overflow-hidden">
+<!-- Left Pane: Source Text -->
+<div class="w-1/2 border-r border-outline-variant flex flex-col bg-surface-container-lowest relative overflow-hidden">
+<div class="p-8 overflow-y-auto h-full text-right" dir="rtl">
+<div class="mb-12">
+<h2 class="text-2xl font-serif text-on-surface mb-6 border-b border-outline-variant pb-4">سُورَةُ البَقَرَةِ</h2>
+<div class="text-3xl leading-[2.5] font-serif text-on-surface">
+<span class="hover:text-primary cursor-pointer transition-colors relative group">
+                                    ذَٰلِكَ
+                                </span>
+<span class="hover:text-primary cursor-pointer transition-colors relative group">
+                                    الْكِتَابُ
+                                </span>
+<span class="hover:text-primary cursor-pointer transition-colors relative group">
+                                    لَا
+                                </span>
+<span class="text-tertiary cursor-pointer relative group border-b-2 border-tertiary border-dashed pb-1">
+                                    رَيْبَ
+                                    <!-- Tooltip -->
+<div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 bg-surface-container-high border border-outline-variant rounded-lg p-3 shadow-xl opacity-0 group-hover:opacity-100 transition-opacity z-10 pointer-events-none text-left" dir="ltr">
+<div class="flex justify-between items-start mb-1">
+<span class="font-mono text-primary text-xs font-bold">r-y-b</span>
+<span class="text-[10px] bg-surface-variant px-1.5 py-0.5 rounded text-on-surface-variant">Noun</span>
+</div>
+<p class="text-sm text-on-surface font-medium mb-1">Doubt, suspicion, uncertainty</p>
+<p class="text-xs text-on-surface-variant">A disturbing doubt that brings unease to the heart.</p>
+</div>
+</span>
+<span class="hover:text-primary cursor-pointer transition-colors relative group">
+                                    ۛ فِيهِ ۛ
+                                </span>
+<span class="hover:text-primary cursor-pointer transition-colors relative group">
+                                    هُدًى
+                                </span>
+<span class="hover:text-primary cursor-pointer transition-colors relative group">
+                                    لِّلْمُتَّقِينَ
+                                </span>
+<span class="text-primary text-xl mx-2 font-sans">﴿٢﴾</span>
+</div>
+<div class="mt-8 text-lg leading-relaxed text-on-surface-variant font-body" dir="ltr">
+                                This is the Book about which there is no doubt, a guidance for those conscious of Allah.
+                            </div>
+</div>
+<!-- More verses would follow -->
+<div class="opacity-50">
+<div class="text-3xl leading-[2.5] font-serif text-on-surface">
+                                الَّذِينَ يُؤْمِنُونَ بِالْغَيْبِ وَيُقِيمُونَ الصَّلَاةَ وَمِمَّا رَزَقْنَاهُمْ يُنفِقُونَ ﴿٣﴾
+                            </div>
+</div>
+</div>
+</div>
+<!-- Right Pane: Intelligence Panel -->
+<div class="w-1/2 flex flex-col bg-surface-container-low">
+<!-- Inner Tabs -->
+<div class="flex border-b border-outline-variant px-2 pt-2 gap-1 bg-surface-dim shrink-0">
+<button class="px-4 py-2 text-sm font-medium text-primary border-b-2 border-primary">Contemplations</button>
+<button class="px-4 py-2 text-sm font-medium text-on-surface-variant hover:text-on-surface hover:bg-surface-variant rounded-t-md transition-colors">Actionable Habits</button>
+<button class="px-4 py-2 text-sm font-medium text-on-surface-variant hover:text-on-surface hover:bg-surface-variant rounded-t-md transition-colors">Directives</button>
+<button class="px-4 py-2 text-sm font-medium text-on-surface-variant hover:text-on-surface hover:bg-surface-variant rounded-t-md transition-colors">Lexicon</button>
+<button class="px-4 py-2 text-sm font-medium text-on-surface-variant hover:text-on-surface hover:bg-surface-variant rounded-t-md transition-colors">Exegesis</button>
+</div>
+<!-- Panel Content Area -->
+<div class="flex-1 overflow-y-auto p-6">
+<div class="mb-6 flex justify-between items-center">
+<h3 class="text-lg font-headline font-semibold text-on-surface">Contemplations on 2:2</h3>
+<button class="flex items-center gap-2 text-xs bg-primary/10 text-primary px-3 py-1.5 rounded-full hover:bg-primary/20 transition-colors border border-primary/20">
+<span class="material-symbols-outlined text-[14px]">add</span>
+                                Add Insight
+                            </button>
+</div>
+<div class="space-y-4">
+<!-- Card 1 -->
+<div class="bg-surface-container border border-outline-variant rounded-lg p-4 hover:border-outline transition-colors group relative">
+<div class="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity flex gap-2">
+<button class="text-on-surface-variant hover:text-primary"><span class="material-symbols-outlined text-[16px]">edit</span></button>
+<button class="text-on-surface-variant hover:text-primary"><span class="material-symbols-outlined text-[16px]">share</span></button>
+</div>
+<div class="flex gap-2 mb-3">
+<span class="text-[10px] uppercase tracking-wider font-mono text-tertiary border border-tertiary/30 bg-tertiary/10 px-2 py-0.5 rounded">Theology</span>
+<span class="text-[10px] uppercase tracking-wider font-mono text-secondary-fixed-dim border border-outline-variant px-2 py-0.5 rounded">Certainty</span>
+</div>
+<p class="text-sm text-on-surface leading-relaxed mb-4">
+                                    The negation of doubt (لَا رَيْبَ) is absolute. It is not merely stating that the Book is true, but that it is fundamentally structured in a way that repels objective doubt. The use of 'Rayb' over 'Shakk' implies an active, unsettling doubt, which this Book cures.
+                                </p>
+<div class="flex items-center gap-2 text-xs text-on-surface-variant border-t border-outline-variant pt-3">
+<span class="material-symbols-outlined text-[14px]">account_circle</span>
+<span>Personal Note</span>
+<span class="mx-1">•</span>
+<span>Oct 24, 2023</span>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="bg-surface-container border border-outline-variant rounded-lg p-4 hover:border-outline transition-colors group relative">
+<div class="flex gap-2 mb-3">
+<span class="text-[10px] uppercase tracking-wider font-mono text-primary border border-primary/30 bg-primary/10 px-2 py-0.5 rounded">Linguistic Structure</span>
+</div>
+<p class="text-sm text-on-surface leading-relaxed mb-4">
+                                    The pause marks (ۛ ۛ) known as Mu'anaqah indicate that if you pause at one, you cannot pause at the other. "This is the Book, no doubt in it, a guidance..." OR "This is the Book, no doubt, in it is guidance...". Both yield profound complementary meanings.
+                                </p>
+<div class="flex items-center gap-2 text-xs text-on-surface-variant border-t border-outline-variant pt-3">
+<span class="material-symbols-outlined text-[14px]">menu_book</span>
+<span>Sourced from: Al-Itqan fi 'Ulum al-Qur'an</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Taqwa (Piety) - Obsidian Scholar</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "inverse-on-surface": "#09090b",
+                        "on-primary-fixed": "#2e1065",
+                        "tertiary-fixed-dim": "#6ee7b7",
+                        "on-tertiary": "#001a12",
+                        "error": "#ef4444",
+                        "on-tertiary-container": "#bbf7d0",
+                        "on-surface-variant": "#a1a1aa",
+                        "on-background": "#fafafa",
+                        "on-secondary-fixed-variant": "#3f3f46",
+                        "inverse-primary": "#5b21b6",
+                        "surface-container-high": "#18181b",
+                        "primary-fixed": "#ede9fe",
+                        "on-secondary-fixed": "#18181b",
+                        "on-primary-fixed-variant": "#5b21b6",
+                        "surface-container": "#121215",
+                        "tertiary": "#34d399",
+                        "outline-variant": "#27272a",
+                        "tertiary-fixed": "#bbf7d0",
+                        "on-surface": "#fafafa",
+                        "surface-container-highest": "#1e1e22",
+                        "on-tertiary-fixed-variant": "#047857",
+                        "surface-container-low": "#0f0f12",
+                        "secondary-container": "#27272a",
+                        "on-primary-container": "#ede9fe",
+                        "on-primary": "#0a0012",
+                        "surface-bright": "#18181b",
+                        "on-error-container": "#fca5a5",
+                        "tertiary-container": "#065f46",
+                        "surface-variant": "#18181b",
+                        "on-secondary": "#09090b",
+                        "surface-tint": "#a78bfa",
+                        "on-tertiary-fixed": "#003318",
+                        "background": "#09090b",
+                        "surface": "#0c0c0f",
+                        "inverse-surface": "#fafafa",
+                        "secondary-fixed-dim": "#71717a",
+                        "secondary": "#71717a",
+                        "surface-container-lowest": "#09090b",
+                        "primary-fixed-dim": "#c4b5fd",
+                        "primary": "#a78bfa",
+                        "surface-dim": "#0c0c0f",
+                        "primary-container": "#7c3aed",
+                        "error-container": "#3b1111",
+                        "secondary-fixed": "#a1a1aa",
+                        "outline": "#52525b",
+                        "on-secondary-container": "#a1a1aa",
+                        "on-error": "#1a0000"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Geist", "sans-serif"],
+                        "body": ["Geist", "sans-serif"],
+                        "label": ["Geist", "sans-serif"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Geist', sans-serif; }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex flex-col">
+<!-- TopNavBar -->
+<nav class="flex justify-between items-center w-full px-6 h-14 bg-[#09090b] z-50 docked full-width top-0 border-b border-b border-[#27272a] flat no shadows text-[#a78bfa] font-['Geist'] tracking-tight text-[#fafafa] hidden md:flex">
+<div class="flex items-center gap-6">
+<span class="text-xl font-black text-[#fafafa] tracking-tighter">Obsidian Scholar</span>
+<div class="flex gap-4">
+<a class="text-[#a1a1aa] hover:text-[#fafafa] hover:bg-[#27272a] transition-colors duration-200 px-2 py-1 rounded" href="#">Corpus</a>
+<a class="text-[#a78bfa] border-b-2 border-[#a78bfa] pb-1 hover:bg-[#27272a] transition-colors duration-200 px-2 py-1" href="#">Entities</a>
+<a class="text-[#a1a1aa] hover:text-[#fafafa] hover:bg-[#27272a] transition-colors duration-200 px-2 py-1 rounded" href="#">Lexicon</a>
+<a class="text-[#a1a1aa] hover:text-[#fafafa] hover:bg-[#27272a] transition-colors duration-200 px-2 py-1 rounded" href="#">Graph</a>
+<a class="text-[#a1a1aa] hover:text-[#fafafa] hover:bg-[#27272a] transition-colors duration-200 px-2 py-1 rounded" href="#">Discussions</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-[#a1a1aa] hover:text-[#fafafa] hover:bg-[#27272a] transition-colors duration-200 p-1 rounded">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="text-[#a1a1aa] hover:text-[#fafafa] hover:bg-[#27272a] transition-colors duration-200 p-1 rounded">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<img alt="Researcher Profile" class="w-8 h-8 rounded-full border border-outline-variant" data-alt="Close up portrait of a professional researcher with neutral expression, studio lighting, dark background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAG-179vBmX6khg4BViTL9Annmcg-gO0TQ25zf9YD-0qRh89LJ0oo4QEGnjb9GG1t0TCAU3hLvOQwdyCZ1iL59EsnGezc4M0qVpx5qO4KAebCi2_9tCV0LBDisfQUMrIVyl3Jvj5r_TwVl0KizKMyh-T1xuGzeX0DLwzBE6mzgKpFmjE07HOv3ZfIdeBL0_BirmhaEp73873qzniIVjKIXT-zj8JW0HBy3ybtttYCs1irUiyUqrn3R0YPe6JMc9ioTFfCjYPxKSIfJC"/>
+</div>
+</nav>
+<div class="flex flex-1 overflow-hidden">
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-14 h-[calc(100vh-3.5rem)] w-64 flex flex-col py-4 z-40 docked left-0 h-full w-64 border-r border-r border-[#27272a] flat no shadows bg-[#0c0c0f] font-['Geist'] text-sm antialiased hidden md:flex">
+<div class="px-6 mb-6">
+<div class="flex items-center gap-3 mb-6">
+<img alt="Project Emblem" class="w-10 h-10 rounded-lg object-cover border border-outline-variant" data-alt="Abstract dark geometric shape resembling a crystal or core structure, glowing softly against a black background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA48jZPc2pW2I5oIqTtTPu9hh6owMpsE6udOAEC_QP5uvFX85t9XMVwsIezYi0mO0ii0askdCkI7hduohBmqeLuxeaMQaJsSCpBrMsSAzJ72eFobVsYdLNQhdHqV7TLefjnWNwFbDWrkmH09ljfdUblqqXLwzH0kZIgItqwudowezYKWjApsOXMQRDMAVYVF-N6Te7sxQ_s9tPun1RVfDUecWCk78Gq6ylYpbEtjS_93rYmHBQbR6pxGKes3lHANq9lSBx_NW4s4U5F"/>
+<div>
+<h2 class="text-lg font-bold text-[#fafafa]">Core Workspace</h2>
+<p class="text-[#a1a1aa] text-xs">Oxford Hellenic Corpus</p>
+</div>
+</div>
+<button class="w-full bg-primary text-on-primary py-2 rounded font-medium hover:bg-primary-container transition-colors">New Entry</button>
+</div>
+<nav class="flex-1 px-4 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 rounded text-[#a1a1aa] hover:text-[#fafafa] hover:bg-[#18181b] hover:bg-[#27272a] transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">folder_open</span> Workspace
+                </a>
+<a class="flex items-center gap-3 px-3 py-2 rounded text-[#a1a1aa] hover:text-[#fafafa] hover:bg-[#18181b] hover:bg-[#27272a] transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">auto_stories</span> Library
+                </a>
+<a class="flex items-center gap-3 px-3 py-2 rounded bg-[#27272a] text-[#a78bfa] font-semibold border-l-2 border-[#a78bfa] hover:bg-[#27272a] transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">sell</span> Tags
+                </a>
+<a class="flex items-center gap-3 px-3 py-2 rounded text-[#a1a1aa] hover:text-[#fafafa] hover:bg-[#18181b] hover:bg-[#27272a] transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">category</span> Categories
+                </a>
+<a class="flex items-center gap-3 px-3 py-2 rounded text-[#a1a1aa] hover:text-[#fafafa] hover:bg-[#18181b] hover:bg-[#27272a] transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">inventory_2</span> Archives
+                </a>
+</nav>
+<div class="px-4 mt-auto space-y-1 border-t border-outline-variant pt-4">
+<a class="flex items-center gap-3 px-3 py-2 rounded text-[#a1a1aa] hover:text-[#fafafa] hover:bg-[#18181b] hover:bg-[#27272a] transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">help_outline</span> Help
+                </a>
+<a class="flex items-center gap-3 px-3 py-2 rounded text-[#a1a1aa] hover:text-[#fafafa] hover:bg-[#18181b] hover:bg-[#27272a] transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">sync</span> Sync
+                </a>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="flex-1 md:ml-64 p-6 lg:p-8 overflow-y-auto">
+<!-- Breadcrumbs -->
+<div class="flex items-center text-sm text-secondary mb-6 font-mono">
+<span class="hover:text-primary cursor-pointer transition-colors">Corpus</span>
+<span class="material-symbols-outlined text-xs mx-2">chevron_right</span>
+<span class="hover:text-primary cursor-pointer transition-colors">Entities</span>
+<span class="material-symbols-outlined text-xs mx-2">chevron_right</span>
+<span class="text-on-surface">Taqwa</span>
+</div>
+<!-- Header -->
+<header class="mb-8 border-b border-outline-variant pb-6 flex justify-between items-end">
+<div>
+<div class="flex items-center gap-3 mb-2">
+<span class="px-2 py-1 bg-surface-container text-xs font-mono text-tertiary border border-outline-variant rounded">Entity: Tag</span>
+<span class="px-2 py-1 bg-surface-container text-xs font-mono text-secondary border border-outline-variant rounded">ID: #9021A</span>
+</div>
+<h1 class="text-4xl md:text-5xl font-extrabold tracking-tight text-on-surface flex items-center gap-4">
+                        Taqwa <span class="text-2xl font-normal text-secondary">(Piety)</span>
+</h1>
+</div>
+<div class="flex gap-2">
+<button class="px-3 py-1.5 bg-surface-container border border-outline-variant text-on-surface rounded text-sm hover:bg-surface-variant transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">edit</span> Edit
+                    </button>
+<button class="px-3 py-1.5 bg-surface-container border border-outline-variant text-on-surface rounded text-sm hover:bg-surface-variant transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">share</span> Share
+                    </button>
+</div>
+</header>
+<div class="grid grid-cols-1 xl:grid-cols-12 gap-8">
+<!-- Main Content Column -->
+<div class="xl:col-span-8 space-y-8">
+<!-- Linguistic Overview -->
+<section class="bg-surface-container-low border border-outline-variant rounded-lg p-6 relative overflow-hidden group">
+<div class="absolute top-0 left-0 w-1 h-full bg-primary opacity-50 group-hover:opacity-100 transition-opacity"></div>
+<h2 class="text-xl font-bold mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">translate</span> Linguistic Overview
+                        </h2>
+<div class="prose prose-invert prose-p:text-on-surface-variant prose-headings:text-on-surface max-w-none">
+<p>
+                                The term <em>taqwa</em> is derived from the Arabic root <strong>W-Q-Y</strong> (و-ق-ي), which fundamentally conveys the idea of "protecting," "shielding," or "guarding" oneself. In its literal sense, it implies taking defensive measures to avoid harm or danger.
+                            </p>
+<p>
+                                Morphologically, it is a verbal noun (maṣdar) of Form VIII verb <em>ittaqa</em>. The transformation from the root letters involves complex phonetic assimilation typical of Arabic morphology, where the initial <em>wāw</em> is assimilated into a <em>tāʾ</em>.
+                            </p>
+</div>
+</section>
+<!-- Historical Evolution -->
+<section class="bg-surface-container-low border border-outline-variant rounded-lg p-6">
+<h2 class="text-xl font-bold mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">history_edu</span> Historical Evolution
+                        </h2>
+<div class="relative pl-6 border-l-2 border-outline-variant space-y-8 mt-6">
+<div class="relative">
+<div class="absolute -left-[31px] bg-surface-container-low border-2 border-primary rounded-full w-4 h-4 mt-1"></div>
+<h3 class="font-bold text-on-surface">Pre-Islamic Arabia (Jahiliyyah)</h3>
+<p class="text-sm text-secondary mt-1 mb-2 font-mono">c. 5th - 6th Century CE</p>
+<p class="text-on-surface-variant text-sm">Used primarily in a physical context, referring to self-preservation against harsh desert elements, dangerous animals, or rival tribes. It lacked profound religious connotations.</p>
+</div>
+<div class="relative">
+<div class="absolute -left-[31px] bg-surface-container-low border-2 border-outline rounded-full w-4 h-4 mt-1"></div>
+<h3 class="font-bold text-on-surface">Early Quranic Period (Meccan)</h3>
+<p class="text-sm text-secondary mt-1 mb-2 font-mono">c. 610 - 622 CE</p>
+<p class="text-on-surface-variant text-sm">Semantic shift towards "God-consciousness" or "fear of Divine retribution." It became a foundational ethical term, emphasizing moral responsibility and the shielding of oneself from spiritual harm through righteous action.</p>
+</div>
+<div class="relative">
+<div class="absolute -left-[31px] bg-surface-container-low border-2 border-outline rounded-full w-4 h-4 mt-1"></div>
+<h3 class="font-bold text-on-surface">Post-Quranic Exegesis (Tafsir)</h3>
+<p class="text-sm text-secondary mt-1 mb-2 font-mono">8th Century CE onwards</p>
+<p class="text-on-surface-variant text-sm">Scholars expanded the definition. Al-Ghazali defined it structurally as caution and avoidance of sins, while Sufi mystics interpreted it as an internal state of hyper-awareness of the Divine presence.</p>
+</div>
+</div>
+</section>
+<!-- Semantic Network Visualization Placeholder -->
+<section class="bg-surface-container-low border border-outline-variant rounded-lg p-6 flex flex-col h-[400px]">
+<h2 class="text-xl font-bold mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">hub</span> Semantic Network
+                        </h2>
+<div class="flex-1 bg-surface-container-lowest border border-outline-variant rounded rounded-lg relative overflow-hidden flex items-center justify-center">
+<!-- Faux Network Nodes -->
+<div class="absolute inset-0 opacity-20" style="background-image: radial-gradient(#27272a 1px, transparent 1px); background-size: 20px 20px;"></div>
+<div class="relative w-full h-full">
+<!-- Central Node -->
+<div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10 flex flex-col items-center">
+<div class="w-16 h-16 rounded-full bg-primary-container border-2 border-primary flex items-center justify-center shadow-[0_0_15px_rgba(167,139,250,0.5)]">
+<span class="font-bold text-on-primary-container">Taqwa</span>
+</div>
+</div>
+<!-- Connecting Lines (SVG) -->
+<svg class="absolute inset-0 w-full h-full pointer-events-none" xmlns="http://www.w3.org/2000/svg">
+<line stroke="#52525b" stroke-dasharray="4" stroke-width="2" x1="50%" x2="30%" y1="50%" y2="20%"></line>
+<line stroke="#52525b" stroke-width="2" x1="50%" x2="75%" y1="50%" y2="25%"></line>
+<line stroke="#52525b" stroke-dasharray="4" stroke-width="2" x1="50%" x2="80%" y1="50%" y2="60%"></line>
+<line stroke="#52525b" stroke-width="2" x1="50%" x2="25%" y1="50%" y2="70%"></line>
+</svg>
+<!-- Peripheral Nodes -->
+<div class="absolute top-[20%] left-[30%] transform -translate-x-1/2 -translate-y-1/2 flex flex-col items-center">
+<div class="w-10 h-10 rounded-full bg-surface-container-high border border-outline flex items-center justify-center">
+<span class="text-xs text-on-surface">Khawf</span>
+</div>
+<span class="text-[10px] text-secondary mt-1">Fear</span>
+</div>
+<div class="absolute top-[25%] left-[75%] transform -translate-x-1/2 -translate-y-1/2 flex flex-col items-center">
+<div class="w-12 h-12 rounded-full bg-surface-container-high border border-tertiary flex items-center justify-center">
+<span class="text-xs text-on-surface">Iman</span>
+</div>
+<span class="text-[10px] text-secondary mt-1">Faith</span>
+</div>
+</div>
+<div class="absolute bottom-4 right-4 flex gap-2">
+<button class="p-1 bg-surface-container border border-outline-variant rounded hover:bg-surface-variant transition-colors"><span class="material-symbols-outlined text-sm">zoom_in</span></button>
+<button class="p-1 bg-surface-container border border-outline-variant rounded hover:bg-surface-variant transition-colors"><span class="material-symbols-outlined text-sm">zoom_out</span></button>
+<button class="p-1 bg-surface-container border border-outline-variant rounded hover:bg-surface-variant transition-colors"><span class="material-symbols-outlined text-sm">center_focus_strong</span></button>
+</div>
+</div>
+</section>
+</div>
+<!-- Right Sidebar: Quick Facts -->
+<aside class="xl:col-span-4 space-y-6">
+<div class="bg-surface-container border border-outline-variant rounded-lg overflow-hidden sticky top-6">
+<div class="bg-surface-container-high px-4 py-3 border-b border-outline-variant flex justify-between items-center">
+<h3 class="font-bold text-on-surface text-sm uppercase tracking-wider">Quick Facts</h3>
+<span class="material-symbols-outlined text-secondary text-sm">info</span>
+</div>
+<div class="p-4 space-y-4">
+<!-- Root Info -->
+<div>
+<h4 class="text-xs text-secondary mb-1">Root Consonants</h4>
+<div class="flex items-center gap-2">
+<span class="font-mono text-lg text-primary bg-primary-container/10 px-2 py-0.5 rounded border border-primary/20">W-Q-Y</span>
+<span class="text-on-surface-variant text-sm font-arabic" dir="rtl">(و ق ي)</span>
+</div>
+</div>
+<div class="w-full h-px bg-outline-variant"></div>
+<!-- Frequency -->
+<div>
+<h4 class="text-xs text-secondary mb-2">Corpus Frequency</h4>
+<div class="flex items-end gap-2 mb-1">
+<span class="text-2xl font-bold text-on-surface leading-none">258</span>
+<span class="text-xs text-on-surface-variant pb-0.5">occurrences</span>
+</div>
+<div class="w-full bg-surface-container-highest rounded-full h-1.5">
+<div class="bg-tertiary h-1.5 rounded-full" style="width: 75%"></div>
+</div>
+<div class="flex justify-between text-[10px] text-secondary mt-1">
+<span>Low</span>
+<span>High</span>
+</div>
+</div>
+<div class="w-full h-px bg-outline-variant"></div>
+<!-- Primary Concepts -->
+<div>
+<h4 class="text-xs text-secondary mb-2">Related Concepts</h4>
+<div class="flex flex-wrap gap-2">
+<span class="px-2 py-1 bg-surface-container-high border border-outline-variant rounded text-xs text-on-surface hover:border-primary cursor-pointer transition-colors">Righteousness</span>
+<span class="px-2 py-1 bg-surface-container-high border border-outline-variant rounded text-xs text-on-surface hover:border-primary cursor-pointer transition-colors">Fear</span>
+<span class="px-2 py-1 bg-surface-container-high border border-outline-variant rounded text-xs text-on-surface hover:border-primary cursor-pointer transition-colors">Protection</span>
+<span class="px-2 py-1 bg-surface-container-high border border-outline-variant rounded text-xs text-on-surface hover:border-primary cursor-pointer transition-colors">Mindfulness</span>
+</div>
+</div>
+<div class="w-full h-px bg-outline-variant"></div>
+<!-- Actions -->
+<div class="pt-2">
+<button class="w-full py-2 bg-surface-container-high border border-outline-variant rounded text-sm text-on-surface hover:bg-surface-variant transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-sm">search</span> View all occurrences
+                                </button>
+</div>
+</div>
+</div>
+</aside>
+</div>
+</main>
+</div>
+</body></html>
