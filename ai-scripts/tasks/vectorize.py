@@ -22,24 +22,29 @@ def create_embeddings(arabic_text: str, translation_text: str = "") -> dict:
     model = os.environ.get("OLLAMA_EMBED_MODEL", "mxbai-embed-large:latest")
 
     from prefect.concurrency.sync import concurrency
-    with concurrency("ollama-calls", occupy=1, timeout_seconds=600):
-        # 1. Arabic embedding (always required)
-        ar_resp = requests.post(f"{ollama_url}/api/embed", json={
-            "model": model,
-            "input": arabic_text,
-        })
-        ar_resp.raise_for_status()
-        ar_vector = ar_resp.json().get("embeddings", [[]])[0]
-
-        # 2. Translation embedding (only when translation is available)
-        translation_vector = []
-        if translation_text and translation_text.strip():
-            id_resp = requests.post(f"{ollama_url}/api/embed", json={
+    try:
+        with concurrency("ollama-calls", occupy=1, timeout_seconds=10):
+            # 1. Arabic embedding (always required)
+            ar_resp = requests.post(f"{ollama_url}/api/embed", json={
                 "model": model,
-                "input": translation_text,
-            })
-            id_resp.raise_for_status()
-            translation_vector = id_resp.json().get("embeddings", [[]])[0]
+                "input": arabic_text,
+            }, timeout=5.0)
+            ar_resp.raise_for_status()
+            ar_vector = ar_resp.json().get("embeddings", [[]])[0]
+
+            # 2. Translation embedding (only when translation is available)
+            translation_vector = []
+            if translation_text and translation_text.strip():
+                id_resp = requests.post(f"{ollama_url}/api/embed", json={
+                    "model": model,
+                    "input": translation_text,
+                }, timeout=5.0)
+                id_resp.raise_for_status()
+                translation_vector = id_resp.json().get("embeddings", [[]])[0]
+    except Exception as e:
+        logger.warning(f"⚠️ Ollama embedding failed: {str(e)}. Proceeding with NULL vectors.")
+        ar_vector = None
+        translation_vector = None
 
     # Validate expected dimension
     if ar_vector and len(ar_vector) != 1024:
@@ -65,13 +70,17 @@ def embed_text(text: str) -> list[float]:
     model = os.environ.get("OLLAMA_EMBED_MODEL", "mxbai-embed-large:latest")
 
     from prefect.concurrency.sync import concurrency
-    with concurrency("ollama-calls", occupy=1, timeout_seconds=600):
-        resp = requests.post(f"{ollama_url}/api/embed", json={
-            "model": model,
-            "input": text,
-        })
-        resp.raise_for_status()
-        vector = resp.json().get("embeddings", [[]])[0]
+    try:
+        with concurrency("ollama-calls", occupy=1, timeout_seconds=10):
+            resp = requests.post(f"{ollama_url}/api/embed", json={
+                "model": model,
+                "input": text,
+            }, timeout=5.0)
+            resp.raise_for_status()
+            vector = resp.json().get("embeddings", [[]])[0]
+    except Exception as e:
+        logger.warning(f"⚠️ Ollama single embedding failed: {str(e)}. Proceeding with NULL vector.")
+        vector = None
 
     if vector and len(vector) != 1024:
         logger.warning(f"Single embed dimension mismatch: got {len(vector)}, expected 1024.")

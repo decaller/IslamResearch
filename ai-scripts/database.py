@@ -89,9 +89,12 @@ def save_to_db(
             update_sql = "UPDATE sentences SET metadata = %s, updated_at = NOW()"
             params = [psycopg2.extras.Json(metadata)]
             
-            if needs_emb and vectors.get("vector_ar"):
+            vector_ar = vectors.get("vector_ar")
+            if needs_emb and vector_ar:
+                if isinstance(vector_ar, list):
+                    vector_ar = "[" + ",".join(map(str, vector_ar)) + "]"
                 update_sql += ", embedding_ar = %s"
-                params.append(vectors.get("vector_ar"))  # Always Arabic source embedding
+                params.append(vector_ar)
             
             update_sql += " WHERE id = %s"
             params.append(sentence_id)
@@ -100,6 +103,12 @@ def save_to_db(
             
             # 2. Upsert translation if needed
             if needs_trans:
+                vector_trans = vectors.get("vector_translation")
+                if isinstance(vector_trans, list) and vector_trans:
+                    vector_trans = "[" + ",".join(map(str, vector_trans)) + "]"
+                else:
+                    vector_trans = None
+
                 cur.execute(
                     """
                     INSERT INTO sentence_translations (id, sentence_id, language, translation_text, embedding, created_at, updated_at)
@@ -107,7 +116,7 @@ def save_to_db(
                     ON CONFLICT (sentence_id, language) DO UPDATE
                     SET translation_text = EXCLUDED.translation_text, embedding = EXCLUDED.embedding, updated_at = NOW()
                     """,
-                    (str(uuid.uuid4()), sentence_id, lang, translation, vectors.get("vector_translation") or None)
+                    (str(uuid.uuid4()), sentence_id, lang, translation, vector_trans)
                 )
     finally:
         conn.close()
@@ -126,9 +135,6 @@ def save_transliteration(sentence_id: str, scheme: str, transliteration_text: st
                 """,
                 (str(uuid.uuid4()), sentence_id, scheme, transliteration_text),
             )
-    finally:
-        conn.close()
-
     finally:
         conn.close()
 
@@ -193,6 +199,14 @@ def save_quran_verse(book_id: str, verse: dict, vectors: dict, lexicon_data: lis
 
             # 2. Upsert Sentence (Ayah)
             sentence_id = str(uuid.uuid4())
+            
+            # Format vectors for pgvector
+            vector_ar = vectors.get("vector_ar")
+            if isinstance(vector_ar, list) and vector_ar:
+                vector_ar = "[" + ",".join(map(str, vector_ar)) + "]"
+            elif not vector_ar:
+                vector_ar = None
+
             cur.execute(
                 """
                 INSERT INTO sentences (id, source_book_id, resource_type, sequence_number, sentence_text, metadata, embedding_ar, created_at, updated_at)
@@ -201,11 +215,103 @@ def save_quran_verse(book_id: str, verse: dict, vectors: dict, lexicon_data: lis
                 SET sentence_text = EXCLUDED.sentence_text, metadata = EXCLUDED.metadata, embedding_ar = EXCLUDED.embedding_ar, updated_at = NOW()
                 RETURNING id
                 """,
-                (sentence_id, book_id, verse['ayah_number_global'], verse['arabic_text'], psycopg2.extras.Json(metadata), vectors.get("vector_ar"))
+                (sentence_id, book_id, verse['ayah_number_global'], verse['arabic_text'], psycopg2.extras.Json(metadata), vector_ar)
             )
             sentence_id = cur.fetchone()[0]
             
             return sentence_id
+    finally:
+        conn.close()
+
+@task
+def get_or_create_root(root_value: str, language: str = 'ar') -> str:
+    """Find or create a lexicon root."""
+    if not root_value:
+        root_value = "UNKNOWN"
+    
+    conn = get_db_connection()
+    try:
+        with conn, conn.cursor() as cur:
+            cur.execute("SELECT id FROM lexicon_roots WHERE language = %s AND root_value = %s", (language, root_value))
+            row = cur.fetchone()
+            if row:
+                return row[0]
+            
+            root_id = str(uuid.uuid4())
+            cur.execute(
+                "INSERT INTO lexicon_roots (id, language, root_value, created_at, updated_at) VALUES (%s, %s, %s, NOW(), NOW()) RETURNING id",
+                (root_id, language, root_value)
+            )
+            return cur.fetchone()[0]
+    finally:
+        conn.close()
+
+def _clean_ar(text: str) -> str:
+    import re
+    return re.sub(r'[\u0617-\u061A\u064B-\u0652]', '', text)
+
+@task
+def save_quran_word(sentence_id: str, word_data: dict, root_id: str = None) -> str:
+    """Save a single word linked to an ayah."""
+    conn = get_db_connection()
+    try:
+        # 1. Ensure we have a root_id
+        if not root_id:
+            # Try to get root from word_data if available (Quran Foundation sometimes has it)
+            # Otherwise we'll use a placeholder or caller should provide it
+            root_str = word_data.get('root_text') or "UNKNOWN"
+            root_id = get_or_create_root(root_str)
+
+        with conn, conn.cursor() as cur:
+            word_id = str(uuid.uuid4())
+            word_raw = word_data.get('text_uthmani') or word_data.get('text')
+            word_clean = _clean_ar(word_raw)
+            
+            # Prepare metadata (glyphs, codes, audio)
+            metadata = {
+                "position": word_data.get('position'),
+                "verse_key": word_data.get('verse_key'),
+                "page_number": word_data.get('page_number'),
+                "line_number": word_data.get('line_number'),
+                "code_v1": word_data.get('code_v1'),
+                "code_v2": word_data.get('code_v2'),
+                "transliteration": word_data.get('transliteration', {}).get('text'),
+                "translation": word_data.get('translation', {}).get('text'),
+            }
+            
+            if word_data.get('audio_url'):
+                metadata['audio_url'] = word_data['audio_url']
+            
+            # Upsert word
+            cur.execute(
+                """
+                INSERT INTO lexicon_words (id, root_id, language, word_raw, word_clean, metadata, created_at, updated_at)
+                VALUES (%s, %s, 'ar', %s, %s, %s, NOW(), NOW())
+                ON CONFLICT (language, word_raw, word_clean) DO UPDATE
+                SET updated_at = NOW()
+                RETURNING id
+                """,
+                (
+                    word_id,
+                    root_id,
+                    word_raw,
+                    word_clean,
+                    psycopg2.extras.Json(metadata)
+                )
+            )
+            word_id = cur.fetchone()[0]
+            
+            # Link to sentence (no timestamps in pivot)
+            cur.execute(
+                """
+                INSERT INTO sentence_word (sentence_id, word_id, source_type, positions)
+                VALUES (%s, %s, 'quran_foundation', %s)
+                ON CONFLICT (sentence_id, word_id) DO NOTHING
+                """,
+                (sentence_id, word_id, psycopg2.extras.Json([word_data['position']]))
+            )
+            
+            return word_id
     finally:
         conn.close()
 

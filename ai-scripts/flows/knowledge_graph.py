@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 from tasks import wiki_enrich, entity_resolution
 from database import find_entity_by_name, create_entity, update_entity_enrichment_time, link_sentence_to_entity
 
-@flow(name="Entity Enrichment & Auto-Building")
+@flow(name="Entity Enrichment and Auto-Building")
 def enrich_entity_recursive(canonical_name: str, sentence_id: str = None, hop_count: int = 0, max_hops: int = 2):
     """
     Enrich an entity and autonomously discover connected concepts.

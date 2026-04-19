@@ -146,6 +146,13 @@ This section tracks the granular progress across all phases, mapping the high-le
     - [x] **Phase 4: Clustered Synthesis:** Deterministic grouping engine for "Folder-based" results UI.
     - [x] **Semantic Caching:** Redis-backed query vector cache (< 1ms hits).
 
+- [x] **Quran Foundation Pipeline (Quran.com V4)**
+    - [x] Create `tasks/quran_foundation.py` — High-fidelity word-by-word API ingestion.
+    - [x] Implement `save_quran_word()` and `get_or_create_root()` in `database.py`.
+    - [x] Build `flows/quran_foundation.py` flow for full chapter ingestion with metadata and words.
+    - [x] Register "Quran Foundation" as a `SourceBook` in the database.
+    - [x] Verify word-level mapping and root resolution for Al-Fatiha.
+
 ### 🧪 Global Verification Checkpoints
 
 - [x] **Cross-Browser:** Does the split-pane and grid system work in Chrome/Firefox/Safari?

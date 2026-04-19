@@ -42,12 +42,13 @@
 
     <footer class="footer footer-center p-10 bg-base-200 text-base-content rounded mt-12">
         <nav class="grid grid-flow-col gap-4">
-            <a class="link link-hover">About</a>
-            <a class="link link-hover">Research</a>
-            <a class="link link-hover">API</a>
+            <a href="/" class="link link-hover">Home</a>
+            <a href="/scholar" class="link link-hover">Workspace</a>
+            <a href="/privacy" class="link link-hover">Privacy Policy</a>
+            <a href="/terms" class="link link-hover">Terms of Service</a>
         </nav>
         <aside>
-            <p>Copyright © {{ date('Y') }} - All right reserved by IslamResearch platform</p>
+            <p>Copyright © {{ date('Y') }} - All rights reserved by IslamResearch platform. Alhamdulillah.</p>
         </aside>
     </footer>
 </body>

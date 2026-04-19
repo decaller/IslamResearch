@@ -35,4 +35,10 @@ return [
         ],
     ],
 
+    'quran' => [
+        'client_id' => env('QURAN_CLIENT_ID'),
+        'client_secret' => env('QURAN_CLIENT_SECRET'),
+        'redirect' => env('QURAN_REDIRECT_URI'),
+    ],
+
 ];
