@@ -37,4 +37,13 @@ class UserJourney extends Model
     {
         return $this->belongsTo(Search::class, 'target_search_id');
     }
+
+    public function getBreadcrumbString(): string
+    {
+        $searchQuery = $this->targetSearch?->query ?? 'Direct view';
+        $sentence = $this->targetSentence;
+        $book = $sentence?->sourceBook?->title ?? 'Unknown Source';
+
+        return "🔍 \"{$searchQuery}\" ➔ 📂 {$book}";
+    }
 }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Livewire\Notebook\NotebookViewer;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -7,3 +8,5 @@ Route::get('/', function () {
 });
 
 Route::view('/scholar', 'scholar')->name('scholar.workspace');
+
+Route::get('/notebooks/{notebook}', NotebookViewer::class)->name('notebooks.show');

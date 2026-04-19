@@ -3,6 +3,7 @@
 use App\Models\LexiconRoot;
 use App\Models\Sentence;
 use App\Services\QueryParser;
+use App\Services\SearchService;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 use Illuminate\Support\Facades\Http;
 
@@ -11,6 +12,12 @@ uses(LazilyRefreshDatabase::class);
 beforeEach(function () {
     // Force scout to use collection for tests to bypass meilisearch requirements
     config(['scout.driver' => 'collection']);
+
+    // Global mock for vectorSearch to avoid PGVector specific errors in tests
+    $this->mock(SearchService::class, function ($mock) {
+        $mock->makePartial();
+        $mock->shouldReceive('vectorSearch')->andReturn(collect([]));
+    });
 });
 
 it('can parse various query intents', function () {
@@ -61,4 +68,37 @@ it('returns fast autocomplete results', function () {
 
     $response->assertStatus(200)
         ->assertJsonStructure(['roots', 'sentences']);
+});
+
+it('triggers micro-targeting re-ranking for semantic queries', function () {
+    // Create a sentence and its translation
+    $sentence = Sentence::factory()->create(['sentence_text' => 'Bismillah']);
+    $sentence->translations()->create([
+        'translation_text' => 'In the name of Allah, the Most Gracious, the Most Merciful',
+        'language' => 'en',
+    ]);
+
+    // Mock SearchService's vectorSearch to return our created sentence
+    // This avoids the raw PGVector query which fails in some test environments
+    $this->mock(SearchService::class, function ($mock) use ($sentence) {
+        $mock->makePartial();
+        $mock->shouldReceive('vectorSearch')
+            ->andReturn(collect([$sentence->load(['entities', 'translations'])]));
+    });
+
+    Http::fake([
+        '*rerank*' => Http::response([
+            'text' => 'name of Allah',
+            'start' => 7,
+            'end' => 20,
+            'score' => 0.95,
+            'doc_index' => 0,
+        ], 200),
+    ]);
+
+    $response = $this->getJson(route('search.index', ['q' => 'Searching for the name of God and his mercy']));
+
+    $response->assertStatus(200);
+    // Verify that semantic_highlight was attached to the first result
+    $response->assertJsonPath('data.data.0.semantic_highlight.phrase', 'name of Allah');
 });

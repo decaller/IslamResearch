@@ -10,7 +10,7 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Install core Python dependencies first
-RUN pip install --no-cache-dir "prefect>=3.0.0" transformers torch sentence-transformers requests "spacy>=3.7.0,<3.8.0" psycopg2-binary
+RUN pip install --no-cache-dir "prefect>=3.0.0" transformers torch sentence-transformers requests "spacy>=3.7.0,<3.8.0" psycopg2-binary fastapi uvicorn numpy
 
 # Install heavier camel-tools
 RUN pip install --no-cache-dir camel-tools

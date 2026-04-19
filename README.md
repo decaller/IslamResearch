@@ -15,7 +15,7 @@ The platform acts as an **AI-driven factory** for Islamic corpus management. It 
 1.  **Ingestion**: Upload classical texts into the system where Prefect handles the heavy Harakat stripping, Zero-Shot taxonomy classifications, and structural translation via local GPUs.
 2.  **Semantic Mapping**: Generate massive separated vectors tied to explicit translations mapped tightly via pgvectorscale.
 3.  **The "Scholar IDE"**: Access data across an IDE-esque split-pane interface using isolated tabs, synchronized scrolling, and a robust `Livewire 4` Redis debounce configuration handling session tracking.
-4.  **Hybrid RAG Search**: Exploit `Meilisearch` specifically for typographic completions while engaging complex `pgvector` indices for exact semantic similarity mappings.
+4.  **Clustered Tree Search**: Exploit `Meilisearch` and `pgvector` specifically for typographic and semantic matches, then synthesize hits into a **Knowledge Tree (Clustered UI)** for structured exploration.
 
 ---
 
@@ -25,8 +25,9 @@ IslamResearch is built with a **"Scholarly IDE"** paradigm, discarding tradition
 
 ### 🌓 Progressive Disclosure & "Magic" Search
 The interface starts with a clean, approachable search (like Google) but instantly unfolds into a powerful academic workspace. 
+- **Knowledge Tree Architecture**: Results are automatically clustered into folders by source (Fiqh, Quran, Tafsir) using a Zero-Query-Time deterministic engine.
+- **The Semantic Sniper**: Instead of showing full raw paragraphs, the system "snipes" the exact 8-word fragment that answers your query and highlights it for instant review.
 - **Hybrid Search**: Toggle between **AI Semantic**, **Exact Word**, and **Root Explorer** modes.
-- **Dynamic Context**: Difficult (*Gharib*) words are automatically identified with hoverable tooltips for instant linguistic clarity.
 
 ### 🔗 Infinite Explorability: "Every Word is a Portal"
 The core philosophy is that knowledge should never be a dead end. Every entity on the screen is a clickable gateway:

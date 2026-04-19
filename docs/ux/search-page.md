@@ -31,11 +31,15 @@ Powered directly by Meilisearch facets. Updates instantly without page reloads.
 *   **Extracted Tags (AI-Generated):** daisyUI **`badge`** chips list, highly relevant to the current search (e.g., #Mekkah, #Rukun_Islam). Clicking forces an exact metadata match.
 *   **Smart Contextual Filters:** Detects search intent and dynamically injects domain-specific filter sections. For example, if the user searches for a "Fiqh" topic, the sidebar proactively suggests a **`collapse`**-wrapped "Madzhab" filter.
 
-### Zone 3: The Results Feed (Center Main)
-*Implemented with daisyUI **`card`** + **`card-body`** per hit. While results are loading, **`skeleton`** placeholder cards fill the space.*
-*   **Bilingual View:** Arabic text (RTL) and Indonesian translation (LTR) inside a responsive `card` grid with `@container` queries.
-*   **Highlighting:** Search terms highlighted using native `<mark>` (styled via daisyUI `highlight` convention) in soft yellow/gold.
-*   **Gharib (Difficult) Words:** Underlined with a dotted line, triggering a daisyUI **`tooltip`** on hover.
+### Zone 3: The Results Feed: The "Knowledge Tree"
+*Implemented with daisyUI **`collapse`** (accordions) for clusters and **`card`** + **`card-body`** for individual hits. While results are loading, **`skeleton`** placeholder clusters fill the space.*
+
+Instead of an endless flat list, the center pane synthesizes findings into a deterministic **Knowledge Tree**.
+*   **The Branches (Clusters):** daisyUI **`collapse-arrow`** containers group hits by source (e.g., "Quran: Surah Al-Baqarah", "Fiqh: Fasting").
+*   **Cluster Summary:** Each branch shows a `badge` list of prominent Knowledge Graph entities (tags) shared by the group (e.g., #Safar, #Qada).
+*   **Semantic Snipering (The Sniper):** Each result Card displays a surgically extracted 8-word fragment (`sniped_text`) wrapped in `<mark>` tags using the **Semantic Sliding Window** re-ranker. This ensures the user sees exactly why the result matched, even in 1000-word Hadiths.
+*   **Bilingual Reading:** Arabic text (RTL) and Indonesian translation (LTR) inside a responsive card grid with `@container` queries.
+*   **Highlighting:** Search terms highlighted using soft gold `<mark>` tags. Difficult words trigger daisyUI **`tooltip`** hints.
 
 ### Zone 4: The Intelligence Panel (Right - Sliding/Dual-Pane)
 *Desktop: panel slides in as a resizable split pane. Mobile: daisyUI **`drawer`** from the bottom or a **`modal`** full-screen overlay.*

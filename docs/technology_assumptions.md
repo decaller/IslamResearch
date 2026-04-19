@@ -77,4 +77,27 @@ Our PostgreSQL schema is not just a storage layer; it is an active participant i
 
 ---
 
+## 🌊 6. Search Execution Flow & The Post-Retrieval Bridge
+
+To maintain "Google-like" speed (< 60ms) while providing "Scholar-level" structure, the system uses a 4-phase chronological bridge.
+
+1.  **Phase 1: Query Processing (The Input):**
+    *   **Asymmetric Processing:** We assume processing a 5-word query is computationally trivial compared to processing millions of documents. 
+    *   **Semantic Caching:** Every query vector is cached in Redis for 30 days. Repeat searches skip the embedding model entirely, reducing latency to **< 1ms**.
+    *   **Metadata Enrichment:** The system automatically tokenizes queries to find implicit **Entities** (Knowledge Graph tags) and **Linguistic Roots** (Arabic morphology).
+
+2.  **Phase 2: Database Retrieval (The Radar):**
+    *   **Hybrid Injection:** Vector distance searches are combined with explicit filters derived from Phase 1.
+    *   **Feedback Guardrails:** User personalization is injected here using `NOT id IN [user_hidden_ids]`. Globally banned items (via `negative_queries` metadata) are purged instantly.
+
+3.  **Phase 3: The Refinement Bridge (The Sniper):**
+    *   **Semantic Sliding Window:** We assume that even if a 300-word Hadith is retrieved, only a small part answers the user. We run a fast re-ranker to find the exact **8-word fragment** that matches the query vector.
+    *   **Surgical Highlighting:** The chosen fragment is wrapped in `<mark>` tags before being passed to the UI.
+
+4.  **Phase 4: Tree Synthesis (The Output):**
+    *   **Deterministic Clustering:** To avoid LLM latency, grouping into "Knowledge Tree" folders happens via fast metadata faceting (Surah/Chapter) or mathematical clustering (K-Means).
+    *   **Zero-Query LLM:** This ensures the "Clustered Syllabus" feel of the results is achieved without the cost or delay of a generative LLM.
+
+---
+
 *This document is a living record. As the platform evolves, these assumptions will be revisited based on user feedback and performance metrics.*

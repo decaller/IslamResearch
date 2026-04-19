@@ -450,6 +450,25 @@ TableGroup "User Personalization" {
   collection_items
   user_feedbacks
   user_habits
+  user_notebooks
+}
+
+Enum notebook_view_mode {
+  article
+  presentation
+}
+
+Table user_notebooks [headercolor: #312E81] {
+  id uuid [primary key]
+  user_id uuid [ref: > users.id]
+  title varchar
+  content_md text [note: 'Markdown content with Live Embed tags {{ embed:... }}']
+  is_published boolean [default: false]
+  view_mode notebook_view_mode [default: 'article']
+  metadata jsonb
+  created_at timestamp
+  updated_at timestamp
+  deleted_at timestamp [note: 'Soft Deletes']
 }
 
 // Polymorphic Relationships (Diagram Helpers)

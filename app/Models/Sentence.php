@@ -53,7 +53,7 @@ class Sentence extends Model
     /**
      * Entities (People, Places, Events, Concepts) mentioned in this sentence.
      */
-    public function entities(): BelongsToMany
+    public function entities()
     {
         return $this->belongsToMany(Entity::class, 'sentence_entity')
             ->withPivot('confidence', 'context_metadata')

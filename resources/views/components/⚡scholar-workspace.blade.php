@@ -10,6 +10,7 @@ new class extends Component
     public string $paneWidth = '50%';
     public string $searchQuery = '';
     public array $results = [];
+    public array $searchStats = ['processing_time_ms' => 0, 'total_clusters' => 0];
     public mixed $taxonomies = [];
     
     // Selection state
@@ -43,19 +44,19 @@ new class extends Component
     public function onSearchUpdated($query, SearchService $searchService)
     {
         $this->searchQuery = $query;
-        $searchResult = $searchService->hybridSearch($query);
         
-        // Handle both Paginator and Collection/Array results from SearchService
-        if (method_exists($searchResult, 'toArray')) {
-            $data = $searchResult->toArray();
-            $this->results = isset($data['data']) ? $data['data'] : $data;
-        } else {
-            $this->results = (array) $searchResult;
-        }
+        // Use the new Clustered Tree Search Architecture
+        $treeOutput = $searchService->clusteredSearch($query);
+        
+        $this->results = $treeOutput['tree'];
+        $this->searchStats = [
+            'processing_time_ms' => $treeOutput['processing_time_ms'],
+            'total_clusters' => count($treeOutput['tree'])
+        ];
 
-        // Auto-select first result if available
-        if (!empty($this->results)) {
-            $this->selectSentence($this->results[0]['id']);
+        // Auto-select first result from the first cluster if available
+        if (!empty($this->results) && !empty($this->results[0]['documents'])) {
+            $this->selectSentence($this->results[0]['documents'][0]['id']);
         }
     }
 
@@ -226,76 +227,79 @@ new class extends Component
                 </div>
 
                 <!-- Breadcrumbs -->
-                <div class="text-sm breadcrumbs mb-4 text-base-content/70 px-2">
+                <div class="text-sm breadcrumbs mb-4 text-base-content/70 px-2 flex justify-between items-center">
                   <ul>
                     <li><a><x-heroicon-o-magnifying-glass class="w-4 h-4 mr-1 inline"/> {{ $searchQuery ?: 'Recent Searches' }}</a></li>
                     @if($searchQuery)
-                        <li><span class="inline-flex items-center"><x-heroicon-s-cube-transparent class="w-4 h-4 mr-1 text-success inline"/> Results: {{ count($results) }}</span></li>
+                        <li><span class="inline-flex items-center"><x-heroicon-s-rectangle-stack class="w-4 h-4 mr-1 text-primary inline"/> Clusters: {{ $searchStats['total_clusters'] }}</span></li>
                     @endif
                   </ul>
+                  @if($searchQuery)
+                    <div class="text-[10px] uppercase tracking-widest opacity-40 font-mono">
+                        Generated in {{ $searchStats['processing_time_ms'] }}ms | Zero LLm Architecture
+                    </div>
+                  @endif
                 </div>
-                <!-- Results Feed -->
-                <div class="grid grid-cols-1 @4xl:grid-cols-2 gap-4">
-                    @forelse($results as $result)
-                        <div 
-                            wire:click="selectSentence('{{ $result['id'] }}')"
-                            class="card bg-base-100 shadow border-2 @if($selectedSentenceId === $result['id']) border-primary @else border-base-200 @endif w-full hover:border-primary transition-colors cursor-pointer group">
-                          <div class="card-body p-4 relative pb-10">
-                            <div class="flex justify-between items-start mb-4">
-                                <h2 class="card-title text-sm">
-                                    <span class="badge badge-error badge-sm">{{ $result['metadata']['source'] ?? 'Unknown' }}</span>
-                                    @if(isset($result['metadata']['surah_name']))
-                                        {{ $result['metadata']['surah_name'] }} #{{ $result['metadata']['ayah_number'] }}
-                                    @endif
-                                </h2>
-                                <button class="btn btn-ghost btn-xs text-base-content/50 hover:text-primary p-0 h-auto min-h-0">
-                                    <x-heroicon-o-bookmark class="w-4 h-4 inline"/>
-                                </button>
+
+                <!-- Results Feed (Knowledge Tree Architecture) -->
+                <div class="space-y-4">
+                    @forelse($results as $cluster)
+                        <div x-data="{ open: true }" class="collapse collapse-arrow bg-base-200 border border-base-300 shadow-sm rounded-xl overflow-visible">
+                            <input type="checkbox" x-model="open" /> 
+                            <div class="collapse-title flex items-center justify-between pr-12">
+                                <div class="flex items-center gap-3">
+                                    <div class="p-2 bg-primary/10 rounded-lg">
+                                        <x-heroicon-s-folder class="w-5 h-5 text-primary" />
+                                    </div>
+                                    <div>
+                                        <h3 class="font-bold text-lg leading-tight">{{ $cluster['node_title'] }}</h3>
+                                        <div class="flex items-center gap-2 mt-1">
+                                            <span class="text-xs font-semibold opacity-60">{{ $cluster['children_count'] }} Related Texts</span>
+                                            @foreach($cluster['common_entities'] as $tag)
+                                                <span class="badge badge-primary badge-outline badge-xs text-[10px]">{{ $tag }}</span>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="text-right text-lg font-arabic mb-4 leading-loose" dir="rtl" x-data="{ 
-                                highlightEntities(text, entities) {
-                                    if (!entities) return text;
-                                    let highlighted = text;
-                                    entities.forEach(entity => {
-                                        const aliases = [entity.canonical_name, ...(entity.aliases || [])];
-                                        aliases.forEach(alias => {
-                                            const regex = new RegExp('(' + alias + ')', 'gi');
-                                            highlighted = highlighted.replace(regex, `<span class='underline decoration-dotted decoration-primary cursor-help group/entity relative'>$1<span class='absolute bottom-full right-0 mb-2 w-48 p-2 bg-base-300 text-base-content text-xs rounded shadow-xl hidden group-hover/entity:block z-50 normal-case font-sans text-right' dir='rtl'><strong>${entity.canonical_name}</strong><br/>${entity.description || ''}</span></span>`);
-                                        });
-                                    });
-                                    return highlighted;
-                                }
-                            }">
-                                <div x-html="highlightEntities('{!! addslashes($result['sentence_text'] ?? '') !!}', {{ json_encode($result['entities'] ?? []) }})"></div>
+                            <div class="collapse-content px-0">
+                                <div class="grid grid-cols-1 @4xl:grid-cols-2 gap-3 p-3 border-t border-base-300 bg-base-100/30">
+                                    @foreach($cluster['documents'] as $doc)
+                                        <div 
+                                            wire:click="selectSentence('{{ $doc['id'] }}')"
+                                            class="card bg-base-100 shadow-sm border-2 @if($selectedSentenceId === $doc['id']) border-primary @else border-base-200 @endif w-full hover:border-primary transition-all cursor-pointer group">
+                                            <div class="card-body p-3 relative">
+                                                <div class="text-right text-base font-arabic mb-2 leading-relaxed" dir="rtl">
+                                                    {{ $doc['text'] }}
+                                                </div>
+                                                <p class="text-[11px] leading-tight opacity-70 line-clamp-2">
+                                                    {{ $doc['translation'] }}
+                                                </p>
+                                                
+                                                @if(isset($doc['metadata']['ayah_number']))
+                                                    <div class="mt-2 flex justify-end">
+                                                        <span class="text-[9px] opacity-40 font-mono">Verse {{ $doc['metadata']['ayah_number'] }}</span>
+                                                    </div>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
                             </div>
-                            <p class="text-sm leading-relaxed mb-4 text-left opacity-80" dir="ltr">
-                                {{ $result['sentence_translation'] ?? ($result['translations'][0]['translation_text'] ?? '') }}
-                            </p>
-                          </div>
-                          <div class="absolute bottom-0 w-full h-8 opacity-0 group-hover:opacity-100 transition-opacity bg-base-200 px-4 border-t border-base-200 text-xs text-base-content/50 flex items-center justify-between rounded-b-xl">
-                               <span>Relevance Match</span>
-                               <div class="badge badge-ghost badge-xs">hybrid</div>
-                          </div>
                         </div>
                     @empty
                         @if($searchQuery)
-                            <div class="col-span-full py-20 text-center">
+                            <div class="py-20 text-center">
                                 <x-heroicon-o-face-frown class="w-12 h-12 mx-auto mb-4 opacity-20"/>
-                                <p class="text-base-content/50 italic">No exact matches found for "{{ $searchQuery }}". Try semantic search.</p>
+                                <p class="text-base-content/50 italic">No clusters found for "{{ $searchQuery }}".</p>
                             </div>
                         @else
-                            <!-- Example loading skeletons -->
-                            @for($i=0; $i<4; $i++)
-                                <div class="card shadow border border-base-200 bg-base-100 w-full p-4 opacity-50">
-                                    <div class="flex items-center gap-4 mb-4">
-                                      <div class="skeleton h-6 w-24"></div>
-                                      <div class="skeleton h-4 w-12 ml-auto"></div>
-                                    </div>
-                                    <div class="skeleton h-4 w-full mb-2"></div>
-                                    <div class="skeleton h-4 w-full mb-2"></div>
-                                    <div class="skeleton h-4 w-3/4"></div>
-                                </div>
-                            @endfor
+                            <!-- Placeholder -->
+                            <div class="flex flex-col items-center justify-center py-32 opacity-20">
+                                <x-heroicon-o-magnifying-glass-circle class="w-24 h-24 mb-4"/>
+                                <p class="text-xl font-bold">Knowledge Discovery Mode</p>
+                                <p class="text-sm">Search to synthesize results into a Knowledge Tree.</p>
+                            </div>
                         @endif
                     @endforelse
                 </div>

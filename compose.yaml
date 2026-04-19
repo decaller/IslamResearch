@@ -113,6 +113,18 @@ services:
         depends_on:
             - pgsql
             - prefect-server
+    rerank-api:
+        build:
+            context: ./docker/python
+        volumes:
+            - ./ai-scripts:/app
+        network_mode: "host"
+        environment:
+            - OLLAMA_URL=${OLLAMA_URL:-http://host.docker.internal:11434}
+            - RERANK_PORT=8001
+        command: python -u /app/rerank_api.py
+        depends_on:
+            - ai-pipeline
     horizon:
         image: 'sail-8.5/app'
         extra_hosts:

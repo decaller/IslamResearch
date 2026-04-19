@@ -12,7 +12,8 @@ The workspace is divided into four distinct resizable areas:
 
 ### A. The Activity Bar (Far Left, 50px wide)
 A thin vertical strip containing global tool icons built with the daisyUI **`menu menu-vertical`** component and **`tooltip`** (data-tip) for icon labels. Clicking these changes the contents of the Explorer panel.
-- 📁 **Explorer:** Your active books, saved collections, and workspace history.
+- 📁 **Explorer:** Your active books and workspace history.
+- 📝 **Notebooks:** Create and manage Markdown research journals (replaces static collections).
 - 🔍 **Search:** Global semantic search across `sentences`.
 - 📖 **Lexicon:** Direct access to `lexicon_roots`.
 - 📈 **Analytics/Tadabbur:** Habit trackers and progress for `user_habits`.
