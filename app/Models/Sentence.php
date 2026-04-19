@@ -50,6 +50,16 @@ class Sentence extends Model
             ->withPivot('source_type', 'positions');
     }
 
+    /**
+     * Entities (People, Places, Events, Concepts) mentioned in this sentence.
+     */
+    public function entities(): BelongsToMany
+    {
+        return $this->belongsToMany(Entity::class, 'sentence_entity')
+            ->withPivot('confidence', 'context_metadata')
+            ->withTimestamps();
+    }
+
     public function toSearchableArray(): array
     {
         $array = [

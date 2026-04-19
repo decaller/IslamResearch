@@ -56,6 +56,14 @@ Enum user_role {
   researcher
 }
 
+Enum entity_type {
+  person
+  location
+  event
+  concept
+  book
+}
+
 //// CORE TABLES
 
 Table users [headercolor: #1E3A8A] {
@@ -126,29 +134,62 @@ Table source_book_taxonomy [headercolor: #BFDBFE] {
   }
 }
 
-//// TAG TABLES
+//// KNOWLEDGE GRAPH & ENTITY TABLES
 
-Table tags [headercolor: #065F46, note: 'Normalised tag entities (was JSONB in sentences.metadata.tags)'] {
+Table entities [headercolor: #047857, note: 'Unified Knowledge Graph nodes (People, Places, Concepts)'] {
   id uuid [primary key]
-  name_ar varchar [note: 'Arabic canonical tag label (e.g. تزكية النفس)']
-  slug varchar [unique, note: 'URL-safe key derived from transliteration']
-  embedding_ar "vector(1024)" [note: 'Arabic tag embedding — for Arabic search']
+  canonical_name varchar [unique]
+  entity_type entity_type
+  aliases jsonb [note: 'Array of common abbreviations or alternative names']
+  description text [note: 'Enriched summary from LLM or Wikipedia']
+  wikipedia_url varchar
+  metadata jsonb [note: 'Birth/death, coordinates, attributes']
+  embedding "vector(1024)" [note: 'Semantic embedding for entity search']
   created_at timestamp
   updated_at timestamp
 
   indexes {
-    name_ar [unique]
-    embedding_ar [type: hnsw]
+    canonical_name [unique]
+    entity_type
+    embedding [type: hnsw]
   }
 }
 
-Table sentence_tag [headercolor: #6EE7B7, note: 'Pivot: links AI-enriched tags to sentences'] {
-  sentence_id uuid [ref: > sentences.id]
-  tag_id uuid [ref: > tags.id]
+Table entity_relationships [headercolor: #065F46, note: 'Knowledge Graph edges (Source ➔ Predicate ➔ Target)'] {
+  id uuid [primary key]
+  source_entity_id uuid [ref: > entities.id]
+  target_entity_id uuid [ref: > entities.id]
+  relationship_type varchar [note: 'e.g. "Migrated To", "Narrated From"']
+  evidence_sentence_id uuid [ref: > sentences.id, note: 'The specific text that proves this relation']
+  confidence float [default: 1.0]
+  created_at timestamp
+  updated_at timestamp
 
   indexes {
-    (sentence_id, tag_id) [unique]
+    (source_entity_id, target_entity_id, relationship_type, evidence_sentence_id) [unique]
   }
+}
+
+Table sentence_entity [headercolor: #10B981, note: 'Pivot: links resolved entities to sentences'] {
+  sentence_id uuid [ref: > sentences.id]
+  entity_id uuid [ref: > entities.id]
+  confidence float [default: 1.0]
+  context_metadata jsonb [note: 'Specific context snippets for this match']
+  
+  indexes {
+    (sentence_id, entity_id) [unique]
+  }
+}
+
+Table entity_ambiguity_queue [headercolor: #34D399, note: 'Human-in-the-loop queue for low-confidence AI matches'] {
+  id uuid [primary key]
+  sentence_id uuid [ref: > sentences.id]
+  surface_name varchar [note: 'The name as it appeared in raw text (e.g. "Umar")']
+  candidate_entities jsonb [note: 'List of potential matches suggested by AI']
+  context_block text [note: 'Context sentences for manual review']
+  status varchar [default: 'pending', note: 'pending | approved | rejected']
+  created_at timestamp
+  updated_at timestamp
 }
 
 //// SENTENCE TABLES
@@ -195,6 +236,19 @@ Table sentences [headercolor: #BFDBFE] {
   }
 }
 
+Table sentence_transliterations [headercolor: #BFDBFE, note: 'Romanized versions of Arabic sentences'] {
+  id uuid [primary key]
+  sentence_id uuid [ref: > sentences.id]
+  scheme varchar [note: 'e.g. ala_lc, dmg']
+  transliteration_text text
+  created_at timestamp
+  updated_at timestamp
+
+  indexes {
+    (sentence_id, scheme) [unique]
+  }
+}
+
 //// CENTRAL TRANSLATIONS
 
 Table translations [headercolor: #F59E0B, note: 'Unified translations for any entity'] {
@@ -213,7 +267,7 @@ Table translations [headercolor: #F59E0B, note: 'Unified translations for any en
 
 Table translatables [headercolor: #FCD34D, note: 'Polymorphic Pivot: Connects translations to entities'] {
   translation_id uuid [ref: > translations.id]
-  translatable_id uuid [note: 'ID of sentence, tag, or taxonomy']
+  translatable_id uuid [note: 'ID of sentence, tag, or entity']
   translatable_type varchar [note: 'e.g., App\\Models\\Sentence']
 
   indexes {
@@ -360,14 +414,17 @@ TableGroup "Taxonomy" {
   source_book_taxonomy
 }
 
-TableGroup "Tags" {
-  tags
-  sentence_tag
+TableGroup "Knowledge Graph" {
+  entities
+  entity_relationships
+  sentence_entity
+  entity_ambiguity_queue
 }
 
 TableGroup "Sentences & Language" {
   sentence_jobs
   sentences
+  sentence_transliterations
 }
 
 TableGroup "Global Translations" {
@@ -393,3 +450,8 @@ TableGroup "User Personalization" {
   user_feedbacks
   user_habits
 }
+
+// Polymorphic Relationships (Diagram Helpers)
+Ref: sentences.id < translatables.translatable_id
+Ref: entities.id < translatables.translatable_id
+Ref: taxonomies.id < translatables.translatable_id

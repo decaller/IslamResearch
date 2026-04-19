@@ -26,11 +26,14 @@ class SearchService
         $scoutQuery = Sentence::search($parsed['query']);
 
         if ($parsed['type'] === 'filter' && isset($parsed['filter_key'])) {
-            // Note: Meilisearch requires this to be in filterableAttributes
-            // Just for demonstration we map 'surah' to source_book_id or similar if it was set
-            // In a real scenario we'd use metadata filtering. Let's assume standard scout query.
             if ($parsed['filter_key'] === 'surah') {
                 $scoutQuery->where('metadata.surah_name', $parsed['query']);
+            }
+            if ($parsed['filter_key'] === 'entity_id') {
+                // When filtering by entity, specifically search sentences linked to that entity
+                return Sentence::whereHas('entities', function($q) use ($parsed) {
+                    $q->where('entities.id', $parsed['query']);
+                })->with('entities')->paginate(20);
             }
         }
 
@@ -39,7 +42,7 @@ class SearchService
             $scoutQuery->where($key, $value);
         }
 
-        return $scoutQuery->paginate(20);
+        return $scoutQuery->query(fn($query) => $query->with('entities'))->paginate(20);
     }
 
     public function vectorSearch(string $query, int $limit = 20)
@@ -59,6 +62,7 @@ class SearchService
 
                 // Use raw pgvector nearest-neighbor operator
                 return Sentence::query()
+                    ->with('entities')
                     ->select('sentences.*')
                     ->selectRaw('embedding_ar <-> ?::vector AS distance', [$vectorString])
                     ->orderBy('distance')

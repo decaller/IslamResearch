@@ -41,10 +41,12 @@ class SearchPanel extends Component
         // We'll use Scout directly to avoid internal HTTP overhead
         $roots = LexiconRoot::search($this->query)->take(3)->get();
         $sentences = Sentence::search($this->query)->take(3)->get();
+        $entities = \App\Models\Entity::search($this->query)->take(5)->get();
 
         $this->suggestions = [
             'roots' => $roots->toArray(),
             'sentences' => $sentences->toArray(),
+            'entities' => $entities->toArray(),
         ];
     }
 

@@ -23,8 +23,32 @@
     </div>
 
     <!-- Autocomplete Dropdown -->
-    @if(!empty($suggestions['roots']) || !empty($suggestions['sentences']))
+    @if(!empty($suggestions['roots']) || !empty($suggestions['sentences']) || !empty($suggestions['entities']))
         <div x-show="showSuggestions" class="absolute z-50 w-full mt-1 bg-base-100 border border-base-300 rounded-lg shadow-xl overflow-hidden shadow-2xl">
+
+            @if(!empty($suggestions['entities']))
+                <div class="p-2 border-b border-base-200">
+                    <h3 class="text-xs font-semibold text-primary uppercase px-2 mb-1 flex items-center gap-1">
+                        <x-heroicon-o-sparkles class="w-3 h-3" />
+                        Did you mean?
+                    </h3>
+                    <ul class="menu menu-compact bg-base-100 w-full p-0">
+                        @foreach($suggestions['entities'] as $entity)
+                            <li>
+                                <a wire:click="$set('query', '#entity:{{ $entity['id'] }}'); executeSearch()" class="flex flex-col items-start hover:bg-base-200 py-2">
+                                    <div class="flex items-center gap-2 w-full">
+                                        <span class="font-bold text-base-content">{{ $entity['canonical_name'] }}</span>
+                                        <span class="badge badge-sm badge-outline opacity-70">{{ $entity['entity_type'] }}</span>
+                                    </div>
+                                    @if($entity['description'])
+                                        <p class="text-xs opacity-60 line-clamp-1 mt-0.5">{{ $entity['description'] }}</p>
+                                    @endif
+                                </a>
+                            </li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
             
             @if(!empty($suggestions['roots']))
                 <div class="p-2 border-b border-base-200">

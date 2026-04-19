@@ -62,7 +62,7 @@ new class extends Component
     public function selectSentence(string $id)
     {
         $this->selectedSentenceId = $id;
-        $sentence = \App\Models\Sentence::with(['translations', 'words.root'])->find($id);
+        $sentence = \App\Models\Sentence::with(['translations', 'words.root', 'entities'])->find($id);
         
         if ($sentence) {
             $this->selectedSentence = $sentence->toArray();
@@ -252,8 +252,21 @@ new class extends Component
                                     <x-heroicon-o-bookmark class="w-4 h-4 inline"/>
                                 </button>
                             </div>
-                            <div class="text-right text-lg font-arabic mb-4 leading-loose" dir="rtl">
-                                {!! preg_replace('/('.preg_quote($searchQuery, '/').')/ui', '<mark class="bg-warning/30 text-warning-content rounded px-1">$1</mark>', $result['sentence_text'] ?? '') !!}
+                            <div class="text-right text-lg font-arabic mb-4 leading-loose" dir="rtl" x-data="{ 
+                                highlightEntities(text, entities) {
+                                    if (!entities) return text;
+                                    let highlighted = text;
+                                    entities.forEach(entity => {
+                                        const aliases = [entity.canonical_name, ...(entity.aliases || [])];
+                                        aliases.forEach(alias => {
+                                            const regex = new RegExp('(' + alias + ')', 'gi');
+                                            highlighted = highlighted.replace(regex, `<span class='underline decoration-dotted decoration-primary cursor-help group/entity relative'>$1<span class='absolute bottom-full right-0 mb-2 w-48 p-2 bg-base-300 text-base-content text-xs rounded shadow-xl hidden group-hover/entity:block z-50 normal-case font-sans text-right' dir='rtl'><strong>${entity.canonical_name}</strong><br/>${entity.description || ''}</span></span>`);
+                                        });
+                                    });
+                                    return highlighted;
+                                }
+                            }">
+                                <div x-html="highlightEntities('{!! addslashes($result['sentence_text'] ?? '') !!}', {{ json_encode($result['entities'] ?? []) }})"></div>
                             </div>
                             <p class="text-sm leading-relaxed mb-4 text-left opacity-80" dir="ltr">
                                 {{ $result['sentence_translation'] ?? ($result['translations'][0]['translation_text'] ?? '') }}

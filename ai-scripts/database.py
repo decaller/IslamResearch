@@ -208,3 +208,109 @@ def save_quran_verse(book_id: str, verse: dict, vectors: dict, lexicon_data: lis
             return sentence_id
     finally:
         conn.close()
+
+@task
+def find_entity_by_name(name: str):
+    """Search for an entity by canonical name or within aliases JSONB array."""
+    conn = get_db_connection()
+    try:
+        with conn.cursor(cursor_factory=RealDictCursor) as cur:
+            # Search canonical name or inside aliases array
+            cur.execute(
+                """
+                SELECT id, canonical_name, entity_type FROM entities
+                WHERE canonical_name = %s OR aliases @> %s
+                """,
+                (name, psycopg2.extras.Json([name]))
+            )
+            return cur.fetchone()
+    finally:
+        conn.close()
+
+@task
+def create_entity(data: dict) -> str:
+    """Create a new entity with optional Wikipedia enrichment data."""
+    conn = get_db_connection()
+    try:
+        with conn, conn.cursor() as cur:
+            entity_id = str(uuid.uuid4())
+            cur.execute(
+                """
+                INSERT INTO entities (
+                    id, canonical_name, entity_type, aliases, description, wikipedia_url, metadata, created_at, updated_at
+                ) VALUES (%s, %s, %s, %s, %s, %s, %s, NOW(), NOW())
+                RETURNING id
+                """,
+                (
+                    entity_id,
+                    data['canonical_name'],
+                    data.get('entity_type', 'concept'),
+                    psycopg2.extras.Json(data.get('aliases', [])),
+                    data.get('description'),
+                    data.get('wikipedia_url'),
+                    psycopg2.extras.Json(data.get('metadata', {}))
+                )
+            )
+            return cur.fetchone()[0]
+    finally:
+        conn.close()
+
+@task
+def link_sentence_to_entity(sentence_id: str, entity_id: str, confidence: float = 1.0, context: dict = None):
+    """Link a sentence to an entity in the pivot table."""
+    conn = get_db_connection()
+    try:
+        with conn, conn.cursor() as cur:
+            cur.execute(
+                """
+                INSERT INTO sentence_entity (sentence_id, entity_id, confidence, context_metadata)
+                VALUES (%s, %s, %s, %s)
+                ON CONFLICT (sentence_id, entity_id) DO UPDATE
+                SET confidence = EXCLUDED.confidence, context_metadata = EXCLUDED.context_metadata
+                """,
+                (sentence_id, entity_id, confidence, psycopg2.extras.Json(context or {}))
+            )
+    finally:
+        conn.close()
+
+@task
+def save_entity_relationship(
+    source_id: str, 
+    target_id: str, 
+    rel_type: str, 
+    evidence_id: str = None, 
+    confidence: float = 1.0
+):
+    """Save a relationship between two entities."""
+    conn = get_db_connection()
+    try:
+        with conn, conn.cursor() as cur:
+            rel_id = str(uuid.uuid4())
+            cur.execute(
+                """
+                INSERT INTO entity_relationships (
+                    id, source_entity_id, target_entity_id, relationship_type, evidence_sentence_id, confidence, created_at, updated_at
+                ) VALUES (%s, %s, %s, %s, %s, %s, NOW(), NOW())
+                ON CONFLICT (source_entity_id, target_entity_id, relationship_type, evidence_sentence_id) DO NOTHING
+                """,
+                (rel_id, source_id, target_id, rel_type, evidence_id, confidence)
+            )
+    finally:
+        conn.close()
+
+@task
+def add_to_ambiguity_queue(sentence_id: str, surface_name: str, candidates: list, context_block: str):
+    """Add an ambiguous match to the queue for manual review."""
+    conn = get_db_connection()
+    try:
+        with conn, conn.cursor() as cur:
+            cur.execute(
+                """
+                INSERT INTO entity_ambiguity_queue (
+                    id, sentence_id, surface_name, candidate_entities, context_block, status, created_at, updated_at
+                ) VALUES (%s, %s, %s, %s, %s, 'pending', NOW(), NOW())
+                """,
+                (str(uuid.uuid4()), sentence_id, surface_name, psycopg2.extras.Json(candidates), context_block)
+            )
+    finally:
+        conn.close()

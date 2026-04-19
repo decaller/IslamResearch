@@ -19,6 +19,36 @@ The platform acts as an **AI-driven factory** for Islamic corpus management. It 
 
 ---
 
+## ✨ UI & UX: The Scholar Workspace
+
+IslamResearch is built with a **"Scholarly IDE"** paradigm, discarding traditional flat-page design for a multi-dimensional, integrated research environment.
+
+### 🌓 Progressive Disclosure & "Magic" Search
+The interface starts with a clean, approachable search (like Google) but instantly unfolds into a powerful academic workspace. 
+- **Hybrid Search**: Toggle between **AI Semantic**, **Exact Word**, and **Root Explorer** modes.
+- **Dynamic Context**: Difficult (*Gharib*) words are automatically identified with hoverable tooltips for instant linguistic clarity.
+
+### 🔗 Infinite Explorability: "Every Word is a Portal"
+The core philosophy is that knowledge should never be a dead end. Every entity on the screen is a clickable gateway:
+- **Linguistic Deep-Dives**: Click any Arabic word to reveal its **Root (جذر)**, grammatical role, and distribution across the entire corpus.
+- **Breadcrumb Journeys**: Your research path is tracked across *Sentence ➔ Root ➔ Tag ➔ Category*, allowing for seamless mental re-tracing.
+
+### 🛠️ The IDE Interaction Model
+Built with **daisyUI v5** and **Tailwind CSS v4**, the workspace provides:
+- **Split-Pane View**: Pin the Quran on the left and a Tafsir or Lexicon on the right with synchronized scrolling.
+- **Tabbed Browsing**: Open multiple searches or books in isolated tabs, just like a code editor.
+- **State Persistence**: Your exact layout, scroll positions, and open tabs are saved to Redis/PostgreSQL, ensuring you can resume your research exactly where you left off.
+
+### 📖 The Intelligence Panel (5-Tab System)
+Every text unit can be viewed through five specialized scholarly lenses:
+1.  **Contemplations (التدبر)** — Deep reflections and questions.
+2.  **Actionable Habits (العمل)** — Practical daily applications with progress tracking.
+3.  **Directives (توجيه)** — Explicit guidance and wisdom blocks.
+4.  **Lexicon (معاني)** — Analytical word-level morphology and roots.
+5.  **Exegesis (التفاسير)** — In-depth classical and modern commentaries.
+
+---
+
 ## 🛠️ Tech Stack
 
 Built with the best-in-class Laravel ecosystem and modern AI tools:
@@ -42,6 +72,7 @@ Detailed guides are available to help you understand and extend the platform:
 -   🎨 **[Scholar IDE Workspace](./docs/ux/ide-workspace.md)**: The structural UI layouts and Redis tab states.
 -   🤖 **[AI Pipeline Details](./docs/pipeline.md)**: Details on the NLP models and stage-by-stage transformations.
 -   📦 **[Data Schema Logic](./docs/details.md)**: Extended reasoning into the DB schema, `ltree`, and vector index isolations.
+-   🕸️ **[Knowledge Graph](./docs/knowledge_graph.md)**: Details on Entity Disambiguation and relationship mapping.
 -   📝 **[Development Roadmap](./TODO.md)**: Current task list and implementation execution steps.
 
 ---

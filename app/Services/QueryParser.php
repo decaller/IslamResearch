@@ -13,6 +13,15 @@ class QueryParser
     {
         $query = trim($query);
 
+        // 0. Entity Filter (e.g. #entity:uuid)
+        if (preg_match('/^#entity:([a-f0-9-]+)$/i', $query, $matches)) {
+            return [
+                'type' => 'filter',
+                'filter_key' => 'entity_id',
+                'query' => trim($matches[1]),
+            ];
+        }
+
         // 1. Vector Root Search (e.g. #root:كتب)
         if (preg_match('/^#root:(.+)$/i', $query, $matches)) {
             return [

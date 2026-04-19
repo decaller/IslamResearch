@@ -24,6 +24,10 @@ These are the core Python packages that handle orchestration, text manipulation,
 - **Function:** The Hugging Face Python library. 
 - **Role:** Allows the Python microservice to download, cache, and run classification and vectorization models locally on the CPU without needing external APIs.
 
+### 5. Wikipedia API (`wikipedia-api`)
+- **Function:** Community-structured knowledge retrieval.
+- **Role:** Fetches canonical summaries, verified names, and semantic categories to enrich entities and provide tooltips for the "Scholar UI".
+
 ---
 
 ## Part 2: Transformers & LLMs (The Brains)
@@ -72,6 +76,13 @@ Uses Hugging Face pipelines locally to assign rigid categories.
 Makes HTTP requests to the Ollama container (host GPU) using the **Aya** model.
 - **Resilience:** Prefect handles automatic retries ($3 \times$) with a 5-second delay if Ollama times out.
 
+### 🧠 Stage 4.1: Entity Resolution (`tasks/entity_resolution.py`)
+Solving the "Umar" problem using historical and narrative context.
+- **NER (Model):** Pre-scans for mentions of People, Places, and Books using `Davlan/bert-base-multilingual-cased-ner-hrl` or CAMeL tools.
+- **Disambiguation:** Prefect pulls 5 sentences of context around hit and sends to Ollama (`aya`) to determine the exact historical figure.
+- **Wikipedia Enrichment:** Pings Wikipedia (`tasks/wiki_enrich.py`) to fetch bios and category tags if the entity is not yet canonicalized.
+- **Graphing:** Automatically generates S-P-O triplets ([Subject] -> [Predicate] -> [Object]) to populate the `entity_relationships` table.
+
 ### 🔤 Stage 4.5: Transliteration (`tasks/transliterate.py`)
 Generates a **romanised (ALA-LC) transliteration** for every Arabic sentence via Ollama and stores it in the `sentence_transliterations` table.
 - **Config:** `OLLAMA_URL`, `OLLAMA_TRANSLITERATE_MODEL`, `OLLAMA_TRANSLITERATE_SCHEME` in `.env` — the URL is shared with the translation task so you only configure it once.
@@ -85,3 +96,15 @@ Uses a multilingual embedding model.
 
 ### 🗄️ Database Interaction (`database.py`)
 Manages connections to PostgreSQL and Meilisearch, providing tasks for fetching pending records and saving enriched results.
+
+---
+
+## Part 4: Specialized Pipeline Flows
+
+While the stages above follow a general pattern, certain resources require specialized logic:
+
+- 📖 **[Quran Arabic Flow](pipeline/quran-arabic.md)**: Zero-hallucination API ingestion for the primary Quran text.
+- 🔤 **[Quran Transliteration Flow](pipeline/quran-transliteration.md)**: Importing certified Latin-script editions.
+- 🌍 **[Quran Translation Flow](pipeline/quran-translation.md)**: Adding multi-lingual layers to existing ayahs.
+- 🕌 **[Amali Tafseer Flow](pipeline/tafsir-amal.md)**: Custom-segmented ingestion for structured commentary.
+- ✍️ **[Quranic I'rab Flow](pipeline/quran-irob.md)**: Grammatical analysis linked to specific verses.
