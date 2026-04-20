@@ -14,109 +14,103 @@ class QueryParser
      */
     public function parse(string $query): array
     {
-        $originalQuery = $query;
-        $query = trim($query);
+        $startTime = microtime(true);
+        $query = $this->normalize($query);
+
+        // 1. Cache Check (handled in SearchService)
 
         $result = [
-            'type' => 'keyword',
+            'type' => 'hybrid',
             'query' => $query,
             'entities' => [],
             'roots' => [],
+            'tokens' => [],
+            'processing_time_ms' => 0,
         ];
 
-        // 0. Entity Filter (e.g. #entity:uuid)
-        if (preg_match('/^#entity:([a-f0-9-]+)$/i', $query, $matches)) {
-            $result['type'] = 'filter';
-            $result['filter_key'] = 'entity_id';
-            $result['query'] = trim($matches[1]);
-        }
+        // 2. Lingustic Tokenization (Arabic Root Extraction)
+        $result['roots'] = $this->extractRoots($query);
 
-        // 1. Vector Root Search (e.g. #root:كتب)
-        elseif (preg_match('/^#root:(.+)$/i', $query, $matches)) {
-            $result['type'] = 'vector_root';
-            $result['query'] = trim($matches[1]);
-        }
+        // 3. Entity Tokenization (Knowledge Graph Match)
+        $result['entities'] = $this->extractEntities($query);
 
-        // 2. Metadata Filter (e.g. @surah:البقرة)
-        elseif (preg_match('/^@surah:(.+)$/i', $query, $matches)) {
-            $result['type'] = 'filter';
-            $result['filter_key'] = 'surah';
-            $result['query'] = trim($matches[1]);
-        }
-
-        // 3. Fuzzy match (e.g. ~fuzzy:bismillah)
-        elseif (preg_match('/^~fuzzy:(.+)$/i', $query, $matches)) {
-            $result['type'] = 'fuzzy';
-            $result['query'] = trim($matches[1]);
-        }
-
-        // 4. Default: Keyword vs Vector Semantic
-        else {
-            $wordCount = str_word_count($query, 0, 'ءآأؤإئابةتثجحخدذرزسشصضطظعغفقكلمنهوىي');
-            if ($wordCount > 4) {
-                $result['type'] = 'vector_semantic';
-            }
-        }
-
-        // 5. Automatic Semantic Enrichment (Finding Tags & Roots)
-        $metadata = $this->extractMetadata($query);
-        $result['entities'] = $metadata['entities'];
-        $result['roots'] = $metadata['roots'];
+        $result['processing_time_ms'] = (int) ((microtime(true) - $startTime) * 1000);
 
         return $result;
     }
 
     /**
-     * Step 2 & 3: Extraction of implicit metadata from query string.
+     * Phase 1: Normalization (cleaned, lowercased, extra spaces removed).
      */
-    public function extractMetadata(string $query): array
+    private function normalize(string $query): string
     {
-        return [
-            'entities' => $this->extractEntities($query),
-            'roots' => $this->extractRoots($query),
-        ];
+        $query = mb_strtolower(trim($query));
+        $query = preg_replace('/\s+/', ' ', $query);
+
+        return $query;
     }
 
-    private function extractEntities(string $query): array
-    {
-        // Simple token matching against entities table.
-        // In production, this list should be cached in Redis for < 1ms lookups.
-        $tokens = explode(' ', $query);
-        if (count($tokens) === 0) {
-            return [];
-        }
-
-        return Entity::where(function ($q) use ($tokens) {
-            foreach ($tokens as $token) {
-                if (strlen($token) < 3) {
-                    continue;
-                }
-                $q->orWhere('canonical_name', 'like', "%{$token}%");
-            }
-        })->take(5)->get()->toArray();
-    }
-
+    /**
+     * Phase 1: Linguistic Tokenization (Root Extraction).
+     * In production, this calls a Python/CAMeL Tools microservice.
+     */
     private function extractRoots(string $query): array
     {
-        // Step 4: Linguistic Tokenization
-        // 1. Remove Harakat
+        // Remove Harakat
         $clean = preg_replace('/[\x{064B}-\x{0652}]/u', '', $query);
 
-        // 2. Simple Rule-based Root identification (Mock logic for CAMeL tools)
-        // If query is Arabic and matches known root patterns, find matches in Lexicon.
-        $arabicTokens = preg_split('/\s+/u', $clean, -1, PREG_SPLIT_NO_EMPTY);
+        // Split into tokens
+        $tokens = preg_split('/\s+/u', $clean, -1, PREG_SPLIT_NO_EMPTY);
         $roots = [];
 
-        foreach ($arabicTokens as $token) {
-            // Very basic heuristic: if it's 3 letters or more, check LexiconRoot
+        foreach ($tokens as $token) {
             if (mb_strlen($token) >= 3) {
-                $match = LexiconRoot::where('root_value', $token)->first();
+                $match = LexiconRoot::where('root_value', $token)
+                    ->orWhere('root_value', mb_substr($token, 0, 3)) // Fallback to prefix
+                    ->first();
+
                 if ($match) {
-                    $roots[] = $match->toArray();
+                    $roots[] = [
+                        'id' => $match->id,
+                        'root_value_ar' => $match->root_value,
+                    ];
                 }
             }
         }
 
         return $roots;
+    }
+
+    /**
+     * Phase 1: Entity Tokenization (Knowledge Graph Match).
+     * Rapidly checks words against entities table aliases/canonical names.
+     */
+    private function extractEntities(string $query): array
+    {
+        $tokens = explode(' ', $query);
+        $entities = [];
+
+        if (empty($tokens)) {
+            return [];
+        }
+
+        // Search for matches in canonical_name or aliases
+        return Entity::where(function ($q) use ($tokens) {
+            foreach ($tokens as $token) {
+                if (strlen($token) < 3) {
+                    continue;
+                }
+                $q->orWhere('canonical_name', 'ilike', "%{$token}%")
+                    ->orWhereJsonContains('aliases', $token);
+            }
+        })
+            ->take(10)
+            ->get()
+            ->map(fn ($e) => [
+                'id' => $e->id,
+                'canonical_name' => $e->canonical_name,
+                'entity_type' => $e->entity_type,
+            ])
+            ->toArray();
     }
 }

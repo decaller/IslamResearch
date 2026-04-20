@@ -72,4 +72,4 @@ Uses horizontal rules (`---`) to split content into slides.
 The most advanced use-case is the living document. A notebook can contain a search query:
 `{{ embed:query:"latest rulings on zakat" | limit:5 }}`
 
-Every time the notebook is viewed, it fetches the latest data from Meilisearch, ensuring the research never goes stale.
+Every time the notebook is viewed, it fetches the latest data via the [Search Pipeline](../search-pipeline.md), ensuring the research never goes stale.

@@ -26,5 +26,6 @@ Route::post('/webhooks/prefect/job-completed', PrefectWebhookController::class)
 // Search Integration
 Route::middleware('throttle:120,1')->group(function () {
     Route::get('/search', [SearchController::class, 'index'])->name('search.index');
+    Route::get('/search/pipeline', [SearchController::class, 'pipeline'])->name('search.pipeline');
     Route::get('/search/autocomplete', [SearchController::class, 'autocomplete'])->name('search.autocomplete');
 });

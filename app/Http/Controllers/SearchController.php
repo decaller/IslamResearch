@@ -24,6 +24,19 @@ class SearchController extends Controller
         ]);
     }
 
+    /**
+     * The Complete Execution Pipeline endpoint.
+     */
+    public function pipeline(SearchRequest $request): JsonResponse
+    {
+        $results = $this->searchService->pipelineSearch(
+            $request->validated('q'),
+            $request->validated('filters') ?? []
+        );
+
+        return response()->json($results);
+    }
+
     public function autocomplete(SearchRequest $request): JsonResponse
     {
         // For fast autocomplete, skip vector search and only use Scout
